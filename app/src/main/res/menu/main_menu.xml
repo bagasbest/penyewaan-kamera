@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_photo_camera_black_48dp"
+            android:title="Petunjuk Penggunaan"
+            app:tint="@color/browser_actions_bg_grey" />
+
+        <item
+            android:id="@+id/nav_product"
+            android:icon="@drawable/ic_baseline_attractions_24"
+            android:title="Pengaturan Aplikasi"
+            app:tint="@color/browser_actions_bg_grey" />
+
+        <item
+            android:id="@+id/nav_history_transaction"
+            android:icon="@drawable/ic_baseline_account_balance_wallet_24"
+            android:title="Tentang Aplikasi"
+            app:tint="@color/browser_actions_bg_grey" />
+
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/ic_baseline_shopping_cart_24"
+            android:title="Beri Saran"
+            app:tint="@color/browser_actions_bg_grey" />
+
+        <item
+            android:id="@+id/nav_denda"
+            android:icon="@drawable/ic_baseline_info_24"
+            android:title="Ketentuan Layanan"
+            app:tint="@color/browser_actions_bg_grey" />
+
+    </group>
+
+</menu>

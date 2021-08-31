@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Penyewaan_kamera">
-        <activity android:name=".HomepageActivity"></activity>
+        <activity android:name=".ui.product.ProductActivity"></activity>
+        <activity android:name=".ui.history_transaction.HistoryTransactionActivity" />
+        <activity android:name=".ui.denda.DendaActivity" />
+        <activity android:name=".ui.cart.CartActivity" />
+        <activity android:name=".ui.camera.CameraActivity" />
+        <activity android:name=".HomepageActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
