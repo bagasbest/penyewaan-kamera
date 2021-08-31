@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // login process
+        binding.progressBar2.setVisibility(View.VISIBLE);
         FirebaseAuth
                 .getInstance()
                 .signInWithEmailAndPassword(email, password)
@@ -78,8 +79,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
+                            binding.progressBar2.setVisibility(View.GONE);
                               startActivity(new Intent(LoginActivity.this, HomepageActivity.class));
                         } else {
+                            binding.progressBar2.setVisibility(View.GONE);
                             showFailureDialog();
                         }
                     }

@@ -30,11 +30,12 @@ import com.penyewaan.kamera.ui.product.ProductActivity;
 
 import org.jetbrains.annotations.NotNull;
 
-public class HomepageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomepageActivity extends AppCompatActivity {
 
     private ActivityHomepageBinding binding;
     private FirebaseUser user;
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,35 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                 if(!navDrawer.isDrawerOpen(GravityCompat.START)) navDrawer.openDrawer(GravityCompat.START);
                 else navDrawer.closeDrawer(GravityCompat.END);
             }
+        });
+
+
+        // Klik navigasi pada drawer
+        NavigationView navView = binding.navView;
+        navView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_camera: {
+                    startActivity(new Intent(HomepageActivity.this, CameraActivity.class));
+                    break;
+                }
+                case R.id.nav_cart: {
+                    startActivity(new Intent(HomepageActivity.this, CartActivity.class));
+                    break;
+                }
+                case R.id.nav_denda: {
+                    startActivity(new Intent(HomepageActivity.this, DendaActivity.class));
+                    break;
+                }
+                case R.id.nav_product: {
+                    startActivity(new Intent(HomepageActivity.this, ProductActivity.class));
+                    break;
+                }
+                case R.id.nav_history_transaction: {
+                    startActivity(new Intent(HomepageActivity.this, HistoryTransactionActivity.class));
+                    break;
+                }
+            }
+            return true;
         });
 
         // ambil username dan email
@@ -68,15 +98,16 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        NavigationView navView = (NavigationView) binding.navView.getHeaderView(0);
+                        NavigationView navView = binding.navView;
+                        View hView = navView.getHeaderView(0);
 
-                        TextView nameHeader = navView.findViewById(R.id.username);
+                        TextView nameHeader = hView.findViewById(R.id.username);
                         nameHeader.setText(""+documentSnapshot.get("name"));
 
-                        TextView emailHeader = navView.findViewById(R.id.email);
+                        TextView emailHeader = hView.findViewById(R.id.email);
                         emailHeader.setText(""+documentSnapshot.get("email"));
 
-                        ImageView userDp = navView.findViewById(R.id.userDp);
+                        ImageView userDp = hView.findViewById(R.id.userDp);
                         Glide.with(HomepageActivity.this)
                                 .load(""+documentSnapshot.get("dp"))
                                 .error(R.drawable.ic_baseline_face_24)
@@ -89,33 +120,5 @@ public class HomepageActivity extends AppCompatActivity implements NavigationVie
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-    }
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_camera: {
-                startActivity(new Intent(HomepageActivity.this, CameraActivity.class));
-                break;
-            }
-            case R.id.nav_cart: {
-                startActivity(new Intent(HomepageActivity.this, CartActivity.class));
-                break;
-            }
-            case R.id.nav_denda: {
-                startActivity(new Intent(HomepageActivity.this, DendaActivity.class));
-                break;
-            }
-            case R.id.nav_product: {
-                startActivity(new Intent(HomepageActivity.this, ProductActivity.class));
-                break;
-            }
-            case R.id.nav_history_transaction: {
-                startActivity(new Intent(HomepageActivity.this, HistoryTransactionActivity.class));
-                break;
-            }
-        }
-        return true;
     }
 }
