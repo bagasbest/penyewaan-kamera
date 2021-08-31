@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "438580496581",
+    "project_id": "penyewaan-kamera",
+    "storage_bucket": "penyewaan-kamera.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438580496581:android:13421bd4aec8557ca488ac",
+        "android_client_info": {
+          "package_name": "com.penyewaan.kamera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438580496581-gspkgkbp1uurql0d14v96s6mjn2jdva1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjfkGFwX96R_38Hhik6mc9BQO16nRPlAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438580496581-gspkgkbp1uurql0d14v96s6mjn2jdva1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
