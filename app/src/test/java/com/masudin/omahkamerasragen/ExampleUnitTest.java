@@ -1,4 +1,4 @@
-package com.penyewaan.kamera;
+package com.masudin.omahkamerasragen;
 
 import org.junit.Test;
 

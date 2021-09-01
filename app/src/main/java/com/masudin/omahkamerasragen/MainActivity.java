@@ -1,4 +1,4 @@
-package com.penyewaan.kamera;
+package com.masudin.omahkamerasragen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.penyewaan.kamera.databinding.ActivityMainBinding;
+import com.masudin.omahkamerasragen.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,11 +1,11 @@
-package com.penyewaan.kamera.ui.denda;
+package com.masudin.omahkamerasragen.ui.denda;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
-import com.penyewaan.kamera.R;
-import com.penyewaan.kamera.databinding.ActivityDendaBinding;
+import com.masudin.omahkamerasragen.databinding.ActivityDendaBinding;
 
 public class DendaActivity extends AppCompatActivity {
 
@@ -16,6 +16,14 @@ public class DendaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityDendaBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     @Override

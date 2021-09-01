@@ -1,4 +1,4 @@
-package com.penyewaan.kamera;
+package com.masudin.omahkamerasragen;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.penyewaan.kamera.databinding.ActivityLoginBinding;
+import com.masudin.omahkamerasragen.databinding.ActivityLoginBinding;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,11 +1,11 @@
-package com.penyewaan.kamera.ui.history_transaction;
+package com.masudin.omahkamerasragen.ui.history_transaction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
-import com.penyewaan.kamera.R;
-import com.penyewaan.kamera.databinding.ActivityHistoryTransactionBinding;
+import com.masudin.omahkamerasragen.databinding.ActivityHistoryTransactionBinding;
 
 public class HistoryTransactionActivity extends AppCompatActivity {
 
@@ -16,6 +16,14 @@ public class HistoryTransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHistoryTransactionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     @Override

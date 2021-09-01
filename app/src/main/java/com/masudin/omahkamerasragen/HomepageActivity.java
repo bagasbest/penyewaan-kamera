@@ -1,15 +1,12 @@
-package com.penyewaan.kamera;
+package com.masudin.omahkamerasragen;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,14 +18,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.penyewaan.kamera.databinding.ActivityHomepageBinding;
-import com.penyewaan.kamera.ui.camera.CameraActivity;
-import com.penyewaan.kamera.ui.cart.CartActivity;
-import com.penyewaan.kamera.ui.denda.DendaActivity;
-import com.penyewaan.kamera.ui.history_transaction.HistoryTransactionActivity;
-import com.penyewaan.kamera.ui.product.ProductActivity;
-
-import org.jetbrains.annotations.NotNull;
+import com.masudin.omahkamerasragen.databinding.ActivityHomepageBinding;
+import com.masudin.omahkamerasragen.ui.camera.CameraActivity;
+import com.masudin.omahkamerasragen.ui.cart.CartActivity;
+import com.masudin.omahkamerasragen.ui.denda.DendaActivity;
+import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionActivity;
+import com.masudin.omahkamerasragen.ui.product.ProductActivity;
 
 public class HomepageActivity extends AppCompatActivity {
 
@@ -84,6 +79,14 @@ public class HomepageActivity extends AppCompatActivity {
 
         // ambil username dan email
         populateHeader();
+
+        // edit data pribadi
+         binding.account.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 
+             }
+         });
 
     }
 

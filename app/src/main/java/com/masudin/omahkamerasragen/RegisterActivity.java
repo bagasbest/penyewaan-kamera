@@ -1,4 +1,4 @@
-package com.penyewaan.kamera;
+package com.masudin.omahkamerasragen;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.penyewaan.kamera.databinding.ActivityRegisterBinding;
+import com.masudin.omahkamerasragen.databinding.ActivityRegisterBinding;
 
 import java.util.HashMap;
 import java.util.Map;

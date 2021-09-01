@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.penyewaan.kamera">
+    package="com.masudin.omahkamerasragen">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Penyewaan_kamera">
-        <activity android:name=".ui.product.ProductActivity"></activity>
+        <activity android:name=".ui.profile.ProfileActivity"></activity>
+        <activity android:name=".ui.product.ProductActivity" />
         <activity android:name=".ui.history_transaction.HistoryTransactionActivity" />
         <activity android:name=".ui.denda.DendaActivity" />
         <activity android:name=".ui.cart.CartActivity" />

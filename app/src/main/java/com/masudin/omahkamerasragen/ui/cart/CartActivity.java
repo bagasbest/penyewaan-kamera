@@ -1,22 +1,20 @@
-package com.penyewaan.kamera.ui.camera;
+package com.masudin.omahkamerasragen.ui.cart;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.penyewaan.kamera.R;
-import com.penyewaan.kamera.databinding.ActivityCameraBinding;
+import com.masudin.omahkamerasragen.databinding.ActivityCartBinding;
 
-public class CameraActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity {
 
-
-    private ActivityCameraBinding  binding;
+    private ActivityCartBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCameraBinding.inflate(getLayoutInflater());
+        binding = ActivityCartBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         binding.backButton.setOnClickListener(new View.OnClickListener() {
