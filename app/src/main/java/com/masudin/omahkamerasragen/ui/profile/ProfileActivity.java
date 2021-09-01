@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.masudin.omahkamerasragen.LoginActivity;
@@ -35,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         // KLIK PERBARUI PROFIL
         updateProfile();
@@ -50,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        populateUI();
     }
 
     private void updateUserDp() {
@@ -58,7 +62,6 @@ public class ProfileActivity extends AppCompatActivity {
                     .with(this)
                     .galleryOnly()
                     .compress(1024)
-                    .maxResultSize(1080, 1080)
                     .start(REQUEST_FROM_GALLERY_TO_SELF_PHOTO);
         });
     }
@@ -159,6 +162,8 @@ public class ProfileActivity extends AppCompatActivity {
                                 .error(R.drawable.ic_baseline_face_24)
                                 .into(binding.userDp);
 
+                        Log.e("TAG", userDp);
+
                         if (gender.equals("Laki-laki")) {
                             binding.male.setChecked(true);
                         } else {
@@ -189,8 +194,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
 
 

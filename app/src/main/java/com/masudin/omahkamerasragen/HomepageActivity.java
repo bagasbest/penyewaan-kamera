@@ -24,11 +24,20 @@ import com.masudin.omahkamerasragen.ui.cart.CartActivity;
 import com.masudin.omahkamerasragen.ui.denda.DendaActivity;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionActivity;
 import com.masudin.omahkamerasragen.ui.product.ProductActivity;
+import com.masudin.omahkamerasragen.ui.profile.ProfileActivity;
 
 public class HomepageActivity extends AppCompatActivity {
 
     private ActivityHomepageBinding binding;
     private FirebaseUser user;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // ambil username dan email
+        populateHeader();
+
+    }
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -43,7 +52,8 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DrawerLayout navDrawer = binding.drawerLayout;
-                if(!navDrawer.isDrawerOpen(GravityCompat.START)) navDrawer.openDrawer(GravityCompat.START);
+                if (!navDrawer.isDrawerOpen(GravityCompat.START))
+                    navDrawer.openDrawer(GravityCompat.START);
                 else navDrawer.closeDrawer(GravityCompat.END);
             }
         });
@@ -77,16 +87,13 @@ public class HomepageActivity extends AppCompatActivity {
             return true;
         });
 
-        // ambil username dan email
-        populateHeader();
-
         // edit data pribadi
-         binding.account.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 
-             }
-         });
+        binding.account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomepageActivity.this, ProfileActivity.class));
+            }
+        });
 
     }
 
@@ -105,14 +112,14 @@ public class HomepageActivity extends AppCompatActivity {
                         View hView = navView.getHeaderView(0);
 
                         TextView nameHeader = hView.findViewById(R.id.username);
-                        nameHeader.setText(""+documentSnapshot.get("name"));
+                        nameHeader.setText("" + documentSnapshot.get("name"));
 
                         TextView emailHeader = hView.findViewById(R.id.email);
-                        emailHeader.setText(""+documentSnapshot.get("email"));
+                        emailHeader.setText("" + documentSnapshot.get("email"));
 
                         ImageView userDp = hView.findViewById(R.id.userDp);
                         Glide.with(HomepageActivity.this)
-                                .load(""+documentSnapshot.get("dp"))
+                                .load("" + documentSnapshot.get("dp"))
                                 .error(R.drawable.ic_baseline_face_24)
                                 .into(userDp);
                     }

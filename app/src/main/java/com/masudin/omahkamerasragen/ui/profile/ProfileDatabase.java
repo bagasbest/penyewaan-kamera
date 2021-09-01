@@ -50,7 +50,7 @@ public class ProfileDatabase {
                 .getInstance()
                 .collection("users")
                 .document(uid)
-                .update("userDp", userDp)
+                .update("dp", userDp)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         mProgressDialog.dismiss();

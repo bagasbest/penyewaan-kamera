@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.bumptech.glide.Glide;
 import com.masudin.omahkamerasragen.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Glide.with(this)
+                .load(R.drawable.logo)
+                .into(binding.imageView);
 
         final Handler handler = new Handler();
         handler.postDelayed(() -> {

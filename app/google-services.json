@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:438580496581:android:13421bd4aec8557ca488ac",
+        "mobilesdk_app_id": "1:438580496581:android:16472460a068c777a488ac",
         "android_client_info": {
-          "package_name": "com.penyewaan.kamera"
+          "package_name": "com.masudin.omahkamerasragen"
         }
       },
       "oauth_client": [
