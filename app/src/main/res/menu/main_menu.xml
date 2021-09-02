@@ -13,25 +13,25 @@
         <item
             android:id="@+id/nav_product"
             android:icon="@drawable/ic_baseline_attractions_24"
-            android:title="Pengaturan Aplikasi"
+            android:title="Peralan Kamera"
             app:tint="@color/browser_actions_bg_grey" />
 
         <item
             android:id="@+id/nav_history_transaction"
             android:icon="@drawable/ic_baseline_account_balance_wallet_24"
-            android:title="Riwayat Transaksi"
+            android:title="History Transaksi"
             app:tint="@color/browser_actions_bg_grey" />
 
         <item
             android:id="@+id/nav_cart"
             android:icon="@drawable/ic_baseline_shopping_cart_24"
-            android:title="Beri Saran"
+            android:title="Cart"
             app:tint="@color/browser_actions_bg_grey" />
 
         <item
             android:id="@+id/nav_denda"
             android:icon="@drawable/ic_baseline_info_24"
-            android:title="Ketentuan Layanan"
+            android:title="Denda"
             app:tint="@color/browser_actions_bg_grey" />
 
     </group>

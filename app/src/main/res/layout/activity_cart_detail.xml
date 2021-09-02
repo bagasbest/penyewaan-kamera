@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.cart.CartDetailActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginBottom="16dp"
+            android:layout_height="wrap_content">
+
+
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_bg"
+                android:contentDescription="@string/button"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.044"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="30dp"
+                android:text="Detail Keranjang"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/backButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/backButton"
+                tools:layout_editor_absoluteX="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:scaleType="centerCrop"
+                        app:riv_corner_radius="10dp" />
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="110dp"
+                        android:layout_marginTop="10dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:layout_below="@+id/name"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_toEndOf="@id/dp"
+                        android:background="@drawable/border_card"
+                        android:enabled="false"
+                        android:textAllCaps="false" />
+
+                    <TextView
+                        android:id="@+id/merk"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/name"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="30sp"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_toEndOf="@id/dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Merk: "
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="11sp" />
+
+
+                    <TextView
+                        android:id="@+id/tv1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Tanggal Sewa"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/dateStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv1"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="01-01-2021"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_toEndOf="@id/tv1"
+                        android:text="Tanggal Kembali"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/dateFinish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv2"
+                        android:layout_marginStart="36dp"
+                        android:layout_toEndOf="@+id/tv1"
+                        android:text="03-01-2021"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="16dp"
+                        android:text="Tanggal Kembali"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/jamAmbil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv2"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="36dp"
+                        android:text="07.00"
+                        android:textColor="@color/black" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                tools:layout_editor_absoluteX="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+
+                    <TextView
+                        android:id="@+id/tv4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rincian Barang"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_below="@id/tv4"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/border_card" />
+
+                    <Button
+                        android:id="@+id/cancelBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv4"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="20sp"
+                        android:layout_marginEnd="10dp"
+                        android:text="Cancel"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv4"
+                        android:layout_marginTop="30sp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="110dp" />
+
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/duration"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="110dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="110dp"
+                        android:layout_below="@+id/view1"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/border_card" />
+
+                    <TextView
+                        android:id="@+id/info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/view1"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="26dp"
+                        android:text="Informasi Tambahan:\n\n1. Biaya kerusakan ditanggung oleh penyewa.\n2. Denda berlaku sebesar Rp. 5.000 per Jam, jika melebihi waktu pinjam."
+                        android:textColor="@color/black" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    <TextView
+        android:id="@+id/totalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Rp. -"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view" />
+
+
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

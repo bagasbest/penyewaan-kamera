@@ -178,6 +178,7 @@ public class ProductEditActivity extends AppCompatActivity {
                 .setPositiveButton("OKE", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     onBackPressed();
+                    onBackPressed();
                 })
                 .show();
     }

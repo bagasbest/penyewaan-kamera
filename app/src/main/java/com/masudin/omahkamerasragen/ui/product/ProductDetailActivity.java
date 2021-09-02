@@ -3,29 +3,30 @@ package com.masudin.omahkamerasragen.ui.product;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.core.util.Pair;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityProductDetailBinding;
-
 import org.jetbrains.annotations.NotNull;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -95,7 +96,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 binding.sewaBerdasarkanJam.setVisibility(View.VISIBLE);
                 binding.jam.setVisibility(View.GONE);
-
+                sewaPeralatanKameraPerDay();
             }
         });
 
@@ -117,12 +118,150 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     }
 
+    private void sewaPeralatanKameraPerDay() {
+        // pilih tanggal peminjaman
+        Calendar now = Calendar.getInstance();
+        MaterialDatePicker datePicker = MaterialDatePicker.Builder.dateRangePicker()
+                .setSelection(Pair.create(now.getTimeInMillis(), now.getTimeInMillis())).build();
+
+        datePicker.show(getSupportFragmentManager(), datePicker.toString());
+
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            Pair prendiRange = (Pair) datePicker.getSelection();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String formatFirst = sdf.format(new Date(Long.parseLong(prendiRange.first.toString())));
+            String formatSecond = sdf.format(new Date(Long.parseLong(prendiRange.second.toString())));
+            new AlertDialog.Builder(this)
+                    .setTitle("Konfirmasi Penyewaan Peralatan Kamera")
+                    .setMessage("Apakah anda yakin ingin menyewa peralatan kamera ini ?\n\nJika ya, produk ini akan di tambahkan di keranjang")
+                    .setIcon(R.drawable.ic_baseline_warning_24)
+                    .setPositiveButton("OKE", (dialogInterface, i) -> {
+                        long diff = Long.parseLong(prendiRange.second.toString()) - Long.parseLong(prendiRange.first.toString());
+                        long diffDays = diff / (24 * 60 * 60 * 1000);
+                        saveProductToCart(formatFirst, formatSecond, 24, diffDays);
+                    })
+                    .setNegativeButton("TIDAK", (dialog, i) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
+    }
+
     private void sewaPeralatanKameraPerHour(int hour) {
         // pilih tanggal peminjaman
-        MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Pilih Tanggal Penyewaan").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
+        MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker().build();
+        datePicker.show(getSupportFragmentManager(), datePicker.toString());
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            Log.e("TAG", datePicker.getHeaderText());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String format = sdf.format(new Date(Long.parseLong(selection.toString())));
+            new AlertDialog.Builder(this)
+                    .setTitle("Konfirmasi Penyewaan Peralatan Kamera")
+                    .setMessage("Apakah anda yakin ingin menyewa  peralatan kamera ini ?\n\nJika ya, produk ini akan di tambahkan di keranjang")
+                    .setIcon(R.drawable.ic_baseline_warning_24)
+                    .setPositiveButton("OKE", (dialogInterface, i) -> {
+                        saveProductToCart(format, "", hour, 0);
+                    })
+                    .setNegativeButton("TIDAK", (dialog, i) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+
         });
+
+    }
+
+    private void saveProductToCart(String first, String second, int hour, long difference) {
+        ProgressDialog mProgressDialog = new ProgressDialog(this);
+
+        mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        FirebaseFirestore
+                .getInstance()
+                .collection("users")
+                .document(user.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String uid = String.valueOf(System.currentTimeMillis());
+
+                        // SIMPAN DATA PERALATAN KAMERA KE DATABASE
+                        Map<String, Object> addToCart = new HashMap<>();
+                        addToCart.put("cartId", uid);
+                        addToCart.put("name", model.getName());
+                        addToCart.put("merk", model.getMerk());
+                        addToCart.put("dp", model.getDp());
+                        if(hour == 6) {
+                            addToCart.put("duration", hour + " Jam");
+                            addToCart.put("price", model.getPrice());
+                            addToCart.put("dateStart", first);
+                            addToCart.put("dateFinish", first);
+                            addToCart.put("totalPrice", model.getPrice());
+                        } else if(hour == 12) {
+                            addToCart.put("duration", hour + " Jam");
+                            addToCart.put("price", model.getPrice2());
+                            addToCart.put("dateStart", first);
+                            addToCart.put("dateFinish", first);
+                            addToCart.put("totalPrice", model.getPrice2());
+                        } else {
+                            addToCart.put("duration", difference + " Hari");
+                            addToCart.put("price", model.getPrice3());
+                            addToCart.put("dateStart", first);
+                            addToCart.put("dateFinish", second);
+                            addToCart.put("totalPrice", Long.parseLong(model.getPrice3()) * difference);
+                        }
+                        addToCart.put("category", "Peralatan Kamera");
+                        addToCart.put("customerUid", user.getUid());
+                        addToCart.put("customerName", ""+documentSnapshot.get("name"));
+
+                        FirebaseFirestore
+                                .getInstance()
+                                .collection("cart")
+                                .document(uid)
+                                .set(addToCart)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                        if(task.isSuccessful()) {
+                                            mProgressDialog.dismiss();
+                                            showSuccessDialog();
+                                        }
+                                        else {
+                                            mProgressDialog.dismiss();
+                                            showFailureDialog();
+                                        }
+                                    }
+                                });
+                    }
+                });
+    }
+
+    private void showFailureDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Gagal Memasukkan Produk Kedalam Keranjang")
+                .setMessage("Terdapat kesalahan ketika memasukkan produk kedalam keranjang, silahkan periksa koneksi internet anda, dan coba lagi nanti")
+                .setIcon(R.drawable.ic_baseline_clear_24)
+                .setPositiveButton("OKE", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    onBackPressed();
+                })
+                .show();
+    }
+
+    private void showSuccessDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Berhasil Mengunggah Kamera")
+                .setMessage("Anda dapat melihat produk pada navigasi cart atau keranjang")
+                .setIcon(R.drawable.ic_baseline_check_circle_outline_24)
+                .setPositiveButton("OKE", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    onBackPressed();
+                })
+                .show();
     }
 
     private void showConfirmDialog() {
@@ -132,7 +271,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_baseline_warning_24)
                 .setPositiveButton("YAKIN", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
-                    deleteArticle();
+                    deleteCameraUtilities();
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
@@ -140,7 +279,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void deleteArticle() {
+    private void deleteCameraUtilities() {
         ProgressDialog mProgressDialog = new ProgressDialog(this);
 
         mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...");

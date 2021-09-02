@@ -30,7 +30,7 @@
             android:id="@+id/dp"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:contentDescription="@string/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +117,6 @@
             android:layout_marginStart="16dp"
             android:text="Rp. -"
             android:textColor="@color/black"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -128,7 +127,6 @@
             android:layout_marginStart="16dp"
             android:text="Rp. -"
             android:textColor="@color/black"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/price" />
 
@@ -139,7 +137,6 @@
             android:layout_marginStart="16dp"
             android:text="Rp. -"
             android:textColor="@color/black"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/price2" />
 
