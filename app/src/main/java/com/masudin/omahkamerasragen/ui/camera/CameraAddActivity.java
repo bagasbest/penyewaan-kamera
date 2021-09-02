@@ -122,6 +122,7 @@ public class CameraAddActivity extends AppCompatActivity {
         product.put("price2", price2);
         product.put("price3", price3);
         product.put("uid", uid);
+        product.put("status", "ready");
         product.put("dp", dp);
 
 

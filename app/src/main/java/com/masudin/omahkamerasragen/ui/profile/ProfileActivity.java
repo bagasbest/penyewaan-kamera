@@ -62,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
                     .with(this)
                     .galleryOnly()
                     .compress(1024)
+                    .maxResultSize(1080, 1080)
                     .start(REQUEST_FROM_GALLERY_TO_SELF_PHOTO);
         });
     }

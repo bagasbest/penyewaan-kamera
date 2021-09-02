@@ -69,7 +69,7 @@ public class ProductActivity extends AppCompatActivity {
         ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         binding.progressBar.setVisibility(View.VISIBLE);
-        viewModel.setArticleList();
+        viewModel.setCameraUtilities();
         viewModel.getProduct().observe(this, product -> {
             if (product.size() > 0) {
                 binding.noData.setVisibility(View.GONE);

@@ -1,6 +1,5 @@
-package com.masudin.omahkamerasragen.ui.product;
+package com.masudin.omahkamerasragen.ui.camera;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,74 +19,83 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder> {
 
-    private final ArrayList<ProductModel> listProduct = new ArrayList<>();
-    public void setData(ArrayList<ProductModel> items) {
-        listProduct.clear();
-        listProduct.addAll(items);
+    private final ArrayList<CameraModel> listCamera = new ArrayList<>();
+    public void setData(ArrayList<CameraModel> items) {
+        listCamera.clear();
+        listCamera.addAll(items);
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_peralatan, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_camera, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.bind(listProduct.get(position));
+        holder.bind(listCamera.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return listProduct.size();
+        return listCamera.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ConstraintLayout cv;
-        private TextView name, price, status;
-        private ImageView dp;
         private View bg;
+        private ImageView dp;
+        private TextView name, facility, price, status;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             cv = itemView.findViewById(R.id.cv);
-            name = itemView.findViewById(R.id.name);
-            price = itemView.findViewById(R.id.price);
             dp = itemView.findViewById(R.id.dp);
             bg = itemView.findViewById(R.id.view2);
+            name = itemView.findViewById(R.id.name);
+            facility = itemView.findViewById(R.id.facility);
+            price = itemView.findViewById(R.id.price);
             status = itemView.findViewById(R.id.status);
         }
 
-        @SuppressLint("SetTextI18n")
-        public void bind(ProductModel productModel) {
+        public void bind(CameraModel model) {
 
-            name.setText(productModel.getName());
-            price.setText("Rp. " + productModel.getPrice()  + " ~ Rp. " + productModel.getPrice3());
             Glide.with(itemView.getContext())
-                    .load(productModel.getDp())
+                    .load(model.getDp())
                     .into(dp);
-            status.setText(productModel.getStatus());
 
-            if(productModel.getStatus().equals("ready")) {
+            name.setText(model.getName());
+            facility.setText(model.getFacility());
+            price.setText("Rp. " + model.getPrice() + " ~ Rp. " + model.getPrice3());
+            status.setText(model.getStatus());
+
+
+            if(model.getStatus().equals("ready")) {
                 bg.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg2));
 
                 cv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(itemView.getContext(), ProductDetailActivity.class);
-                        intent.putExtra(ProductDetailActivity.EXTRA_PERALATAN, productModel);
+                        Intent intent = new Intent(itemView.getContext(), CameraDetailActivity.class);
+                        intent.putExtra(CameraDetailActivity.EXTRA_CAMERA, model);
                         itemView.getContext().startActivity(intent);
                     }
                 });
+
             } else {
                 bg.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg));
             }
+
+
+
         }
     }
 }

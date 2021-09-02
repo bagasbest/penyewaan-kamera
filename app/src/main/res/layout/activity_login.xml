@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Kata Sandi"
-                android:inputType="textEmailAddress" />
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

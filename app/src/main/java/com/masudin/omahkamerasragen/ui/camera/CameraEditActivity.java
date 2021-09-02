@@ -1,9 +1,8 @@
-package com.masudin.omahkamerasragen.ui.product;
+package com.masudin.omahkamerasragen.ui.camera;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,25 +20,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.masudin.omahkamerasragen.R;
-import com.masudin.omahkamerasragen.databinding.ActivityProductEditBinding;
-
+import com.masudin.omahkamerasragen.databinding.ActivityCameraEditBinding;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductEditActivity extends AppCompatActivity {
+public class CameraEditActivity extends AppCompatActivity {
 
     public static final String EXTRA_EDIT = "edit";
-    private ActivityProductEditBinding binding;
+    private ActivityCameraEditBinding binding;
     private String dp;
-    private ProductModel model;
+    private CameraModel model;
     private static final int REQUEST_FROM_GALLERY = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityProductEditBinding.inflate(getLayoutInflater());
+        binding = ActivityCameraEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         model = getIntent().getParcelableExtra(EXTRA_EDIT);
@@ -54,6 +50,7 @@ public class ProductEditActivity extends AppCompatActivity {
         binding.price.setText(model.getPrice());
         binding.price2.setText(model.getPrice2());
         binding.price3.setText(model.getPrice3());
+        binding.facility.setText(model.getFacility());
         binding.description.setText(model.getDescription());
 
 
@@ -69,7 +66,7 @@ public class ProductEditActivity extends AppCompatActivity {
         binding.imageHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.with(ProductEditActivity.this)
+                ImagePicker.with(CameraEditActivity.this)
                         .galleryOnly()
                         .compress(1024)
                         .maxResultSize(1080, 1080)
@@ -82,13 +79,12 @@ public class ProductEditActivity extends AppCompatActivity {
         binding.uploadArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateCameraUtilities();
+                updateCamera();
             }
         });
     }
 
-
-    private void updateCameraUtilities() {
+    private void updateCamera() {
 
         String name = binding.nameEt.getText().toString().trim();
         String merk = binding.merkEt.getText().toString().trim();
@@ -98,27 +94,27 @@ public class ProductEditActivity extends AppCompatActivity {
         String price3 = binding.price3.getText().toString().trim();
 
         if(name.isEmpty()) {
-            Toast.makeText(ProductEditActivity.this, "Nama Produk tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CameraEditActivity.this, "Nama Kamera tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
         else if(merk.isEmpty()) {
-            Toast.makeText(ProductEditActivity.this, "Merk Produk tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CameraEditActivity.this, "Merk Kamera tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
         else if(desc.isEmpty()) {
-            Toast.makeText(ProductEditActivity.this, "Deskripsi Produk tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CameraEditActivity.this, "Deskripsi Kamera tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
         else if(price.isEmpty()) {
-            Toast.makeText(ProductEditActivity.this, "Harga Produk (6 Jam) tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CameraEditActivity.this, "Harga Kamera (6 Jam) tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
         else if(price2.isEmpty()) {
-            Toast.makeText(ProductEditActivity.this, "Harga Produk (12 Jam) tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CameraEditActivity.this, "Harga Kamera (12 Jam) tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
         else if(price3.isEmpty()) {
-            Toast.makeText(ProductEditActivity.this, "Harga Produk (24 Jam) tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CameraEditActivity.this, "Harga Kamera (24 Jam) tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -139,7 +135,7 @@ public class ProductEditActivity extends AppCompatActivity {
 
         FirebaseFirestore
                 .getInstance()
-                .collection("peralatan")
+                .collection("camera")
                 .document(model.getUid())
                 .update(product)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -217,12 +213,12 @@ public class ProductEditActivity extends AppCompatActivity {
                                 })
                                 .addOnFailureListener(e -> {
                                     mProgressDialog.dismiss();
-                                    Toast.makeText(ProductEditActivity.this, "Gagal mengunggah gambar", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CameraEditActivity.this, "Gagal mengunggah gambar", Toast.LENGTH_SHORT).show();
                                     Log.d("imageDp: ", e.toString());
                                 }))
                 .addOnFailureListener(e -> {
                     mProgressDialog.dismiss();
-                    Toast.makeText(ProductEditActivity.this, "Gagal mengunggah gambar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CameraEditActivity.this, "Gagal mengunggah gambar", Toast.LENGTH_SHORT).show();
                     Log.d("imageDp: ", e.toString());
                 });
     }

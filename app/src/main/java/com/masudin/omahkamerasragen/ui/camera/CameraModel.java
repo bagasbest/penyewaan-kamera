@@ -1,43 +1,47 @@
-package com.masudin.omahkamerasragen.ui.product;
+package com.masudin.omahkamerasragen.ui.camera;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ProductModel implements Parcelable {
+public class CameraModel implements Parcelable {
 
     private String name;
-    private String merk;
     private String description;
-    private String dp;
+    private String facility;
+    private String merk;
     private String price;
     private String price2;
     private String price3;
     private String uid;
+    private String dp;
     private String status;
 
-    public ProductModel(){}
-    protected ProductModel(Parcel in) {
+   public CameraModel() {}
+
+    protected CameraModel(Parcel in) {
         name = in.readString();
-        merk = in.readString();
         description = in.readString();
-        dp = in.readString();
+        facility = in.readString();
+        merk = in.readString();
         price = in.readString();
         price2 = in.readString();
         price3 = in.readString();
         uid = in.readString();
+        dp = in.readString();
         status = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(merk);
         dest.writeString(description);
-        dest.writeString(dp);
+        dest.writeString(facility);
+        dest.writeString(merk);
         dest.writeString(price);
         dest.writeString(price2);
         dest.writeString(price3);
         dest.writeString(uid);
+        dest.writeString(dp);
         dest.writeString(status);
     }
 
@@ -46,15 +50,15 @@ public class ProductModel implements Parcelable {
         return 0;
     }
 
-    public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
+    public static final Creator<CameraModel> CREATOR = new Creator<CameraModel>() {
         @Override
-        public ProductModel createFromParcel(Parcel in) {
-            return new ProductModel(in);
+        public CameraModel createFromParcel(Parcel in) {
+            return new CameraModel(in);
         }
 
         @Override
-        public ProductModel[] newArray(int size) {
-            return new ProductModel[size];
+        public CameraModel[] newArray(int size) {
+            return new CameraModel[size];
         }
     };
 
@@ -66,14 +70,6 @@ public class ProductModel implements Parcelable {
         this.name = name;
     }
 
-    public String getMerk() {
-        return merk;
-    }
-
-    public void setMerk(String merk) {
-        this.merk = merk;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -82,12 +78,20 @@ public class ProductModel implements Parcelable {
         this.description = description;
     }
 
-    public String getDp() {
-        return dp;
+    public String getFacility() {
+        return facility;
     }
 
-    public void setDp(String dp) {
-        this.dp = dp;
+    public void setFacility(String facility) {
+        this.facility = facility;
+    }
+
+    public String getMerk() {
+        return merk;
+    }
+
+    public void setMerk(String merk) {
+        this.merk = merk;
     }
 
     public String getPrice() {
@@ -120,6 +124,14 @@ public class ProductModel implements Parcelable {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getDp() {
+        return dp;
+    }
+
+    public void setDp(String dp) {
+        this.dp = dp;
     }
 
     public String getStatus() {

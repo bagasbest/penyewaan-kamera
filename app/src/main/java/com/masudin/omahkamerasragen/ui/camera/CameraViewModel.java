@@ -1,40 +1,42 @@
-package com.masudin.omahkamerasragen.ui.product;
+package com.masudin.omahkamerasragen.ui.camera;
 
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.masudin.omahkamerasragen.ui.product.ProductModel;
 
 import java.util.ArrayList;
 
-public class ProductViewModel extends ViewModel {
+public class CameraViewModel extends ViewModel {
 
-    private final MutableLiveData<ArrayList<ProductModel>> listProduct = new MutableLiveData<>();
-    final ArrayList<ProductModel> productModelArrayList = new ArrayList<>();
+    private final MutableLiveData<ArrayList<CameraModel>> listCamera = new MutableLiveData<>();
+    final ArrayList<CameraModel> cameraModelArrayList = new ArrayList<>();
 
-    private static final String TAG = ProductViewModel.class.getSimpleName();
+    private static final String TAG = CameraViewModel.class.getSimpleName();
 
-    public void setCameraUtilities() {
-        productModelArrayList.clear();
+    public void setCameraList() {
+        cameraModelArrayList.clear();
 
         try {
             FirebaseFirestore
                     .getInstance()
-                    .collection("peralatan")
+                    .collection("camera")
                     .get()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
                             for(QueryDocumentSnapshot document : task.getResult()) {
-                                ProductModel model = new ProductModel();
+                                CameraModel model = new CameraModel();
 
                                 model.setName("" + document.get("name"));
                                 model.setDescription("" + document.get("description"));
                                 model.setDp("" + document.get("dp"));
                                 model.setMerk("" + document.get("merk"));
+                                model.setFacility("" + document.get("facility"));
+                                model.setStatus("" + document.get("status"));
                                 model.setPrice("" + document.get("price"));
                                 model.setPrice2("" + document.get("price2"));
                                 model.setPrice3("" + document.get("price3"));
@@ -42,9 +44,9 @@ public class ProductViewModel extends ViewModel {
                                 model.setStatus("" + document.get("status"));
 
 
-                                productModelArrayList.add(model);
+                                cameraModelArrayList.add(model);
                             }
-                            listProduct.postValue(productModelArrayList);
+                            listCamera.postValue(cameraModelArrayList);
                         } else {
                             Log.e(TAG, task.toString());
                         }
@@ -55,8 +57,9 @@ public class ProductViewModel extends ViewModel {
     }
 
 
-    public LiveData<ArrayList<ProductModel>> getProduct() {
-        return listProduct;
+    public LiveData<ArrayList<CameraModel>> getCameraList() {
+        return listCamera;
     }
+
 
 }

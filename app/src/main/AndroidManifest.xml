@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Penyewaan_kamera">
-        <activity android:name=".ui.product.ProductEditActivity"></activity>
+        <activity android:name=".ui.camera.CameraEditActivity"></activity>
+        <activity android:name=".ui.camera.CameraDetailActivity" />
+        <activity android:name=".ui.product.ProductEditActivity" />
         <activity android:name=".ui.product.ProductDetailActivity" />
         <activity android:name=".ui.product.ProductAddActivity" />
         <activity android:name=".ui.camera.CameraAddActivity" />

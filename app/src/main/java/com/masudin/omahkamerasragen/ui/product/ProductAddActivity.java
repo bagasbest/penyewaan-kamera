@@ -113,6 +113,8 @@ public class ProductAddActivity extends AppCompatActivity {
         product.put("price3", price3);
         product.put("uid", uid);
         product.put("dp", dp);
+        product.put("status", "ready");
+
 
 
         FirebaseFirestore

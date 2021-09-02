@@ -1,4 +1,4 @@
-package com.masudin.omahkamerasragen.ui.product;
+package com.masudin.omahkamerasragen.ui.camera;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,37 +17,37 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.masudin.omahkamerasragen.R;
-import com.masudin.omahkamerasragen.databinding.ActivityProductDetailBinding;
+import com.masudin.omahkamerasragen.databinding.ActivityCameraDetailBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ProductDetailActivity extends AppCompatActivity {
+public class CameraDetailActivity extends AppCompatActivity {
 
-    public static final String EXTRA_PERALATAN = "peralatan";
-    private ActivityProductDetailBinding binding;
-    private ProductModel model;
+    public static final String EXTRA_CAMERA = "camera";
+    private ActivityCameraDetailBinding binding;
+    private CameraModel model;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityProductDetailBinding.inflate(getLayoutInflater());
+        binding = ActivityCameraDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        model = getIntent().getParcelableExtra(EXTRA_PERALATAN);
+        model = getIntent().getParcelableExtra(EXTRA_CAMERA);
         Glide.with(this)
                 .load(model.getDp())
                 .into(binding.dp);
 
         binding.name.setText(model.getName());
-        binding.merk.setText(model.getMerk());
+        binding.merk.setText("Merk: " + model.getMerk());
         binding.description.setText(model.getDescription());
+        binding.facility.setText(model.getFacility());
         binding.price.setText("Rp. " + model.getPrice() + " untuk 6 Jam Penyewaan");
         binding.price2.setText("Rp. " + model.getPrice2() + " untuk 12 Jam Penyewaan");
         binding.price3.setText("Rp. " + model.getPrice3() + " untuk 24 Jam Penyewaan");
@@ -74,8 +74,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProductDetailActivity.this, ProductEditActivity.class);
-                intent.putExtra(ProductEditActivity.EXTRA_EDIT, model);
+                Intent intent = new Intent(CameraDetailActivity.this, CameraEditActivity.class);
+                intent.putExtra(CameraEditActivity.EXTRA_EDIT, model);
                 startActivity(intent);
             }
         });
@@ -103,7 +103,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.priceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sewaPeralatanKameraPerHour(6);
+                sewaKameraPerHour(6);
             }
         });
 
@@ -111,13 +111,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.price2Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sewaPeralatanKameraPerHour(12);
+                sewaKameraPerHour(12);
             }
         });
-
     }
 
-    private void sewaPeralatanKameraPerHour(int hour) {
+    private void sewaKameraPerHour(int hour) {
         // pilih tanggal peminjaman
         MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Pilih Tanggal Penyewaan").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
         datePicker.addOnPositiveButtonClickListener(selection -> {
@@ -127,8 +126,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void showConfirmDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Konfirmasi menghapus peralatan kamera")
-                .setMessage("Apakah anda yakin ingin menghapus peralatan kamera ini ?")
+                .setTitle("Konfirmasi menghapus kamera")
+                .setMessage("Apakah anda yakin ingin menghapus kamera ini ?")
                 .setIcon(R.drawable.ic_baseline_warning_24)
                 .setPositiveButton("YAKIN", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
@@ -149,7 +148,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         FirebaseFirestore
                 .getInstance()
-                .collection("peralatan")
+                .collection("camera")
                 .document(model.getUid())
                 .delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -157,12 +156,12 @@ public class ProductDetailActivity extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
                         if(task.isSuccessful())  {
                             mProgressDialog.dismiss();
-                            Toast.makeText(ProductDetailActivity.this, "Berhasil menghapus peralatan kamera", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CameraDetailActivity.this, "Berhasil menghapus kamera", Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         }
                         else {
                             mProgressDialog.dismiss();
-                            Toast.makeText(ProductDetailActivity.this, "Gagal menghapus peralatan kamera", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CameraDetailActivity.this, "Gagal menghapus kamera", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

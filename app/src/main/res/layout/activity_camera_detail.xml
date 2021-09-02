@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.product.ProductDetailActivity">
+    tools:context=".ui.camera.CameraDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -67,8 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:textColor="@color/black"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:textAlignment="center"
             android:textSize="18sp"
@@ -80,9 +80,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_bg"
+            android:enabled="false"
             android:textAllCaps="false"
             android:textSize="11sp"
-            android:enabled="false"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,8 +105,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Harga"
             android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="Harga"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view3" />
@@ -149,12 +151,37 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:textStyle="bold"
             android:text="Deskripsi Peralatan Kamera"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/price3" />
+
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Layanan Dasar"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description" />
+
+        <TextView
+            android:id="@+id/layananDasar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Rental camera Anda mencakup layanan di bawah yang bisa anda sesuaikan kebutuhan dengan biaya tambahan"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <TextView
             android:id="@+id/description"
@@ -168,6 +195,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:text="Fasilitas Kamera"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layananDasar" />
+
+        <TextView
+            android:id="@+id/facility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Fasilitas Kamera"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <TextView
             android:id="@+id/textView4"
@@ -180,7 +230,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description" />
+            app:layout_constraintTop_toBottomOf="@+id/facility" />
 
         <TextView
             android:id="@+id/tv5"
@@ -188,7 +238,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Peralatan Kamera"
+            android:text="Kamera"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +261,7 @@
             android:id="@+id/sewaBerdasarkanHari"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="30dp"
             android:text="Sewa Berdasarkan Hari"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
