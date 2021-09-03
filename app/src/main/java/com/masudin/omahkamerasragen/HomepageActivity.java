@@ -1,5 +1,6 @@
 package com.masudin.omahkamerasragen;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -7,11 +8,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,11 +29,15 @@ import com.masudin.omahkamerasragen.ui.denda.DendaActivity;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionActivity;
 import com.masudin.omahkamerasragen.ui.product.ProductActivity;
 import com.masudin.omahkamerasragen.ui.profile.ProfileActivity;
+import com.masudin.omahkamerasragen.ui.user.UserActivity;
+
+import java.util.ArrayList;
 
 public class HomepageActivity extends AppCompatActivity {
 
     private ActivityHomepageBinding binding;
     private FirebaseUser user;
+    private String role = "";
 
     @Override
     protected void onResume() {
@@ -39,7 +47,6 @@ public class HomepageActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +65,54 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        //getRole
+        getRole();
 
+        // Halaman profil
+        binding.account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomepageActivity.this, ProfileActivity.class));
+            }
+        });
+
+        // logout dari aplikasi
+        binding.exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showExitDialog();
+            }
+        });
+
+        // show onboarding image
+        showOnboardingImage();
+
+    }
+
+    private void getRole() {
+        FirebaseFirestore
+                .getInstance()
+                .collection("users")
+                .document(user.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        role = ""+documentSnapshot.get("role");
+
+                        populateDrawerItem();
+
+                    }
+                });
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private void populateDrawerItem() {
         // Klik navigasi pada drawer
         NavigationView navView = binding.navView;
+        if(role.equals("admin")) {
+            navView.getMenu().findItem(R.id.nav_user).setVisible(true);
+        }
         navView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_camera: {
@@ -83,18 +135,47 @@ public class HomepageActivity extends AppCompatActivity {
                     startActivity(new Intent(HomepageActivity.this, HistoryTransactionActivity.class));
                     break;
                 }
+                case R.id.nav_user: {
+                    startActivity(new Intent(HomepageActivity.this, UserActivity.class));
+                    break;
+                }
             }
             return true;
         });
+    }
 
-        // edit data pribadi
-        binding.account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(HomepageActivity.this, ProfileActivity.class));
-            }
-        });
+    private void showOnboardingImage() {
+        final ArrayList<SlideModel> imageList = new ArrayList<>();// Create image list
 
+
+        imageList.add(new SlideModel(R.drawable.logo, ScaleTypes.FIT));
+        imageList.add(new SlideModel(R.drawable.onboarding1, ScaleTypes.FIT));
+        imageList.add(new SlideModel(R.drawable.onboarding2, ScaleTypes.FIT));
+
+        binding.imageView2.setImageList(imageList);
+
+    }
+
+    private void showExitDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Logout")
+                .setMessage("Apakah anda yakin ingin keluar apliaksi ?")
+                .setIcon(R.drawable.ic_baseline_exit_to_app_24)
+                .setPositiveButton("YA", (dialogInterface, i) -> {
+                    // sign out dari firebase autentikasi
+                    FirebaseAuth.getInstance().signOut();
+
+                    // go to login activity
+                    Intent intent = new Intent(HomepageActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    dialogInterface.dismiss();
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("TIDAK", (dialog, i) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
 
 

@@ -3,8 +3,8 @@
     <string name="image">image</string>
     <string name="button">button</string>
 
-    <string-array name="category">
-        <item>Kamera</item>
-        <item>Peralatan Kamera</item>
+    <string-array name="status">
+        <item>Belum Bayar</item>
+        <item>Sudah Bayar</item>
     </string-array>
 </resources>

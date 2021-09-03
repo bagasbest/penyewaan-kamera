@@ -1,23 +1,17 @@
-package com.masudin.omahkamerasragen.ui.denda;
-
+package com.masudin.omahkamerasragen.ui.user;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.masudin.omahkamerasragen.databinding.ActivityDendaBinding;
-import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionAdapter;
-import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionViewModel;
+import com.masudin.omahkamerasragen.databinding.ActivityUserBinding;
 
-public class DendaActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity {
 
-    private ActivityDendaBinding binding;
-    private DendaAdapter adapter;
-    private FirebaseUser user;
+    private ActivityUserBinding binding;
+    private UserAdapter adapter;
 
     @Override
     protected void onResume() {
@@ -29,9 +23,8 @@ public class DendaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityDendaBinding.inflate(getLayoutInflater());
+        binding = ActivityUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        user = FirebaseAuth.getInstance().getCurrentUser();
 
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,22 +34,24 @@ public class DendaActivity extends AppCompatActivity {
         });
     }
 
+
     private void initRecyclerView() {
-        binding.rvDenda.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DendaAdapter();
-        binding.rvDenda.setAdapter(adapter);
+        binding.rvUser.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new UserAdapter();
+        binding.rvUser.setAdapter(adapter);
     }
 
     private void initViewModel() {
         // tampilkan daftar artikel di halaman artikel terkait pertanian
-        HistoryTransactionViewModel viewModel = new ViewModelProvider(this).get(HistoryTransactionViewModel.class);
+        UserViewModel viewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         binding.progressBar.setVisibility(View.VISIBLE);
-        viewModel.setCustomerTransaction(user.getUid(), "Sudah Bayar");
-        viewModel.getTransaction().observe(this, transactionModels -> {
-            if (transactionModels.size() > 0) {
+        viewModel.setListUser(uid);
+        viewModel.getUser().observe(this, users -> {
+            if (users.size() > 0) {
                 binding.noData.setVisibility(View.GONE);
-                adapter.setData(transactionModels);
+                adapter.setData(users);
             } else {
                 binding.noData.setVisibility(View.VISIBLE);
             }

@@ -156,7 +156,7 @@
                         android:layout_below="@id/dp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
-                        android:text="Tanggal Kembali"
+                        android:text="Jam Ambil"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv2"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="36dp"
+                        android:layout_marginEnd="16dp"
                         android:text="07.00"
                         android:textColor="@color/black" />
 
@@ -283,17 +283,5 @@
         app:layout_constraintStart_toStartOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view" />
 
-
-    <Button
-        android:id="@+id/confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Confirm"
-        android:textAllCaps="false"
-        android:textStyle="bold"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

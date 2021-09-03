@@ -20,6 +20,12 @@ import java.util.ArrayList;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     private final ArrayList<CartModel> listCart = new ArrayList<>();
+
+    String option;
+    public CartAdapter(String option) {
+        this.option = option;
+    }
+
     public void setData(ArrayList<CartModel> items) {
         listCart.clear();
         listCart.addAll(items);
@@ -37,7 +43,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.bind(listCart.get(position));
+        holder.bind(listCart.get(position), option);
     }
 
     @Override
@@ -61,7 +67,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
 
         @SuppressLint("SetTextI18n")
-        public void bind(CartModel model) {
+        public void bind(CartModel model, String option) {
 
             Glide.with(itemView.getContext())
                     .load(model.getDp())
@@ -71,15 +77,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             price.setText("Biaya Sewa: Rp. " + model.getTotalPrice());
             duration.setText("Durasi: " + model.getDuration());
 
-            cv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(itemView.getContext(), CartDetailActivity.class);
-                    intent.putExtra(CartDetailActivity.EXTRA_CART, model);
-                    itemView.getContext().startActivity(intent);
-                }
-            });
-
+            if(option.equals("cart")) {
+                cv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(itemView.getContext(), CartDetailActivity.class);
+                        intent.putExtra(CartDetailActivity.EXTRA_CART, model);
+                        itemView.getContext().startActivity(intent);
+                    }
+                });
+            }
         }
     }
 }

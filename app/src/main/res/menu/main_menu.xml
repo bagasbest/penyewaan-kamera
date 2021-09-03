@@ -34,6 +34,13 @@
             android:title="Denda"
             app:tint="@color/browser_actions_bg_grey" />
 
+        <item
+            android:id="@+id/nav_user"
+            android:icon="@drawable/ic_baseline_person_24"
+            android:title="Daftar Pengguna"
+            android:visible="false"
+            app:tint="@color/browser_actions_bg_grey" />
+
     </group>
 
 </menu>

@@ -29,19 +29,32 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@android:color/darker_gray" />
 
+
             <ImageView
                 android:id="@+id/account"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="16dp"
-                android:scaleType="fitXY"
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/image"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_baseline_account_circle_24"
-                app:tint="@android:color/darker_gray"
+                app:layout_constraintEnd_toStartOf="@+id/exit"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/background" />
+
+            <ImageView
+                android:id="@+id/exit"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/image"
+                android:scaleType="fitXY"
+                app:tint="@color/background"
+                android:src="@drawable/ic_baseline_exit_to_app_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <TextView
                 android:id="@+id/textView"
@@ -49,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="18sp"
-                android:text="Menu"
+                android:text="Homepage"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -57,12 +70,54 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
+                android:id="@+id/view4"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:background="@android:color/darker_gray"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/menu" />
+
+            <com.denzcoskun.imageslider.ImageSlider
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/image"
+                app:iss_auto_cycle="true"
+                app:iss_delay="0"
+                app:iss_error_image="@drawable/logo"
+                app:iss_period="1000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Tentang Aplikasi"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                android:id="@+id/about"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.\n\nwhen an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+                app:layout_constraintTop_toBottomOf="@id/about" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

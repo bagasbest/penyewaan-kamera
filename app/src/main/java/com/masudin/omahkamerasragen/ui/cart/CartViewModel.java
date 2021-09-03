@@ -18,14 +18,15 @@ public class CartViewModel extends ViewModel {
 
     private static final String TAG = CartViewModel.class.getSimpleName();
 
-    public void setListCart(String category, String customerUid) {
+    public void setListCart(String customerUid, ArrayList<CartModel> cartArray) {
         cartModelArrayList.clear();
+        cartArray.clear();
+
 
         try {
             FirebaseFirestore
                     .getInstance()
                     .collection("cart")
-                    .whereEqualTo("category", category)
                     .whereEqualTo("customerUid", customerUid)
                     .get()
                     .addOnCompleteListener(task -> {
@@ -47,6 +48,7 @@ public class CartViewModel extends ViewModel {
                                 model.setTotalPrice("" + document.get("totalPrice"));
 
                                 cartModelArrayList.add(model);
+                                cartArray.add(model);
                             }
                             listCart.postValue(cartModelArrayList);
                         } else {
