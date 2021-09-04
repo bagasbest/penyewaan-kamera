@@ -11,15 +11,20 @@ public class HistoryTransactionModel implements Parcelable {
     private String customerId;
     private String finalPrice;
     private String status;
+    private String dateStart;
+    private String dateFinish;
     public List<CartModel> data;
 
     public HistoryTransactionModel(){}
+
 
     protected HistoryTransactionModel(Parcel in) {
         transactionId = in.readString();
         customerId = in.readString();
         finalPrice = in.readString();
         status = in.readString();
+        dateStart = in.readString();
+        dateFinish = in.readString();
         data = in.createTypedArrayList(CartModel.CREATOR);
     }
 
@@ -29,6 +34,8 @@ public class HistoryTransactionModel implements Parcelable {
         dest.writeString(customerId);
         dest.writeString(finalPrice);
         dest.writeString(status);
+        dest.writeString(dateStart);
+        dest.writeString(dateFinish);
         dest.writeTypedList(data);
     }
 
@@ -79,6 +86,22 @@ public class HistoryTransactionModel implements Parcelable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDateStart() {
+        return dateStart;
+    }
+
+    public void setDateStart(String dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public String getDateFinish() {
+        return dateFinish;
+    }
+
+    public void setDateFinish(String dateFinish) {
+        this.dateFinish = dateFinish;
     }
 
     public List<CartModel> getData() {

@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:listitem="@layout/item_cart"
-        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backButton" />
 
@@ -56,6 +56,17 @@
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
     <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Nama Penyewa: "
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transactionId" />
+
+    <TextView
         android:id="@+id/dateStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,7 +75,7 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transactionId" />
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <TextView
         android:id="@+id/dateFinish"
@@ -117,11 +128,12 @@
         android:id="@+id/delete"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:visibility="gone"
         android:layout_marginTop="23dp"
+        android:visibility="gone"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/image"
-        android:src="@drawable/ic_baseline_check_circle_outline_24"
+        app:tint="@color/background"
+        android:src="@drawable/ic_baseline_delete_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -130,11 +142,11 @@
         android:layout_height="35dp"
         android:id="@+id/verify"
         android:layout_marginEnd="16dp"
+        android:visibility="gone"
         android:layout_marginTop="23dp"
         android:contentDescription="@string/image"
-        android:src="@drawable/ic_baseline_delete_24"
+        android:src="@drawable/ic_baseline_check_circle_outline_24"
         app:layout_constraintEnd_toStartOf="@+id/delete"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/background" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityProductDetailBinding;
+import com.masudin.omahkamerasragen.ui.camera.CameraDetailActivity;
+
 import org.jetbrains.annotations.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -104,7 +106,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.priceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sewaPeralatanKameraPerHour(6);
+                if(!model.getPrice().equals("0")) {
+                    sewaPeralatanKameraPerHour(6);
+                } else {
+                    Toast.makeText(ProductDetailActivity.this, "Penyewaan 6 Jam tidak tersedia", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -112,7 +118,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.price2Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sewaPeralatanKameraPerHour(12);
+                if(!model.getPrice2().equals("0")) {
+                    sewaPeralatanKameraPerHour(12);
+                } else {
+                    Toast.makeText(ProductDetailActivity.this, "Penyewaan 12 Jam tidak tersedia", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

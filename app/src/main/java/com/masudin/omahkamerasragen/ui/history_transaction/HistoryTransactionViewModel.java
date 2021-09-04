@@ -37,6 +37,8 @@ public class HistoryTransactionViewModel extends ViewModel {
                                 model.setFinalPrice("" + document.get("finalPrice"));
                                 model.setStatus("" + document.get("status"));
                                 model.setTransactionId("" + document.get("transactionId"));
+                                model.setDateStart("" + document.get("dateStart"));
+                                model.setDateFinish("" + document.get("dateFinish"));
                                 model.setData(document.toObject(HistoryTransactionModel.class).data);
 
                                 transactionModelArrayList.add(model);
@@ -70,6 +72,8 @@ public class HistoryTransactionViewModel extends ViewModel {
                                 model.setFinalPrice("" + document.get("finalPrice"));
                                 model.setStatus("" + document.get("status"));
                                 model.setTransactionId("" + document.get("transactionId"));
+                                model.setDateStart("" + document.get("dateStart"));
+                                model.setDateFinish("" + document.get("dateFinish"));
                                 model.setData(document.toObject(HistoryTransactionModel.class).data);
 
 

@@ -44,10 +44,15 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         model = getIntent().getParcelableExtra(EXTRA_TRANSACTION);
-        binding.transactionId.setText("ID Transaksi: " + model.getTransactionId());
+        binding.transactionId.setText("Koda Transaksi: " + model.getTransactionId());
+        binding.name.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.dateStart.setText("Waktu Penyewaan: " + model.getData().get(0).getDateStart());
-        binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish());
-        binding.finalPrice.setText("Total Biaya: " + model.getFinalPrice());
+        binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 16.00");
+        binding.finalPrice.setText("Biaya Sewa: Rp." + model.getFinalPrice());
+
+        if(model.getStatus().equals("Belum Bayar") || model.getStatus().equals("Selesai")) {
+            binding.delete.setVisibility(View.VISIBLE);
+        }
 
         initRecyclerView();
 
@@ -73,7 +78,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                //
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.google.com/?q=-6.175272232834139,106.82708981082553"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.app.goo.gl/1NjEZLyem51M4sx28"));
                 startActivity(browserIntent);
             }
         });
@@ -82,7 +87,11 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         binding.verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showConfirmVerifyDialog();
+                if(model.getStatus().equals("Belum Bayar")) {
+                    showConfirmVerifyDialog();
+                } else if(model.getStatus().equals("Sudah Bayar")) {
+                    showConfirmFinishDialog();
+                }
             }
         });
 
@@ -111,6 +120,41 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                     dialog.dismiss();
                 })
                 .show();
+    }
+
+    private void showConfirmFinishDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Selesaikan Transaksi")
+                .setMessage("Apakah anda yakin ingin menyelesaikan transaksi ini, dan barang sudah di kembalikan, serta denda sudah dibayarkan ?")
+                .setCancelable(false)
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                .setPositiveButton("YA", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    finishTransaction();
+                })
+                .setNegativeButton("TIDAK", (dialog, i) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+    private void finishTransaction() {
+        FirebaseFirestore
+                .getInstance()
+                .collection("transaction")
+                .document(model.getTransactionId())
+                .update("status", "Selesai")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(HistoryTransactionDetailActivity.this, "Berhasil menyelesaikan transaksi ini", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
+                        } else {
+                            Toast.makeText(HistoryTransactionDetailActivity.this, "Gagal menyelesaikan transaksi ini", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void verifyTransaction() {
@@ -177,7 +221,9 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(("" + documentSnapshot.get("role")).equals("admin")) {
-                            binding.verify.setVisibility(View.VISIBLE);
+                            if(!model.getStatus().equals("Selesai")) {
+                                binding.verify.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });

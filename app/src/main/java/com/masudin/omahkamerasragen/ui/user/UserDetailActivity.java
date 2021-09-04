@@ -180,6 +180,7 @@ public class UserDetailActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             mProgressDialog.dismiss();
                             Toast.makeText(UserDetailActivity.this, "Berhasil menghapus akun", Toast.LENGTH_SHORT).show();
+                            onBackPressed();
                         } else {
                             mProgressDialog.dismiss();
                             Toast.makeText(UserDetailActivity.this, "Gagal menghapus akun", Toast.LENGTH_SHORT).show();

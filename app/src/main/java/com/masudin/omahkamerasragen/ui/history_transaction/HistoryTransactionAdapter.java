@@ -67,7 +67,7 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
         @SuppressLint("SetTextI18n")
         public void bind(HistoryTransactionModel model) {
             transactionId.setText(model.getTransactionId());
-            dateStart.setText(String.valueOf(model.data.get(0).getDateStart()));
+            dateStart.setText(model.getDateStart());
             status.setText(model.getStatus());
             finalPrice.setText("Rp. " + model.getFinalPrice());
 

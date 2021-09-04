@@ -27,7 +27,7 @@
         android:id="@+id/denda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rp. -"
+        android:text="Rp. 0"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -109,8 +109,6 @@
         android:layout_marginEnd="16dp"
         android:textColor="@color/black"
         android:layout_marginTop="10dp"
-        android:textSize="11sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateFinish" />
 

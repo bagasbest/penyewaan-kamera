@@ -3,22 +3,23 @@ package com.masudin.omahkamerasragen.ui.denda;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import com.masudin.omahkamerasragen.R;
+import android.view.View;
 import com.masudin.omahkamerasragen.databinding.ActivityDendaDetailBinding;
 import com.masudin.omahkamerasragen.ui.cart.CartAdapter;
 import com.masudin.omahkamerasragen.ui.cart.CartModel;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionModel;
-
 import java.util.ArrayList;
 
 public class DendaDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_DENDA = "denda";
+    public static final String DENDA = "extraCash";
     private ActivityDendaDetailBinding binding;
     private HistoryTransactionModel model;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +27,15 @@ public class DendaDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         model = getIntent().getParcelableExtra(EXTRA_DENDA);
-        binding.transactionId.setText(model.getTransactionId());
+        binding.transactionId.setText("Kode Transaksi: " + model.getTransactionId());
+        binding.finalPrice.setText("Biaya Denda: Rp." + getIntent().getLongExtra(DENDA,0));
+
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         initRecyclerView();
 

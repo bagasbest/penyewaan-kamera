@@ -22,6 +22,7 @@ public class HistoryTransactionActivity extends AppCompatActivity {
     private HistoryTransactionAdapter adapter;
     private FirebaseUser user;
     private String role;
+    private String status = "Belum Bayar";
 
     @Override
     protected void onResume() {
@@ -41,11 +42,11 @@ public class HistoryTransactionActivity extends AppCompatActivity {
                         if(("" + documentSnapshot.get("role")).equals("admin")) {
                             role = "admin";
                             initRecyclerView();
-                            initViewModel("admin", "Belum Bayar");
+                            initViewModel("admin", status);
                         } else {
                             role = "user";
                             initRecyclerView();
-                            initViewModel("user", "Belum Bayar");
+                            initViewModel("user", status);
                         }
                     }
                 });
@@ -67,7 +68,8 @@ public class HistoryTransactionActivity extends AppCompatActivity {
         binding.statusEt.setAdapter(adapter);
         binding.statusEt.setOnItemClickListener((adapterView, view, i, l) -> {
             initRecyclerView();
-            initViewModel(role, binding.statusEt.getText().toString());
+            status = binding.statusEt.getText().toString();
+            initViewModel(role, status);
         });
 
 

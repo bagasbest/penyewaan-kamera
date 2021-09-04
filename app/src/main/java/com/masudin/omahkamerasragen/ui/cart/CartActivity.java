@@ -41,10 +41,6 @@ public class CartActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if(cartModelArrayList.size() > 0) {
-            binding.button3.setVisibility(View.VISIBLE);
-        }
-
         // kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,9 +53,24 @@ public class CartActivity extends AppCompatActivity {
         binding.button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkoutAllProduct();
+                showConfirmDialog();
             }
         });
+    }
+
+    private void showConfirmDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Melakukan Checkout")
+                .setMessage("Apakah anda yakin ingin melakukan checkout barang ?")
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                .setPositiveButton("YAKIN", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    checkoutAllProduct();
+                })
+                .setNegativeButton("TIDAK", (dialog, i) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     private void checkoutAllProduct() {
@@ -74,6 +85,8 @@ public class CartActivity extends AppCompatActivity {
         Map<String, Object> transaction = new HashMap<>();
         transaction.put("transactionId", transactionId);
         transaction.put("customerId", cartModelArrayList.get(0).getCustomerUid());
+        transaction.put("dateStart", cartModelArrayList.get(0).getDateStart());
+        transaction.put("dateFinish", cartModelArrayList.get(0).getDateFinish());
         transaction.put("status", "Belum Bayar");
         transaction.put("finalPrice", String.valueOf(totalPrice));
         transaction.put("data", cartModelArrayList);
@@ -146,9 +159,11 @@ public class CartActivity extends AppCompatActivity {
         viewModel.setListCart(user.getUid(), cartModelArrayList);
         viewModel.getListCart().observe(this, product -> {
             if (product.size() > 0) {
+                binding.button3.setVisibility(View.VISIBLE);
                 binding.noData.setVisibility(View.GONE);
                 adapter.setData(product);
             } else {
+                binding.button3.setVisibility(View.GONE);
                 binding.noData.setVisibility(View.VISIBLE);
             }
             binding.progressBar.setVisibility(View.GONE);
