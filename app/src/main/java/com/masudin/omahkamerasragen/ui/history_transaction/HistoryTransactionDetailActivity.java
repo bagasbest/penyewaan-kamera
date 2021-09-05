@@ -77,7 +77,6 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         binding.button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.app.goo.gl/1NjEZLyem51M4sx28"));
                 startActivity(browserIntent);
             }

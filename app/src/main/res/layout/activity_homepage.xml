@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Tentang Aplikasi"
+                android:text="Lokasi Omah Kamera Sragen"
                 android:textColor="@color/black"
                 android:layout_marginTop="16dp"
                 android:textSize="18sp"
@@ -110,14 +110,31 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/textView15"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="30dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Jl. Cemara, Mageru, Plumbungan, Kec. Karangmalang, Kabupaten Sragen, Jawa Tengah 57214"
                 android:textColor="@color/black"
-                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.\n\nwhen an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/about" />
+
+
+            <ImageView
+                android:contentDescription="@string/image"
+                android:id="@+id/imageView3"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_baseline_location_on_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView15"
+                app:tint="@color/background" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
