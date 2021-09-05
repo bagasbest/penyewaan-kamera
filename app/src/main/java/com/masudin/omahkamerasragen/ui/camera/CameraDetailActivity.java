@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,9 +22,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityCameraDetailBinding;
+import com.masudin.omahkamerasragen.ui.booking.BookingActivity;
+
 import org.jetbrains.annotations.NotNull;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +42,7 @@ public class CameraDetailActivity extends AppCompatActivity {
     public static final String EXTRA_CAMERA = "camera";
     private ActivityCameraDetailBinding binding;
     private CameraModel model;
+    private int counter = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -116,6 +126,14 @@ public class CameraDetailActivity extends AppCompatActivity {
                 sewaKameraPerHour(12);
             }
         });
+
+        binding.bookingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CameraDetailActivity.this, BookingActivity.class));
+            }
+        });
+
     }
 
     private void sewaKameraPerDay() {
@@ -123,28 +141,99 @@ public class CameraDetailActivity extends AppCompatActivity {
         Calendar now = Calendar.getInstance();
         MaterialDatePicker datePicker = MaterialDatePicker.Builder.dateRangePicker()
                 .setSelection(Pair.create(now.getTimeInMillis(), now.getTimeInMillis())).build();
-
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
-
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            Pair prendiRange = (Pair) datePicker.getSelection();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            String formatFirst = sdf.format(new Date(Long.parseLong(prendiRange.first.toString())));
-            String formatSecond = sdf.format(new Date(Long.parseLong(prendiRange.second.toString())));
-            new AlertDialog.Builder(this)
-                    .setTitle("Konfirmasi Penyewaan Kamera")
-                    .setMessage("Apakah anda yakin ingin menyewa Kamera ini ?\n\nJika ya, produk ini akan di tambahkan di keranjang")
-                    .setIcon(R.drawable.ic_baseline_warning_24)
-                    .setPositiveButton("OKE", (dialogInterface, i) -> {
-                        long diff = Long.parseLong(prendiRange.second.toString()) - Long.parseLong(prendiRange.first.toString());
-                        long diffDays = diff / (24 * 60 * 60 * 1000);
-                        saveProductToCart(formatFirst, formatSecond, 24, diffDays);
-                    })
-                    .setNegativeButton("TIDAK", (dialog, i) -> {
-                        dialog.dismiss();
-                    })
-                    .show();
+
+
+            ProgressDialog mProgressDialog = new ProgressDialog(this);
+
+            mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...");
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
+
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("transaction")
+                    .whereEqualTo("status", "Sudah Bayar")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot size = task.getResult();
+                                if(size.size() > 0) {
+
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Pair prendiRange = (Pair) datePicker.getSelection();
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                                        String formatFirst = sdf.format(new Date(Long.parseLong(prendiRange.first.toString())));
+                                        String formatSecond = sdf.format(new Date(Long.parseLong(prendiRange.second.toString())));
+                                        try {
+                                            Date dateStart = sdf.parse("" + document.get("dateStart"));
+                                            Date dateFinish = sdf.parse("" + document.get("dateFinish"));
+                                            Date nowFirst = sdf.parse(formatFirst);
+                                            Date nowSecond = sdf.parse(formatSecond);
+
+                                            long x = dateStart.getTime();
+                                            long y = dateFinish.getTime();
+                                            long dateStartNow = nowFirst.getTime();
+                                            long dateFinishNow = nowSecond.getTime();
+
+
+                                            // cek apakah tanggal sudah di booking atau belum
+                                            if (((dateStartNow < x && dateStartNow < y) && (dateFinishNow < x && dateFinishNow < y))
+                                                    || ((dateStartNow > x && dateStartNow > y) && (dateFinishNow > x && dateFinishNow > y))) {
+                                                counter++;
+                                                if (counter == size.size()) {
+                                                    counter = 0;
+                                                    mProgressDialog.dismiss();
+                                                    confirmSewaCameraPerDay(datePicker);
+                                                }
+                                            } else {
+                                                counter = 0;
+                                                mProgressDialog.dismiss();
+                                                Toast.makeText(CameraDetailActivity.this, "Tanggal Sudah Di Booking", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+
+                                        } catch (ParseException e) {
+                                            mProgressDialog.dismiss();
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                } else {
+                                    mProgressDialog.dismiss();
+                                    confirmSewaCameraPerDay(datePicker);
+                                }
+
+                            } else {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(CameraDetailActivity.this, "Gagal Load Calendar", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
         });
+    }
+
+    private void confirmSewaCameraPerDay(MaterialDatePicker datePicker) {
+        Pair prendiRange = (Pair) datePicker.getSelection();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String formatFirst = sdf.format(new Date(Long.parseLong(prendiRange.first.toString())));
+        String formatSecond = sdf.format(new Date(Long.parseLong(prendiRange.second.toString())));
+        new AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Penyewaan Kamera")
+                .setMessage("Apakah anda yakin ingin menyewa Kamera ini ?\n\nJika ya, produk ini akan di tambahkan di keranjang")
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                .setPositiveButton("OKE", (dialogInterface, i) -> {
+                    long diff = Long.parseLong(prendiRange.second.toString()) - Long.parseLong(prendiRange.first.toString());
+                    long diffDays = diff / (24 * 60 * 60 * 1000);
+                    saveProductToCart(formatFirst, formatSecond, 24, diffDays);
+                })
+                .setNegativeButton("TIDAK", (dialog, i) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     private void sewaKameraPerHour(int hour) {
@@ -152,22 +241,85 @@ public class CameraDetailActivity extends AppCompatActivity {
         MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker().build();
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            String format = sdf.format(new Date(Long.parseLong(selection.toString())));
-            new AlertDialog.Builder(this)
-                    .setTitle("Konfirmasi Penyewaan Kamera")
-                    .setMessage("Apakah anda yakin ingin menyewa Kamera ini ?\n\nJika ya, produk ini akan di tambahkan di keranjang")
-                    .setIcon(R.drawable.ic_baseline_warning_24)
-                    .setPositiveButton("OKE", (dialogInterface, i) -> {
-                       saveProductToCart(format, "", hour, 0);
-                    })
-                    .setNegativeButton("TIDAK", (dialog, i) -> {
-                        dialog.dismiss();
-                    })
-                    .show();
 
+            ProgressDialog mProgressDialog = new ProgressDialog(this);
+
+            mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...");
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
+
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("transaction")
+                    .whereEqualTo("status", "Sudah Bayar")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot size = task.getResult();
+                                if(size.size() > 0) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                                        String format = sdf.format(new Date(Long.parseLong(selection.toString())));
+
+                                        try {
+                                            Date dateStart = sdf.parse("" + document.get("dateStart"));
+                                            Date dateFinish = sdf.parse("" + document.get("dateFinish"));
+                                            Date now = sdf.parse(format);
+
+                                            long x = dateStart.getTime();
+                                            long y = dateFinish.getTime();
+                                            long dateNow = now.getTime();
+
+                                            // cek apakah tanggal sudah di booking atau belum
+                                            if ((dateNow < x && dateNow < y) || (dateNow > x && dateNow > y)) {
+                                                counter++;
+                                                if (counter == size.size()) {
+                                                    counter = 0;
+                                                    mProgressDialog.dismiss();
+                                                    confirmSewaCamera(selection, hour);
+                                                }
+                                            } else {
+                                                counter = 0;
+                                                mProgressDialog.dismiss();
+                                                Toast.makeText(CameraDetailActivity.this, "Tanggal Sudah Di Booking", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+
+                                        } catch (ParseException e) {
+                                            mProgressDialog.dismiss();
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } else {
+                                    mProgressDialog.dismiss();
+                                    confirmSewaCamera(selection, hour);
+                                }
+                            } else {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(CameraDetailActivity.this, "Gagal Load Calendar", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
         });
 
+    }
+
+    private void confirmSewaCamera(Object selection, int hour) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String format = sdf.format(new Date(Long.parseLong(selection.toString())));
+        new AlertDialog.Builder(this)
+                .setTitle("Konfirmasi Penyewaan Kamera")
+                .setMessage("Apakah anda yakin ingin menyewa Kamera ini ?\n\nJika ya, produk ini akan di tambahkan di keranjang")
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                .setPositiveButton("OKE", (dialogInterface, i) -> {
+                    saveProductToCart(format, "", hour, 0);
+                })
+                .setNegativeButton("TIDAK", (dialog, i) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     private void saveProductToCart(String first, String second, int hour, long difference) {
@@ -195,13 +347,13 @@ public class CameraDetailActivity extends AppCompatActivity {
                         addToCart.put("name", model.getName());
                         addToCart.put("merk", model.getMerk());
                         addToCart.put("dp", model.getDp());
-                        if(hour == 6) {
+                        if (hour == 6) {
                             addToCart.put("duration", hour + " Jam");
                             addToCart.put("price", model.getPrice());
                             addToCart.put("dateStart", first);
                             addToCart.put("dateFinish", first);
                             addToCart.put("totalPrice", model.getPrice());
-                        } else if(hour == 12) {
+                        } else if (hour == 12) {
                             addToCart.put("duration", hour + " Jam");
                             addToCart.put("price", model.getPrice2());
                             addToCart.put("dateStart", first);
@@ -216,7 +368,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                         }
                         addToCart.put("category", "Kamera");
                         addToCart.put("customerUid", user.getUid());
-                        addToCart.put("customerName", ""+documentSnapshot.get("name"));
+                        addToCart.put("customerName", "" + documentSnapshot.get("name"));
 
                         FirebaseFirestore
                                 .getInstance()
@@ -226,11 +378,10 @@ public class CameraDetailActivity extends AppCompatActivity {
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                        if(task.isSuccessful()) {
+                                        if (task.isSuccessful()) {
                                             mProgressDialog.dismiss();
                                             showSuccessDialog();
-                                        }
-                                        else {
+                                        } else {
                                             mProgressDialog.dismiss();
                                             showFailureDialog();
                                         }
@@ -294,12 +445,11 @@ public class CameraDetailActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
-                        if(task.isSuccessful())  {
+                        if (task.isSuccessful()) {
                             mProgressDialog.dismiss();
                             Toast.makeText(CameraDetailActivity.this, "Berhasil menghapus kamera", Toast.LENGTH_SHORT).show();
                             onBackPressed();
-                        }
-                        else {
+                        } else {
                             mProgressDialog.dismiss();
                             Toast.makeText(CameraDetailActivity.this, "Gagal menghapus kamera", Toast.LENGTH_SHORT).show();
                         }
