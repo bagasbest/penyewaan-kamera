@@ -26,7 +26,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityProductDetailBinding;
 import com.masudin.omahkamerasragen.ui.booking.BookingActivity;
-import com.masudin.omahkamerasragen.ui.camera.CameraDetailActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -140,7 +139,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 startActivity(new Intent(ProductDetailActivity.this, BookingActivity.class));
             }
         });
-        
+
     }
 
     private void sewaPeralatanKameraPerDay() {
