@@ -55,6 +55,7 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
         ConstraintLayout cl;
         TextView denda, transactionId, dateFinish, dateBackProduct;
         long extraCash = 0;
+        long finalDateFinishInMillis = 0;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -73,23 +74,30 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
             dateBackProduct.setText(historyTransactionModel.getDateFinish());
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String duration = historyTransactionModel.data.get(0).getDuration();
+
+
             try {
                 Date date = sdf.parse(historyTransactionModel.getData().get(0).getDateFinish());
                 long dateFinishInMillis = date.getTime();
                 long dateNowInMillis = System.currentTimeMillis();
 
-                Log.e("NOW", String.valueOf(dateNowInMillis));
-                Log.e("FINISH", String.valueOf(dateFinishInMillis));
+                if(duration.equals("6 Jam")) {
+                    finalDateFinishInMillis = dateFinishInMillis + (1000*60*60*13);
+                } else if (duration.equals("12 Jam")) {
+                    finalDateFinishInMillis = dateFinishInMillis + (1000*60*60*19);
+                }
 
-                if(dateNowInMillis > dateFinishInMillis) {
-                    long diff = dateNowInMillis - dateFinishInMillis;
+
+                if(dateNowInMillis > finalDateFinishInMillis) {
+                    long diff = dateNowInMillis - finalDateFinishInMillis;
                     long extendCash = diff / (1000*60*60);
                     extraCash = extendCash * 5000;
                     denda.setText("Rp. " + extraCash);
                 }
 
             } catch (ParseException e){
-
+                e.printStackTrace();
             }
 
 

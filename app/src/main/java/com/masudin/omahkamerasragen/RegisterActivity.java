@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -55,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
         else if(username.isEmpty()) {
-            Toast.makeText(RegisterActivity.this, "Usia tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Username tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
         else if(nik.isEmpty()) {
@@ -78,8 +79,8 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "Kata Sandi tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
-        else if (radioButton.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Jenis Kelamin tidak boleh kosong", Toast.LENGTH_SHORT).show();
+        else if (radioButton == null) {
+            Toast.makeText(RegisterActivity.this, "Jenis Kelamin tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
         }
 

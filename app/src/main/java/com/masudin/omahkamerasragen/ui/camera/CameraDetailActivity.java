@@ -9,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -27,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityCameraDetailBinding;
 import com.masudin.omahkamerasragen.ui.booking.BookingActivity;
+import com.masudin.omahkamerasragen.ui.product.ProductDetailActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +75,7 @@ public class CameraDetailActivity extends AppCompatActivity {
         });
 
         // hapus barang
-        binding.description.setOnClickListener(new View.OnClickListener() {
+        binding.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showConfirmDialog();
@@ -115,7 +115,11 @@ public class CameraDetailActivity extends AppCompatActivity {
         binding.priceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sewaKameraPerHour(6);
+                if(!model.getPrice().equals("0")) {
+                    sewaKameraPerHour(6);
+                } else {
+                    Toast.makeText(CameraDetailActivity.this, "Penyewaan 6 Jam tidak tersedia", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -123,7 +127,11 @@ public class CameraDetailActivity extends AppCompatActivity {
         binding.price2Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sewaKameraPerHour(12);
+                if(!model.getPrice2().equals("0")) {
+                    sewaKameraPerHour(12);
+                } else {
+                    Toast.makeText(CameraDetailActivity.this, "Penyewaan 12 Jam tidak tersedia", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -133,7 +141,6 @@ public class CameraDetailActivity extends AppCompatActivity {
                 startActivity(new Intent(CameraDetailActivity.this, BookingActivity.class));
             }
         });
-
     }
 
     private void sewaKameraPerDay() {

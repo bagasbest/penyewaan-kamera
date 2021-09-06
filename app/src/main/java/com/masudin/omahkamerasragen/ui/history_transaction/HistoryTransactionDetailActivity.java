@@ -44,15 +44,19 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         model = getIntent().getParcelableExtra(EXTRA_TRANSACTION);
+        String duration = model.getData().get(0).getDuration();
+
         binding.transactionId.setText("Koda Transaksi: " + model.getTransactionId());
         binding.name.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.dateStart.setText("Waktu Penyewaan: " + model.getData().get(0).getDateStart());
-        binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 16.00");
-        binding.finalPrice.setText("Biaya Sewa: Rp." + model.getFinalPrice());
-
-        if(model.getStatus().equals("Belum Bayar") || model.getStatus().equals("Selesai")) {
-            binding.delete.setVisibility(View.VISIBLE);
+        if(duration.equals("6 Jam")) {
+            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 13.59");
+        } else if(duration.equals("12 Jam")) {
+            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 19.59");
+        } else {
+            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 07.59");
         }
+        binding.finalPrice.setText("Biaya Sewa: Rp." + model.getFinalPrice());
 
         initRecyclerView();
 
@@ -222,6 +226,9 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                         if(("" + documentSnapshot.get("role")).equals("admin")) {
                             if(!model.getStatus().equals("Selesai")) {
                                 binding.verify.setVisibility(View.VISIBLE);
+                            }
+                            if(model.getStatus().equals("Belum Bayar") || model.getStatus().equals("Selesai")) {
+                                binding.delete.setVisibility(View.VISIBLE);
                             }
                         }
                     }

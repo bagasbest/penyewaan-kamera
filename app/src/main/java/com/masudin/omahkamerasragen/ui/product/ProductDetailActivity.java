@@ -73,7 +73,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         // hapus barang
-        binding.description.setOnClickListener(new View.OnClickListener() {
+        binding.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showConfirmDialog();
