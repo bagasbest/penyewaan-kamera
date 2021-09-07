@@ -18,9 +18,11 @@ import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionMod
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 
 public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> {
@@ -69,6 +71,11 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
 
         @SuppressLint("SetTextI18n")
         public void bind(HistoryTransactionModel historyTransactionModel) {
+
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            format.setMaximumFractionDigits(0);
+            format.setCurrency(Currency.getInstance("IDR"));
+
             transactionId.setText(historyTransactionModel.getTransactionId());
             dateFinish.setText(historyTransactionModel.getDateFinish());
             dateBackProduct.setText(historyTransactionModel.getDateFinish());
@@ -93,7 +100,7 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
                     long diff = dateNowInMillis - finalDateFinishInMillis;
                     long extendCash = diff / (1000*60*60);
                     extraCash = extendCash * 5000;
-                    denda.setText("Rp. " + extraCash);
+                    denda.setText(format.format(extendCash));
                 }
 
             } catch (ParseException e){

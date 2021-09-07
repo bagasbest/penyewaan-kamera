@@ -15,7 +15,9 @@ import com.masudin.omahkamerasragen.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
@@ -68,13 +70,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         @SuppressLint("SetTextI18n")
         public void bind(CartModel model, String option) {
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            format.setMaximumFractionDigits(0);
+            format.setCurrency(Currency.getInstance("IDR"));
 
             Glide.with(itemView.getContext())
                     .load(model.getDp())
                     .into(dp);
 
             name.setText(model.getName());
-            price.setText("Biaya Sewa: Rp. " + model.getTotalPrice());
+            price.setText("Biaya Sewa: " + format.format(Integer.parseInt(model.getTotalPrice())));
             duration.setText("Durasi: " + model.getDuration());
 
             if(option.equals("cart")) {

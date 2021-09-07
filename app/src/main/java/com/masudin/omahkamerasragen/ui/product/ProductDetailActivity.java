@@ -16,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,9 +31,11 @@ import com.masudin.omahkamerasragen.ui.booking.BookingActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +55,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         model = getIntent().getParcelableExtra(EXTRA_PERALATAN);
+
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setMaximumFractionDigits(0);
+        format.setCurrency(Currency.getInstance("IDR"));
+
         Glide.with(this)
                 .load(model.getDp())
                 .into(binding.dp);
@@ -58,9 +67,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.name.setText(model.getName());
         binding.merk.setText(model.getMerk());
         binding.description.setText(model.getDescription());
-        binding.price.setText("Rp. " + model.getPrice() + " untuk 6 Jam Penyewaan");
-        binding.price2.setText("Rp. " + model.getPrice2() + " untuk 12 Jam Penyewaan");
-        binding.price3.setText("Rp. " + model.getPrice3() + " untuk 24 Jam Penyewaan");
+        binding.price.setText(format.format(Integer.parseInt(model.getPrice())) + " untuk 6 Jam Penyewaan");
+        binding.price2.setText(format.format(Integer.parseInt(model.getPrice2()))  + " untuk 12 Jam Penyewaan");
+        binding.price3.setText(format.format(Integer.parseInt(model.getPrice3()))  + " untuk 24 Jam Penyewaan");
 
         // cek apakah role == user / role == admin
         checkRole();
@@ -146,6 +155,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // pilih tanggal peminjaman
         Calendar now = Calendar.getInstance();
         MaterialDatePicker datePicker = MaterialDatePicker.Builder.dateRangePicker()
+                .setCalendarConstraints(new CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build())
                 .setSelection(Pair.create(now.getTimeInMillis(), now.getTimeInMillis())).build();
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
         datePicker.addOnPositiveButtonClickListener(selection -> {
@@ -244,7 +254,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void sewaPeralatanKameraPerHour(int hour) {
         // pilih tanggal peminjaman
-        MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker().build();
+        MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker().setCalendarConstraints(new CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build()).build();
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
         datePicker.addOnPositiveButtonClickListener(selection -> {
 

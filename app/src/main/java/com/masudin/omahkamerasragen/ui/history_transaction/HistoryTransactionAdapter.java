@@ -17,7 +17,9 @@ import com.masudin.omahkamerasragen.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 
 public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTransactionAdapter.ViewHolder> {
 
@@ -66,10 +68,14 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
 
         @SuppressLint("SetTextI18n")
         public void bind(HistoryTransactionModel model) {
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            format.setMaximumFractionDigits(0);
+            format.setCurrency(Currency.getInstance("IDR"));
+
             transactionId.setText(model.getTransactionId());
             dateStart.setText(model.getDateStart());
             status.setText(model.getStatus());
-            finalPrice.setText("Rp. " + model.getFinalPrice());
+            finalPrice.setText(format.format(Integer.parseInt(model.getFinalPrice())));
 
             if(model.getStatus().equals("Belum Bayar")) {
                 view.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg));

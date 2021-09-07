@@ -19,7 +19,9 @@ import com.masudin.omahkamerasragen.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
@@ -68,8 +70,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         @SuppressLint("SetTextI18n")
         public void bind(ProductModel productModel) {
 
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            format.setMaximumFractionDigits(0);
+            format.setCurrency(Currency.getInstance("IDR"));
+
             name.setText(productModel.getName());
-            price.setText("Rp. " + productModel.getPrice()  + " ~ Rp. " + productModel.getPrice3());
+            price.setText(format.format(Integer.parseInt(productModel.getPrice()))  + " ~ " + format.format(Integer.parseInt(productModel.getPrice3())));
             Glide.with(itemView.getContext())
                     .load(productModel.getDp())
                     .into(dp);

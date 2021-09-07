@@ -10,7 +10,10 @@ import com.masudin.omahkamerasragen.databinding.ActivityDendaDetailBinding;
 import com.masudin.omahkamerasragen.ui.cart.CartAdapter;
 import com.masudin.omahkamerasragen.ui.cart.CartModel;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionModel;
+
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 
 public class DendaDetailActivity extends AppCompatActivity {
 
@@ -27,8 +30,12 @@ public class DendaDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         model = getIntent().getParcelableExtra(EXTRA_DENDA);
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setMaximumFractionDigits(0);
+        format.setCurrency(Currency.getInstance("IDR"));
+
         binding.transactionId.setText("Kode Transaksi: " + model.getTransactionId());
-        binding.finalPrice.setText("Biaya Denda: Rp." + getIntent().getLongExtra(DENDA,0));
+        binding.finalPrice.setText("Biaya Denda: " + format.format(getIntent().getLongExtra(DENDA,0)));
 
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override

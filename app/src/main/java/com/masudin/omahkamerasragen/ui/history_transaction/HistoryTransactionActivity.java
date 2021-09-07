@@ -61,7 +61,7 @@ public class HistoryTransactionActivity extends AppCompatActivity {
 
         // filter belum bayar atau sudah bayar
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.status, android.R.layout.simple_spinner_item);
+                R.array.status, android.R.layout.simple_list_item_1);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner

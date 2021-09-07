@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private void checkUserLoginOrNotBefore() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, HomepageActivity.class));
+            finish();
         }
     }
 
@@ -86,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             binding.progressBar2.setVisibility(View.GONE);
                               startActivity(new Intent(LoginActivity.this, HomepageActivity.class));
+                              finish();
                         } else {
                             binding.progressBar2.setVisibility(View.GONE);
                             showFailureDialog();

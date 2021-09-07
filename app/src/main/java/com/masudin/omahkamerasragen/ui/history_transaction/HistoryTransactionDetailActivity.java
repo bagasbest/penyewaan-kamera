@@ -26,7 +26,9 @@ import com.masudin.omahkamerasragen.ui.cart.CartModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 
 public class HistoryTransactionDetailActivity extends AppCompatActivity {
 
@@ -44,6 +46,11 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         model = getIntent().getParcelableExtra(EXTRA_TRANSACTION);
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setMaximumFractionDigits(0);
+        format.setCurrency(Currency.getInstance("IDR"));
+
+
         String duration = model.getData().get(0).getDuration();
 
         binding.transactionId.setText("Koda Transaksi: " + model.getTransactionId());
@@ -56,7 +63,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         } else {
             binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 07.59");
         }
-        binding.finalPrice.setText("Biaya Sewa: Rp." + model.getFinalPrice());
+        binding.finalPrice.setText("Biaya Sewa: " + format.format(Integer.parseInt(model.getFinalPrice())));
 
         initRecyclerView();
 
