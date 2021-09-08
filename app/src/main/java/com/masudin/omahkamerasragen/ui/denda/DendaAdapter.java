@@ -18,6 +18,7 @@ import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionMod
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,9 +73,8 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
         @SuppressLint("SetTextI18n")
         public void bind(HistoryTransactionModel historyTransactionModel) {
 
-            NumberFormat format = NumberFormat.getCurrencyInstance();
-            format.setMaximumFractionDigits(0);
-            format.setCurrency(Currency.getInstance("IDR"));
+            NumberFormat formatter = new DecimalFormat("#,###");
+
 
             transactionId.setText(historyTransactionModel.getTransactionId());
             dateFinish.setText(historyTransactionModel.getDateFinish());
@@ -95,12 +95,15 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
                     finalDateFinishInMillis = dateFinishInMillis + (1000*60*60*19);
                 }
 
+                Log.e("NOW", String.valueOf(dateNowInMillis));
+                Log.e("FINISH", String.valueOf(dateFinishInMillis));
+
 
                 if(dateNowInMillis > finalDateFinishInMillis) {
                     long diff = dateNowInMillis - finalDateFinishInMillis;
                     long extendCash = diff / (1000*60*60);
                     extraCash = extendCash * 5000;
-                    denda.setText(format.format(extendCash));
+                    denda.setText("IDR " + formatter.format(Double.parseDouble(String.valueOf(extraCash))));
                 }
 
             } catch (ParseException e){

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import com.masudin.omahkamerasragen.databinding.ActivityDendaDetailBinding;
@@ -11,6 +13,7 @@ import com.masudin.omahkamerasragen.ui.cart.CartAdapter;
 import com.masudin.omahkamerasragen.ui.cart.CartModel;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionModel;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -30,12 +33,11 @@ public class DendaDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         model = getIntent().getParcelableExtra(EXTRA_DENDA);
-        NumberFormat format = NumberFormat.getCurrencyInstance();
-        format.setMaximumFractionDigits(0);
-        format.setCurrency(Currency.getInstance("IDR"));
+        NumberFormat formatter = new DecimalFormat("#,###");
+
 
         binding.transactionId.setText("Kode Transaksi: " + model.getTransactionId());
-        binding.finalPrice.setText("Biaya Denda: " + format.format(getIntent().getLongExtra(DENDA,0)));
+        binding.finalPrice.setText("Biaya Denda: IDR " + formatter.format(Double.parseDouble(String.valueOf(getIntent().getLongExtra(DENDA,0)))));
 
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +47,14 @@ public class DendaDetailActivity extends AppCompatActivity {
         });
 
         initRecyclerView();
+
+        binding.button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.app.goo.gl/1NjEZLyem51M4sx28"));
+                startActivity(browserIntent);
+            }
+        });
 
 
     }

@@ -28,9 +28,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityProductDetailBinding;
 import com.masudin.omahkamerasragen.ui.booking.BookingActivity;
+import com.masudin.omahkamerasragen.ui.camera.CameraDetailActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,9 +58,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         model = getIntent().getParcelableExtra(EXTRA_PERALATAN);
 
-        NumberFormat format = NumberFormat.getCurrencyInstance();
-        format.setMaximumFractionDigits(0);
-        format.setCurrency(Currency.getInstance("IDR"));
+        NumberFormat formatter = new DecimalFormat("#,###");
 
         Glide.with(this)
                 .load(model.getDp())
@@ -67,9 +67,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         binding.name.setText(model.getName());
         binding.merk.setText(model.getMerk());
         binding.description.setText(model.getDescription());
-        binding.price.setText(format.format(Integer.parseInt(model.getPrice())) + " untuk 6 Jam Penyewaan");
-        binding.price2.setText(format.format(Integer.parseInt(model.getPrice2()))  + " untuk 12 Jam Penyewaan");
-        binding.price3.setText(format.format(Integer.parseInt(model.getPrice3()))  + " untuk 24 Jam Penyewaan");
+        binding.price.setText("IDR " + formatter.format(Double.parseDouble(model.getPrice())) + " untuk 6 Jam Penyewaan");
+        binding.price2.setText("IDR " + formatter.format(Double.parseDouble(model.getPrice2()))  + " untuk 12 Jam Penyewaan");
+        binding.price3.setText("IDR "+ formatter.format(Double.parseDouble(model.getPrice3()))  + " untuk 24 Jam Penyewaan");
 
         // cek apakah role == user / role == admin
         checkRole();
@@ -160,6 +160,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
         datePicker.addOnPositiveButtonClickListener(selection -> {
 
+            Pair prendiRange = (Pair) datePicker.getSelection();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String formatFirst = sdf.format(new Date(Long.parseLong(prendiRange.first.toString())));
+            String formatSecond = sdf.format(new Date(Long.parseLong(prendiRange.second.toString())));
+
+            if(formatFirst.equals(formatSecond)) {
+                Toast.makeText(ProductDetailActivity.this, "Penyewaan Barang Minimal 1 Hari", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             ProgressDialog mProgressDialog = new ProgressDialog(this);
 
@@ -180,10 +189,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 if (size.size() > 0) {
 
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Pair prendiRange = (Pair) datePicker.getSelection();
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                                        String formatFirst = sdf.format(new Date(Long.parseLong(prendiRange.first.toString())));
-                                        String formatSecond = sdf.format(new Date(Long.parseLong(prendiRange.second.toString())));
                                         try {
                                             Date dateStart = sdf.parse("" + document.get("dateStart"));
                                             Date dateFinish = sdf.parse("" + document.get("dateFinish"));

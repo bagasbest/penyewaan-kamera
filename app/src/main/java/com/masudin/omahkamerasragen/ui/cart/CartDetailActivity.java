@@ -16,6 +16,7 @@ import com.masudin.omahkamerasragen.databinding.ActivityCartDetailBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Currency;
 
@@ -33,9 +34,7 @@ public class CartDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         model = getIntent().getParcelableExtra(EXTRA_CART);
-        NumberFormat format = NumberFormat.getCurrencyInstance();
-        format.setMaximumFractionDigits(0);
-        format.setCurrency(Currency.getInstance("IDR"));
+        NumberFormat formatter = new DecimalFormat("#,###");
 
         Glide.with(this)
                 .load(model.getDp())
@@ -45,9 +44,9 @@ public class CartDetailActivity extends AppCompatActivity {
         binding.merk.setText("Merk: " + model.getMerk());
         binding.dateStart.setText(model.getDateStart());
         binding.dateFinish.setText(model.getDateFinish());
-        binding.price.setText("Biaya sewa: " + format.format(Integer.parseInt(model.getPrice())));
+        binding.price.setText("Biaya sewa: IDR " + formatter.format(Double.parseDouble(model.getPrice())));
         binding.duration.setText("Durasi sewa: " + model.getDuration());
-        binding.totalPrice.setText("Rp. " + model.getTotalPrice());
+        binding.totalPrice.setText("Total Biaya: IDR " + formatter.format(Double.parseDouble(model.getTotalPrice())));
 
         // kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {

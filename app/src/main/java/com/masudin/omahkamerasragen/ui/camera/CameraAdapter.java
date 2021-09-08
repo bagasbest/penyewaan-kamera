@@ -17,6 +17,7 @@ import com.masudin.omahkamerasragen.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -70,9 +71,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
 
         public void bind(CameraModel model) {
 
-            NumberFormat format = NumberFormat.getCurrencyInstance();
-            format.setMaximumFractionDigits(0);
-            format.setCurrency(Currency.getInstance("IDR"));
+            NumberFormat formatter = new DecimalFormat("#,###");
 
             Glide.with(itemView.getContext())
                     .load(model.getDp())
@@ -80,7 +79,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
 
             name.setText(model.getName());
             facility.setText(model.getFacility());
-            price.setText(format.format(Integer.parseInt(model.getPrice())) + " ~ " + format.format(Integer.parseInt(model.getPrice3())));
+            price.setText("IDR " + formatter.format(Double.parseDouble(model.getPrice())) + " ~ IDR " + formatter.format(Double.parseDouble(model.getPrice3())));
             status.setText(model.getStatus());
 
 
