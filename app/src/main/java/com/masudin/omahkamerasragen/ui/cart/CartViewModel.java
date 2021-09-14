@@ -46,6 +46,7 @@ public class CartViewModel extends ViewModel {
                                 model.setName("" + document.get("name"));
                                 model.setPrice("" + document.get("price"));
                                 model.setTotalPrice("" + document.get("totalPrice"));
+                                model.setDurationEnd(document.getLong("durationEnd"));
 
                                 cartModelArrayList.add(model);
                                 cartArray.add(model);

@@ -18,7 +18,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Currency;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class CartDetailActivity extends AppCompatActivity {
 
@@ -47,6 +50,22 @@ public class CartDetailActivity extends AppCompatActivity {
         binding.price.setText("Biaya sewa: IDR " + formatter.format(Double.parseDouble(model.getPrice())));
         binding.duration.setText("Durasi sewa: " + model.getDuration());
         binding.totalPrice.setText("Total Biaya: IDR " + formatter.format(Double.parseDouble(model.getTotalPrice())));
+
+        if(model.getDuration().equals("6 Jam")) {
+            long durationEndInMillis = model.getDurationEnd() - (1000*60*60*6);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            Date date = new Date(durationEndInMillis);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            String returnFormat = dateFormat.format(date);
+            binding.jamAmbil.setText(returnFormat);
+        } else if(model.getDuration().equals("12 Jam")) {
+            long durationEndInMillis = model.getDurationEnd() - (1000*60*60*12);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            Date date = new Date(durationEndInMillis);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            String returnFormat = dateFormat.format(date);
+            binding.jamAmbil.setText(returnFormat);
+        }
 
         // kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {

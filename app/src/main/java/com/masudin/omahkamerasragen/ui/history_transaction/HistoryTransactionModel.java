@@ -3,6 +3,8 @@ package com.masudin.omahkamerasragen.ui.history_transaction;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.masudin.omahkamerasragen.ui.cart.CartModel;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryTransactionModel implements Parcelable {
@@ -13,6 +15,7 @@ public class HistoryTransactionModel implements Parcelable {
     private String status;
     private String dateStart;
     private String dateFinish;
+    private ArrayList<String> name;
     public List<CartModel> data;
 
     public HistoryTransactionModel(){}
@@ -25,6 +28,7 @@ public class HistoryTransactionModel implements Parcelable {
         status = in.readString();
         dateStart = in.readString();
         dateFinish = in.readString();
+        name = in.createStringArrayList();
         data = in.createTypedArrayList(CartModel.CREATOR);
     }
 
@@ -36,6 +40,7 @@ public class HistoryTransactionModel implements Parcelable {
         dest.writeString(status);
         dest.writeString(dateStart);
         dest.writeString(dateFinish);
+        dest.writeStringList(name);
         dest.writeTypedList(data);
     }
 
@@ -102,6 +107,14 @@ public class HistoryTransactionModel implements Parcelable {
 
     public void setDateFinish(String dateFinish) {
         this.dateFinish = dateFinish;
+    }
+
+    public ArrayList<String> getName() {
+        return name;
+    }
+
+    public void setName(ArrayList<String> name) {
+        this.name = name;
     }
 
     public List<CartModel> getData() {

@@ -13,7 +13,7 @@
         <item
             android:id="@+id/nav_product"
             android:icon="@drawable/ic_baseline_attractions_24"
-            android:title="Peralan Kamera"
+            android:title="Aksesoris"
             app:tint="@color/browser_actions_bg_grey" />
 
         <item

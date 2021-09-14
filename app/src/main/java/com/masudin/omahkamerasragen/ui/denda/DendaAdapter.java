@@ -16,14 +16,12 @@ import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Date;
 
 public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> {
@@ -90,13 +88,15 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
                 long dateNowInMillis = System.currentTimeMillis();
 
                 if(duration.equals("6 Jam")) {
-                    finalDateFinishInMillis = dateFinishInMillis + (1000*60*60*13);
+                    finalDateFinishInMillis = dateFinishInMillis + historyTransactionModel.getData().get(0).getDurationEnd();
                 } else if (duration.equals("12 Jam")) {
-                    finalDateFinishInMillis = dateFinishInMillis + (1000*60*60*19);
+                    finalDateFinishInMillis = dateFinishInMillis +  historyTransactionModel.getData().get(0).getDurationEnd();
+                } else  {
+                    finalDateFinishInMillis = dateFinishInMillis + (1000*60*60*24);
                 }
 
                 Log.e("NOW", String.valueOf(dateNowInMillis));
-                Log.e("FINISH", String.valueOf(dateFinishInMillis));
+                Log.e("FINISH", String.valueOf(finalDateFinishInMillis));
 
 
                 if(dateNowInMillis > finalDateFinishInMillis) {
@@ -104,6 +104,7 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
                     long extendCash = diff / (1000*60*60);
                     extraCash = extendCash * 5000;
                     denda.setText("IDR " + formatter.format(Double.parseDouble(String.valueOf(extraCash))));
+                    Log.e("TAG", String.valueOf(extendCash));
                 }
 
             } catch (ParseException e){

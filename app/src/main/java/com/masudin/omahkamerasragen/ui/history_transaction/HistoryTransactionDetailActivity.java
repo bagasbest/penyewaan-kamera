@@ -28,8 +28,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class HistoryTransactionDetailActivity extends AppCompatActivity {
 
@@ -56,11 +59,21 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         binding.name.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.dateStart.setText("Waktu Penyewaan: " + model.getData().get(0).getDateStart());
         if(duration.equals("6 Jam")) {
-            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 13.59");
+            long durationEndInMillis = model.getData().get(0).getDurationEnd();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            Date date = new Date(durationEndInMillis);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            String returnFormat = dateFormat.format(date);
+            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
         } else if(duration.equals("12 Jam")) {
-            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 19.59");
+            long durationEndInMillis = model.getData().get(0).getDurationEnd();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            Date date = new Date(durationEndInMillis);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            String returnFormat = dateFormat.format(date);
+            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
         } else {
-            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 07.59");
+            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 23:59");
         }
         binding.finalPrice.setText("Biaya Sewa: IDR " + formatter.format(Double.parseDouble(model.getFinalPrice())));
 

@@ -140,8 +140,8 @@ public class ProductAddActivity extends AppCompatActivity {
 
     private void showFailureDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Gagal Mengunggah Peralatan Kamera")
-                .setMessage("Terdapat kesalahan ketika mengunggah peralatan kamera, silahkan periksa koneksi internet anda, dan coba lagi nanti")
+                .setTitle("Gagal Mengunggah Aksesoris")
+                .setMessage("Terdapat kesalahan ketika mengunggah Aksesoris, silahkan periksa koneksi internet anda, dan coba lagi nanti")
                 .setIcon(R.drawable.ic_baseline_clear_24)
                 .setPositiveButton("OKE", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
@@ -152,8 +152,8 @@ public class ProductAddActivity extends AppCompatActivity {
 
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Berhasil Mengunggah Peralatan Kamera")
-                .setMessage("Peralatan Kamera akan segera terbit, anda dapat mengedit atau menghapus peralatan kamera jika terdapat kesalahan")
+                .setTitle("Berhasil Mengunggah Aksesoris")
+                .setMessage("Aksesoris akan segera terbit, anda dapat mengedit atau menghapus peralatan kamera jika terdapat kesalahan")
                 .setIcon(R.drawable.ic_baseline_check_circle_outline_24)
                 .setPositiveButton("OKE", (dialogInterface, i) -> {
                     dialogInterface.dismiss();

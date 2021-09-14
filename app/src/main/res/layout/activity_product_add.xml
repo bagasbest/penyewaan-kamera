@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="30dp"
-            android:text="Tambah Peralatan Kamera"
+            android:text="Tambah Aksesoris"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
-                android:hint="Nama Peralatan" />
+                android:hint="Nama Aksesoris" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:inputType="textCapWords"
                 android:layout_height="wrap_content"
-                android:hint="Merk Peralatan" />
+                android:hint="Merk Aksesoris" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +92,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Deskripsi Peralatan"
+                android:hint="Deskripsi Aksesoris"
                 android:inputType="textMultiLine"
                 android:singleLine="false" />
 
@@ -112,7 +112,7 @@
                 android:id="@+id/price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Harga Peralatan (6 Jam)"
+                android:hint="Harga Aksesoris (6 Jam)"
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -131,7 +131,7 @@
                 android:id="@+id/price2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Harga Peralatan (12 Jam)"
+                android:hint="Harga Aksesoris (12 Jam)"
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -150,7 +150,7 @@
                 android:id="@+id/price3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Harga Peralatan (24 Jam)"
+                android:hint="Harga Aksesoris (24 Jam)"
                 android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -195,7 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="16dp"
-            android:text="Unggah Peralatan Kamera"
+            android:text="Unggah Aksesoris"
             android:layout_marginBottom="30sp"
             android:textAllCaps="false"
             android:textStyle="bold"

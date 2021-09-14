@@ -16,7 +16,6 @@ import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionMod
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 
 public class DendaDetailActivity extends AppCompatActivity {
 
@@ -37,6 +36,7 @@ public class DendaDetailActivity extends AppCompatActivity {
 
 
         binding.transactionId.setText("Kode Transaksi: " + model.getTransactionId());
+        binding.borrower.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.finalPrice.setText("Biaya Denda: IDR " + formatter.format(Double.parseDouble(String.valueOf(getIntent().getLongExtra(DENDA,0)))));
 
         binding.backButton.setOnClickListener(new View.OnClickListener() {

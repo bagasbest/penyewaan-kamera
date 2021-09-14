@@ -65,7 +65,11 @@ public class CartActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_baseline_warning_24)
                 .setPositiveButton("YAKIN", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
-                    checkoutAllProduct();
+                    if(cartModelArrayList.get(0).getCategory().equals("Kamera")) {
+                        checkoutAllProduct("CA-");
+                    } else {
+                        checkoutAllProduct("AK-");
+                    }
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
@@ -73,9 +77,11 @@ public class CartActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void checkoutAllProduct() {
+    private void checkoutAllProduct(String code) {
+        ArrayList<String> listName = new ArrayList<>();
+
         for(int i=0; i<cartModelArrayList.size(); i++) {
-            Log.e("Tag", cartModelArrayList.get(i).getTotalPrice());
+            listName.add(cartModelArrayList.get(i).getName());
             totalPrice += Integer.parseInt(cartModelArrayList.get(i).getTotalPrice());
         }
 
@@ -83,18 +89,19 @@ public class CartActivity extends AppCompatActivity {
         String transactionId = String.valueOf(System.currentTimeMillis());
 
         Map<String, Object> transaction = new HashMap<>();
-        transaction.put("transactionId", transactionId);
+        transaction.put("transactionId", code+transactionId);
         transaction.put("customerId", cartModelArrayList.get(0).getCustomerUid());
         transaction.put("dateStart", cartModelArrayList.get(0).getDateStart());
         transaction.put("dateFinish", cartModelArrayList.get(0).getDateFinish());
         transaction.put("status", "Belum Bayar");
         transaction.put("finalPrice", String.valueOf(totalPrice));
         transaction.put("data", cartModelArrayList);
+        transaction.put("name", listName);
 
         FirebaseFirestore
                 .getInstance()
                 .collection("transaction")
-                .document(transactionId)
+                .document(code+transactionId)
                 .set(transaction)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

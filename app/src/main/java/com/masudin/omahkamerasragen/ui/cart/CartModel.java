@@ -18,6 +18,7 @@ public class CartModel implements Parcelable {
     private String name;
     private String price;
     private String totalPrice;
+    private long durationEnd;
 
     public CartModel(){}
 
@@ -34,6 +35,29 @@ public class CartModel implements Parcelable {
         name = in.readString();
         price = in.readString();
         totalPrice = in.readString();
+        durationEnd = in.readLong();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(cartId);
+        dest.writeString(category);
+        dest.writeString(customerName);
+        dest.writeString(customerUid);
+        dest.writeString(dateFinish);
+        dest.writeString(dateStart);
+        dest.writeString(dp);
+        dest.writeString(duration);
+        dest.writeString(merk);
+        dest.writeString(name);
+        dest.writeString(price);
+        dest.writeString(totalPrice);
+        dest.writeLong(durationEnd);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<CartModel> CREATOR = new Creator<CartModel>() {
@@ -144,24 +168,11 @@ public class CartModel implements Parcelable {
         this.totalPrice = totalPrice;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public long getDurationEnd() {
+        return durationEnd;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(cartId);
-        parcel.writeString(category);
-        parcel.writeString(customerName);
-        parcel.writeString(customerUid);
-        parcel.writeString(dateFinish);
-        parcel.writeString(dateStart);
-        parcel.writeString(dp);
-        parcel.writeString(duration);
-        parcel.writeString(merk);
-        parcel.writeString(name);
-        parcel.writeString(price);
-        parcel.writeString(totalPrice);
+    public void setDurationEnd(long durationEnd) {
+        this.durationEnd = durationEnd;
     }
 }
