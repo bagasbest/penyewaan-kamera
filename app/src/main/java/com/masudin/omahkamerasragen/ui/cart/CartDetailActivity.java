@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
@@ -65,13 +67,16 @@ public class CartDetailActivity extends AppCompatActivity {
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             String returnFormat = dateFormat.format(date);
             binding.jamAmbil.setText(returnFormat);
+        } else {
+            binding.jamAmbil.setText(model.getPickHour());
         }
 
         // kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                startActivity(new Intent(CartDetailActivity.this, CartActivity.class));
+                finish();
             }
         });
 
@@ -110,12 +115,24 @@ public class CartDetailActivity extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
                         if(task.isSuccessful()) {
                             Toast.makeText(CartDetailActivity.this, "Berhasil menghapus cart", Toast.LENGTH_SHORT).show();
-                            onBackPressed();
+                            startActivity(new Intent(CartDetailActivity.this, CartActivity.class));
+                            finish();
                         }else {
                             Toast.makeText(CartDetailActivity.this, "Gagal menghapus kamera", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            startActivity(new Intent(CartDetailActivity.this, CartActivity.class));
+            finish();
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -19,6 +19,7 @@ public class CartModel implements Parcelable {
     private String price;
     private String totalPrice;
     private long durationEnd;
+    private String pickHour;
 
     public CartModel(){}
 
@@ -36,6 +37,7 @@ public class CartModel implements Parcelable {
         price = in.readString();
         totalPrice = in.readString();
         durationEnd = in.readLong();
+        pickHour = in.readString();
     }
 
     @Override
@@ -53,6 +55,7 @@ public class CartModel implements Parcelable {
         dest.writeString(price);
         dest.writeString(totalPrice);
         dest.writeLong(durationEnd);
+        dest.writeString(pickHour);
     }
 
     @Override
@@ -174,5 +177,13 @@ public class CartModel implements Parcelable {
 
     public void setDurationEnd(long durationEnd) {
         this.durationEnd = durationEnd;
+    }
+
+    public String getPickHour() {
+        return pickHour;
+    }
+
+    public void setPickHour(String pickHour) {
+        this.pickHour = pickHour;
     }
 }
