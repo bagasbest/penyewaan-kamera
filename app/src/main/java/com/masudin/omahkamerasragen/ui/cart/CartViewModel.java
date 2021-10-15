@@ -35,6 +35,7 @@ public class CartViewModel extends ViewModel {
                                 CartModel model = new CartModel();
 
                                 model.setCartId("" + document.get("cartId"));
+                                model.setProductId("" + document.get("productId"));
                                 model.setCategory("" + document.get("category"));
                                 model.setCustomerName("" + document.get("customerName"));
                                 model.setCustomerUid("" + document.get("customerUid"));

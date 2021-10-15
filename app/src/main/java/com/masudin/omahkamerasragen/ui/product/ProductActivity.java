@@ -65,7 +65,6 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
-        // tampilkan daftar artikel di halaman artikel terkait pertanian
         ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
         binding.progressBar.setVisibility(View.VISIBLE);

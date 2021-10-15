@@ -76,7 +76,7 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
 
             transactionId.setText(historyTransactionModel.getTransactionId());
             dateFinish.setText(historyTransactionModel.getDateFinish());
-            dateBackProduct.setText(historyTransactionModel.getDateFinish());
+            dateBackProduct.setText("0 Hari, 0 Jam");
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             String duration = historyTransactionModel.data.get(0).getDuration();
@@ -92,7 +92,7 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
                 } else if (duration.equals("12 Jam")) {
                     finalDateFinishInMillis = dateFinishInMillis +  historyTransactionModel.getData().get(0).getDurationEnd();
                 } else  {
-                    finalDateFinishInMillis = dateFinishInMillis + (1000*60*60*24);
+                    finalDateFinishInMillis = dateFinishInMillis;
                 }
 
                 Log.e("NOW", String.valueOf(dateNowInMillis));
@@ -104,7 +104,12 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
                     long extendCash = diff / (1000*60*60);
                     extraCash = extendCash * 5000;
                     denda.setText("IDR " + formatter.format(Double.parseDouble(String.valueOf(extraCash))));
-                    Log.e("TAG", String.valueOf(extendCash));
+
+                    /// set keterlambatan, contoh: keterlambatan 1 Hari, 20 Jam
+                    long getDays = diff / (1000*60*60*24);
+                    long getHours = (diff / (1000*60*60))%24;
+                    dateBackProduct.setText(""+getDays + " Hari, "+ getHours + " Jam");
+
                 }
 
             } catch (ParseException e){

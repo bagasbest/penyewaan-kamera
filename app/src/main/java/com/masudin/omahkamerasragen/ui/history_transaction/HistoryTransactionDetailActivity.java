@@ -128,6 +128,57 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
 
     }
 
+    private void setTotalSewa() {
+        for(int i=0; i<model.getData().size(); i++) {
+            String category = model.getData().get(i).getCategory();
+            String productId = model.getData().get(i).getProductId();
+
+            if(category.equals("Kamera")) {
+                FirebaseFirestore
+                        .getInstance()
+                        .collection("camera")
+                        .document(productId)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                int totalSewa = documentSnapshot.getLong("totalSewa").intValue() + 1;
+
+                                FirebaseFirestore
+                                        .getInstance()
+                                        .collection("camera")
+                                        .document(productId)
+                                        .update("totalSewa", totalSewa);
+
+                            }
+                        });
+            } else {
+                FirebaseFirestore
+                        .getInstance()
+                        .collection("peralatan")
+                        .document(productId)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                int totalSewa = documentSnapshot.getLong("totalSewa").intValue() + 1;
+
+                                FirebaseFirestore
+                                        .getInstance()
+                                        .collection("peralatan")
+                                        .document(productId)
+                                        .update("totalSewa", totalSewa);
+
+                            }
+                        });
+            }
+        }
+
+        Toast.makeText(HistoryTransactionDetailActivity.this, "Berhasil menyelesaikan transaksi ini", Toast.LENGTH_SHORT).show();
+        onBackPressed();
+
+    }
+
     private void showConfirmVerifyDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi ACC Transaksi")
@@ -170,8 +221,8 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
                         if(task.isSuccessful()) {
-                            Toast.makeText(HistoryTransactionDetailActivity.this, "Berhasil menyelesaikan transaksi ini", Toast.LENGTH_SHORT).show();
-                            onBackPressed();
+                            /// total sewa bertambah
+                            setTotalSewa();
                         } else {
                             Toast.makeText(HistoryTransactionDetailActivity.this, "Gagal menyelesaikan transaksi ini", Toast.LENGTH_SHORT).show();
                         }

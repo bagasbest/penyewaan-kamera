@@ -29,8 +29,8 @@
         <ImageView
             android:id="@+id/dp"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:scaleType="fitXY"
+            android:layout_height="400dp"
+            android:scaleType="centerCrop"
             android:contentDescription="@string/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -292,11 +292,39 @@
             app:layout_constraintTop_toBottomOf="@+id/bookingBtn" />
 
         <Button
+            android:id="@+id/sewaSekarang"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Sewa Sekarang"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/bookingBtn" />
+
+
+        <Button
             android:id="@+id/sewaBerdasarkanHari"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="30dp"
             android:text="Sewa Berdasarkan Hari"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sewaBerdasarkanJam"
+            tools:layout_editor_absoluteX="16dp" />
+
+
+        <Button
+            android:id="@+id/masukkanKeranjang"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="30dp"
+            android:text="Masukkan kedalam keranjang"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:textAllCaps="false"

@@ -124,7 +124,7 @@ public class CameraAddActivity extends AppCompatActivity {
         product.put("uid", uid);
         product.put("status", "ready");
         product.put("dp", dp);
-
+        product.put("totalSewa", 0);
 
         FirebaseFirestore
                 .getInstance()

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Penyewaan_kamera">
-        <activity android:name=".ui.booking.BookingActivity"></activity>
+        <activity android:name=".ui.terlaris.TerlarisActivity"></activity>
+        <activity android:name=".ui.booking.BookingActivity" />
         <activity android:name=".ui.denda.DendaDetailActivity" />
         <activity android:name=".ui.user.UserDetailActivity" />
         <activity android:name=".ui.user.UserActivity" />

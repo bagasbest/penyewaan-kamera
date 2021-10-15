@@ -412,6 +412,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                         // SIMPAN DATA PERALATAN KAMERA KE DATABASE
                         Map<String, Object> addToCart = new HashMap<>();
                         addToCart.put("cartId", uid);
+                        addToCart.put("productId", model.getUid());
                         addToCart.put("name", model.getName());
                         addToCart.put("merk", model.getMerk());
                         addToCart.put("dp", model.getDp());

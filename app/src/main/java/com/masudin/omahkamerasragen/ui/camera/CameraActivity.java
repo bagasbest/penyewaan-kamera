@@ -66,7 +66,6 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
-        // tampilkan daftar artikel di halaman artikel terkait pertanian
         CameraViewModel viewModel = new ViewModelProvider(this).get(CameraViewModel.class);
 
         binding.progressBar.setVisibility(View.VISIBLE);

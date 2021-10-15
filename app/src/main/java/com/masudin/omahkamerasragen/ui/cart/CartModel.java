@@ -7,6 +7,7 @@ import android.os.Parcelable;
 public class CartModel implements Parcelable {
 
     private String cartId;
+    private String productId;
     private String category;
     private String customerName;
     private String customerUid;
@@ -25,6 +26,7 @@ public class CartModel implements Parcelable {
 
     protected CartModel(Parcel in) {
         cartId = in.readString();
+        productId = in.readString();
         category = in.readString();
         customerName = in.readString();
         customerUid = in.readString();
@@ -43,6 +45,7 @@ public class CartModel implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(cartId);
+        dest.writeString(productId);
         dest.writeString(category);
         dest.writeString(customerName);
         dest.writeString(customerUid);
@@ -81,6 +84,14 @@ public class CartModel implements Parcelable {
 
     public void setCartId(String cartId) {
         this.cartId = cartId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getCategory() {

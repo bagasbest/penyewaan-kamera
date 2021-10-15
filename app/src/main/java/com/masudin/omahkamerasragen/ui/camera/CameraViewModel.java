@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.masudin.omahkamerasragen.ui.product.ProductModel;
 
@@ -25,6 +26,46 @@ public class CameraViewModel extends ViewModel {
             FirebaseFirestore
                     .getInstance()
                     .collection("camera")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document : task.getResult()) {
+                                CameraModel model = new CameraModel();
+
+                                model.setName("" + document.get("name"));
+                                model.setDescription("" + document.get("description"));
+                                model.setDp("" + document.get("dp"));
+                                model.setMerk("" + document.get("merk"));
+                                model.setFacility("" + document.get("facility"));
+                                model.setStatus("" + document.get("status"));
+                                model.setPrice("" + document.get("price"));
+                                model.setPrice2("" + document.get("price2"));
+                                model.setPrice3("" + document.get("price3"));
+                                model.setUid("" + document.get("uid"));
+                                model.setStatus("" + document.get("status"));
+
+
+                                cameraModelArrayList.add(model);
+                            }
+                            listCamera.postValue(cameraModelArrayList);
+                        } else {
+                            Log.e(TAG, task.toString());
+                        }
+                    });
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+    }
+
+
+    public void setCameraTerlaris() {
+        cameraModelArrayList.clear();
+
+        try {
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("camera")
+                    .orderBy("totalSewa", Query.Direction.DESCENDING)
                     .get()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {

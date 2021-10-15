@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class CameraDetailActivity extends AppCompatActivity {
     private CameraModel model;
     private int counter = 0;
     private String pickHour;
+    private String options;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -151,6 +153,25 @@ public class CameraDetailActivity extends AppCompatActivity {
                 startActivity(new Intent(CameraDetailActivity.this, BookingActivity.class));
             }
         });
+
+        binding.sewaSekarang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.sewaSekarang.setVisibility(View.GONE);
+                binding.masukkanKeranjang.setVisibility(View.GONE);
+                options = "now";
+            }
+        });
+
+        binding.masukkanKeranjang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.sewaSekarang.setVisibility(View.GONE);
+                binding.masukkanKeranjang.setVisibility(View.GONE);
+                options = "cart";
+            }
+        });
+
     }
 
     private void sewaKameraPerDay() {
@@ -172,6 +193,9 @@ public class CameraDetailActivity extends AppCompatActivity {
                 return;
             }
 
+
+            Log.e("FIRST", formatFirst);
+            Log.e("SECOND", formatSecond);
 
             // show time picker
             MaterialTimePicker timePicker = new MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build();
@@ -413,6 +437,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                         // SIMPAN DATA PERALATAN KAMERA KE DATABASE
                         Map<String, Object> addToCart = new HashMap<>();
                         addToCart.put("cartId", uid);
+                        addToCart.put("productId", model.getUid());
                         addToCart.put("name", model.getName());
                         addToCart.put("merk", model.getMerk());
                         addToCart.put("dp", model.getDp());

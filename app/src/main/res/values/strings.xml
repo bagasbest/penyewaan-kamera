@@ -8,4 +8,9 @@
         <item>Sudah Bayar</item>
         <item>Selesai</item>
     </string-array>
+
+    <string-array name="kategori">
+        <item>Kamera</item>
+        <item>Aksesoris</item>
+    </string-array>
 </resources>

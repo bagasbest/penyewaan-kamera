@@ -4,12 +4,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,11 +26,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.masudin.omahkamerasragen.databinding.ActivityHomepageBinding;
 import com.masudin.omahkamerasragen.ui.camera.CameraActivity;
+import com.masudin.omahkamerasragen.ui.camera.CameraAdapter;
+import com.masudin.omahkamerasragen.ui.camera.CameraViewModel;
 import com.masudin.omahkamerasragen.ui.cart.CartActivity;
 import com.masudin.omahkamerasragen.ui.denda.DendaActivity;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionActivity;
 import com.masudin.omahkamerasragen.ui.product.ProductActivity;
 import com.masudin.omahkamerasragen.ui.profile.ProfileActivity;
+import com.masudin.omahkamerasragen.ui.terlaris.TerlarisActivity;
+import com.masudin.omahkamerasragen.ui.terlaris.TerlarisAdapter;
 import com.masudin.omahkamerasragen.ui.user.UserActivity;
 
 import java.util.ArrayList;
@@ -39,13 +44,15 @@ public class HomepageActivity extends AppCompatActivity {
     private ActivityHomepageBinding binding;
     private FirebaseUser user;
     private String role = "";
+    private TerlarisAdapter adapter;
 
     @Override
     protected void onResume() {
         super.onResume();
         // ambil username dan email
         populateHeader();
-
+        initRecylerView();
+        initViewModel();
     }
 
     @Override
@@ -93,6 +100,14 @@ public class HomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.app.goo.gl/1NjEZLyem51M4sx28"));
                 startActivity(browserIntent);
+            }
+        });
+
+
+        binding.textView17.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomepageActivity.this, TerlarisActivity.class));
             }
         });
 
@@ -215,6 +230,31 @@ public class HomepageActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    private void initRecylerView() {
+        binding.rvTerlaris.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        adapter = new TerlarisAdapter();
+        binding.rvTerlaris.setAdapter(adapter);
+    }
+
+    private void initViewModel() {
+        // tampilkan daftar artikel di halaman artikel terkait pertanian
+        CameraViewModel viewModel = new ViewModelProvider(this).get(CameraViewModel.class);
+
+        binding.progressBar.setVisibility(View.VISIBLE);
+        viewModel.setCameraTerlaris();
+        viewModel.getCameraList().observe(this, camera -> {
+            if (camera.size() > 0) {
+                binding.noData.setVisibility(View.GONE);
+                adapter.setData(camera);
+            } else {
+                binding.noData.setVisibility(View.VISIBLE);
+            }
+            binding.progressBar.setVisibility(View.GONE);
+        });
+    }
+
 
     @Override
     protected void onDestroy() {

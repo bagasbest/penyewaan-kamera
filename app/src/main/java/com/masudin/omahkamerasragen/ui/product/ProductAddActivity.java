@@ -114,6 +114,8 @@ public class ProductAddActivity extends AppCompatActivity {
         product.put("uid", uid);
         product.put("dp", dp);
         product.put("status", "ready");
+        product.put("totalSewa", 0);
+
 
 
 
