@@ -58,6 +58,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         binding.transactionId.setText("Koda Transaksi: " + model.getTransactionId());
         binding.name.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.dateStart.setText("Waktu Penyewaan: " + model.getData().get(0).getDateStart());
+        binding.pickHour.setText("Jam Ambil: Pukul " + model.getData().get(0).getPickHour());
         if(duration.equals("6 Jam")) {
             long durationEndInMillis = model.getData().get(0).getDurationEnd();
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
