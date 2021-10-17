@@ -77,6 +77,7 @@ public class HistoryTransactionViewModel extends ViewModel {
                                 model.setDateStart("" + document.get("dateStart"));
                                 model.setDateFinish("" + document.get("dateFinish"));
                                 model.setData(document.toObject(HistoryTransactionModel.class).data);
+                                model.setName((ArrayList<String>) document.get("name"));
 
 
                                 transactionModelArrayList.add(model);

@@ -9,6 +9,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityHistoryTransactionDetailBinding;
 import com.masudin.omahkamerasragen.ui.cart.CartAdapter;
@@ -26,12 +30,16 @@ import com.masudin.omahkamerasragen.ui.cart.CartModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class HistoryTransactionDetailActivity extends AppCompatActivity {
@@ -40,6 +48,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
     private ActivityHistoryTransactionDetailBinding binding;
     private HistoryTransactionModel model;
     private FirebaseUser user;
+    private int counterNotification = 0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -59,24 +68,41 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         binding.name.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.dateStart.setText("Waktu Penyewaan: " + model.getData().get(0).getDateStart());
         binding.pickHour.setText("Jam Ambil: Pukul " + model.getData().get(0).getPickHour());
-        if(duration.equals("6 Jam")) {
-            long durationEndInMillis = model.getData().get(0).getDurationEnd();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-            Date date = new Date(durationEndInMillis);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-            String returnFormat = dateFormat.format(date);
-            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
-        } else if(duration.equals("12 Jam")) {
-            long durationEndInMillis = model.getData().get(0).getDurationEnd();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-            Date date = new Date(durationEndInMillis);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-            String returnFormat = dateFormat.format(date);
-            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
-        } else {
-            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 23:59");
-        }
+
+        /// waktu pengembalian
+        long durationEndInMillis = model.getData().get(0).getDurationEnd();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        Date date = new Date(durationEndInMillis);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String returnFormat = dateFormat.format(date);
+        binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
+
+
         binding.finalPrice.setText("Biaya Sewa: IDR " + formatter.format(Double.parseDouble(model.getFinalPrice())));
+//        if(duration.equals("6 Jam")) {
+//            long durationEndInMillis = model.getData().get(0).getDurationEnd();
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+//            Date date = new Date(durationEndInMillis);
+//            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+//            String returnFormat = dateFormat.format(date);
+//            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
+//        } else if(duration.equals("12 Jam")) {
+//            long durationEndInMillis = model.getData().get(0).getDurationEnd();
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+//            Date date = new Date(durationEndInMillis);
+//            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+//            String returnFormat = dateFormat.format(date);
+//            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
+//        }
+//        else {
+//            long durationEndInMillis = model.getData().get(0).getDurationEnd();
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+//            Date date = new Date(durationEndInMillis);
+//            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+//            String returnFormat = dateFormat.format(date);
+//            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
+//            ///binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 23:59");
+//        }
 
         initRecyclerView();
 
@@ -110,9 +136,9 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         binding.verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(model.getStatus().equals("Belum Bayar")) {
+                if (model.getStatus().equals("Belum Bayar")) {
                     showConfirmVerifyDialog();
-                } else if(model.getStatus().equals("Sudah Bayar")) {
+                } else if (model.getStatus().equals("Sudah Bayar")) {
                     showConfirmFinishDialog();
                 }
             }
@@ -127,14 +153,80 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
             }
         });
 
+
+        /// beri validasi jika terdapat barang & waktu yang sama, namun status = Belum Bayar
+        showDialogNotification();
+
+    }
+
+    private void showDialogNotification() {
+        for (int i = 0; i < model.getName().size(); i++) {
+            int finalI = i;
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("notification")
+                    .whereEqualTo("name", model.getName().get(i))
+                    .whereNotEqualTo("cartId", model.getData().get(i).getCartId())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot size = task.getResult();
+
+                                if (size.size() > 0) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                                        try {
+                                            Date dateStart = formatter.parse(model.getDateStart());
+                                            Date dateFinish = formatter.parse(model.getDateFinish());
+
+                                            Date transactionStart = formatter.parse("" + document.get("dateStart"));
+                                            Date transactionFinish = formatter.parse("" + document.get("dateFinish"));
+
+                                            if (((dateStart.getTime() < transactionStart.getTime() && dateStart.getTime() < transactionFinish.getTime()) && (dateFinish.getTime() < transactionStart.getTime() && dateFinish.getTime() < transactionFinish.getTime()))
+                                                    || ((dateStart.getTime() > transactionStart.getTime() && dateStart.getTime() > transactionFinish.getTime()) && (dateFinish.getTime() > transactionStart.getTime() && dateFinish.getTime() > transactionFinish.getTime()))) {
+
+                                                Log.e(String.valueOf(finalI), "PASS");
+
+                                            } else {
+                                                counterNotification++;
+                                                Log.e(String.valueOf(finalI), "get");
+                                            }
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } else {
+                                    Log.e(String.valueOf(finalI), "Transaksi kosong");
+                                }
+                            }
+                        }
+                    });
+        }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            if (counterNotification > 0) {
+                /// tampilkan dialog notifikasi
+                new AlertDialog.Builder(HistoryTransactionDetailActivity.this)
+                        .setTitle("Harap Lakukan Pembayaran")
+                        .setMessage("Harap segera melakukan pembayaran terhadap transaksi ini, karena barang pada transaksi ini juga terdapat di transaksi lain.\n\nHanya pelanggan yang pertama kali membayar, yang berhak menyewa Kamera/Aksesoris pada transaksi ini, setelah itu transaksi lain akan dibatalkan oleh admin")
+                        .setIcon(R.drawable.ic_baseline_warning_24)
+                        .setPositiveButton("OKE", (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                        })
+                        .show();
+            }
+        }, 1000);
     }
 
     private void setTotalSewa() {
-        for(int i=0; i<model.getData().size(); i++) {
+        for (int i = 0; i < model.getData().size(); i++) {
             String category = model.getData().get(i).getCategory();
             String productId = model.getData().get(i).getProductId();
 
-            if(category.equals("Kamera")) {
+            if (category.equals("Kamera")) {
                 FirebaseFirestore
                         .getInstance()
                         .collection("camera")
@@ -221,9 +313,10 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             /// total sewa bertambah
                             setTotalSewa();
+                            deleteBooking();
                         } else {
                             Toast.makeText(HistoryTransactionDetailActivity.this, "Gagal menyelesaikan transaksi ini", Toast.LENGTH_SHORT).show();
                         }
@@ -231,7 +324,18 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 });
     }
 
+    private void deleteBooking() {
+        for (int i = 0; i < model.getData().size(); i++) {
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("booking")
+                    .document(model.getData().get(i).getCartId())
+                    .delete();
+        }
+    }
+
     private void verifyTransaction() {
+
         FirebaseFirestore
                 .getInstance()
                 .collection("transaction")
@@ -240,7 +344,23 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
+
+                            /// create booking product
+                            for (int i = 0; i < model.getData().size(); i++) {
+                                Map<String, Object> booking = new HashMap<>();
+                                booking.put("transactionId", model.getTransactionId());
+                                booking.put("dateStart", model.getDateStart());
+                                booking.put("dateFinish", model.getDateFinish());
+                                booking.put("productName", model.getData().get(i).getName());
+                                booking.put("category", model.getData().get(i).getCategory());
+
+                                FirebaseFirestore
+                                        .getInstance()
+                                        .collection("booking")
+                                        .document(model.getData().get(i).getCartId())
+                                        .set(booking);
+                            }
                             Toast.makeText(HistoryTransactionDetailActivity.this, "Berhasil melakukan acc transaksi ini", Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         } else {
@@ -259,11 +379,16 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .setPositiveButton("YA", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     deleteTransaction();
+                    deleteNotification();
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
                 })
                 .show();
+    }
+
+    private void deleteNotification() {
+
     }
 
     private void deleteTransaction() {
@@ -275,7 +400,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             Toast.makeText(HistoryTransactionDetailActivity.this, "Berhasil menghapus riwayat transaksi ini", Toast.LENGTH_SHORT).show();
                             onBackPressed();
                         } else {
@@ -294,11 +419,11 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(("" + documentSnapshot.get("role")).equals("admin")) {
-                            if(!model.getStatus().equals("Selesai")) {
+                        if (("" + documentSnapshot.get("role")).equals("admin")) {
+                            if (!model.getStatus().equals("Selesai")) {
                                 binding.verify.setVisibility(View.VISIBLE);
                             }
-                            if(model.getStatus().equals("Belum Bayar") || model.getStatus().equals("Selesai")) {
+                            if (model.getStatus().equals("Belum Bayar") || model.getStatus().equals("Selesai")) {
                                 binding.delete.setVisibility(View.VISIBLE);
                             }
                         }

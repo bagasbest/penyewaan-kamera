@@ -18,14 +18,14 @@ public class BookingViewModel extends ViewModel {
 
     private static final String TAG = BookingViewModel.class.getSimpleName();
 
-    public void setListBooking() {
+    public void setListBookingCamera() {
         bookingModelArrayList.clear();
 
         try {
             FirebaseFirestore
                     .getInstance()
-                    .collection("transaction")
-                    .whereEqualTo("status", "Sudah Bayar")
+                    .collection("booking")
+                    .whereEqualTo("category", "Kamera")
                     .get()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
@@ -35,6 +35,38 @@ public class BookingViewModel extends ViewModel {
                                 model.setTransactionId("" + document.get("transactionId"));
                                 model.setDateStart("" + document.get("dateStart"));
                                 model.setDateFinish("" + document.get("dateFinish"));
+                                model.setProductName("" + document.get("productName"));
+
+                                bookingModelArrayList.add(model);
+                            }
+                            listBooking.postValue(bookingModelArrayList);
+                        } else {
+                            Log.e(TAG, task.toString());
+                        }
+                    });
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+    }
+
+    public void setListBookingAksesoris() {
+        bookingModelArrayList.clear();
+
+        try {
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("booking")
+                    .whereEqualTo("category", "Aksesoris")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document : task.getResult()) {
+                                BookingModel model = new BookingModel();
+
+                                model.setTransactionId("" + document.get("transactionId"));
+                                model.setDateStart("" + document.get("dateStart"));
+                                model.setDateFinish("" + document.get("dateFinish"));
+                                model.setProductName("" + document.get("productName"));
 
                                 bookingModelArrayList.add(model);
                             }

@@ -41,19 +41,21 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tId, dateStart, dateFinish;
+        TextView tId, dateStart, dateFinish, name;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             tId = itemView.findViewById(R.id.transactionId);
             dateFinish = itemView.findViewById(R.id.dateFinish);
             dateStart = itemView.findViewById(R.id.dateStart);
+            name = itemView.findViewById(R.id.productName);
         }
 
         public void bind(BookingModel model) {
             tId.setText(model.getTransactionId());
             dateStart.setText(model.getDateStart());
             dateFinish.setText(model.getDateFinish());
+            name.setText(model.getProductName());
         }
     }
 }

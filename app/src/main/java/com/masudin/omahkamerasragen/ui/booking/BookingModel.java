@@ -5,6 +5,9 @@ public class BookingModel {
     private String transactionId;
     private String dateStart;
     private String dateFinish;
+    private String productName;
+
+   public BookingModel(){}
 
     public String getTransactionId() {
         return transactionId;
@@ -28,5 +31,13 @@ public class BookingModel {
 
     public void setDateFinish(String dateFinish) {
         this.dateFinish = dateFinish;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }

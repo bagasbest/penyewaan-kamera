@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -221,7 +222,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                             }
 
                             /// cek apakah waktu peminjaman & pengembalian sudah sama dengan produk yang ada di keranjang, jika ada
-                            if (((dateStart.equals(formatFirst)) && (dateFinish.equals(formatSecond))) || document.size() == 0) {
+                            if (((dateStart.equals(formatFirst)) && (dateFinish.equals(formatSecond))) || document.size() == 0 || options.equals("now")) {
 
                                 // show time picker
                                 MaterialTimePicker timePicker = new MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build();
@@ -251,9 +252,12 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                             pickHour = timePicker.getHour() + ":" + timePicker.getMinute();
                                                         }
 
+                                                        long durationEndInMillis = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(timePicker.getHour()) + TimeUnit.MINUTES.toSeconds(timePicker.getMinute()));
+
+                                                        Log.e("TAG", pickHour + " " + getPickHour);
 
                                                         if (size.size() > 0) {
-                                                            if (pickHour.equals(getPickHour)) {
+                                                            if (pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
                                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                                     try {
                                                                         ArrayList<String> listName = (ArrayList<String>) document.get("name");
@@ -275,7 +279,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                                             if (counter == size.size()) {
                                                                                 counter = 0;
                                                                                 mProgressDialog.dismiss();
-                                                                                confirmSewaCameraPerDay(datePicker, pickHour);
+                                                                                confirmSewaCameraPerDay(datePicker, pickHour, durationEndInMillis);
                                                                             }
                                                                         } else {
                                                                             for (int i = 0; i < listName.size(); i++) {
@@ -289,7 +293,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                                             if (counter == size.size()) {
                                                                                 counter = 0;
                                                                                 mProgressDialog.dismiss();
-                                                                                confirmSewaCameraPerDay(datePicker, pickHour);
+                                                                                confirmSewaCameraPerDay(datePicker, pickHour, durationEndInMillis);
                                                                             }
                                                                         }
 
@@ -302,7 +306,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                                 mProgressDialog.dismiss();
                                                                 new AlertDialog.Builder(CameraDetailActivity.this)
                                                                         .setTitle("Gagal")
-                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: " + getPickHour)
+                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: pukul " + getPickHour)
                                                                         .setIcon(R.drawable.ic_baseline_warning_24)
                                                                         .setPositiveButton("OKE", (dialogInterface, i) -> {
                                                                             dialogInterface.dismiss();
@@ -311,7 +315,18 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                             }
                                                         } else {
                                                             mProgressDialog.dismiss();
-                                                            confirmSewaCameraPerDay(datePicker, pickHour);
+                                                            if(pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
+                                                                confirmSewaCameraPerDay(datePicker, pickHour, durationEndInMillis);
+                                                            } else {
+                                                                new AlertDialog.Builder(CameraDetailActivity.this)
+                                                                        .setTitle("Gagal")
+                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: pukul " + getPickHour)
+                                                                        .setIcon(R.drawable.ic_baseline_warning_24)
+                                                                        .setPositiveButton("OKE", (dialogInterface, i) -> {
+                                                                            dialogInterface.dismiss();
+                                                                        })
+                                                                        .show();
+                                                            }
                                                         }
 
                                                     } else {
@@ -321,7 +336,6 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                 }
                                             });
                                 });
-
                             } else {
                                 new AlertDialog.Builder(CameraDetailActivity.this)
                                         .setTitle("Gagal")
@@ -338,7 +352,7 @@ public class CameraDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void confirmSewaCameraPerDay(MaterialDatePicker datePicker, String pickHour) {
+    private void confirmSewaCameraPerDay(MaterialDatePicker datePicker, String pickHour, Long durationEnd) {
         Pair prendiRange = (Pair) datePicker.getSelection();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String formatFirst = sdf.format(new Date(Long.parseLong(prendiRange.first.toString())));
@@ -350,7 +364,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                 .setPositiveButton("YA", (dialogInterface, i) -> {
                     long diff = Long.parseLong(prendiRange.second.toString()) - Long.parseLong(prendiRange.first.toString());
                     long diffDays = diff / (24 * 60 * 60 * 1000);
-                    saveProductToCart(formatFirst, formatSecond, 24, diffDays, 0, pickHour);
+                    saveProductToCart(formatFirst, formatSecond, 24, diffDays, durationEnd, pickHour);
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
@@ -385,7 +399,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                 getPickHour = "" + document.getDocuments().get(0).get("pickHour");
                             }
 
-                            if (getDateNow.equals(dateStart) && getDateNow.equals(dateFinish) || document.size() == 0) {
+                            if (getDateNow.equals(dateStart) && getDateNow.equals(dateFinish) || document.size() == 0 || options.equals("now")) {
                                 // show time picker
                                 MaterialTimePicker timePicker = new MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build();
                                 timePicker.show(getSupportFragmentManager(), timePicker.toString());
@@ -417,7 +431,7 @@ public class CameraDetailActivity extends AppCompatActivity {
 
 
                                                         if (size.size() > 0) {
-                                                            if (getPickHour.equals(pickHour)) {
+                                                            if (getPickHour.equals(pickHour) || document.size() == 0 || options.equals("now")) {
                                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                                                                     String format = sdf.format(new Date(Long.parseLong(selection.toString())));
@@ -482,8 +496,6 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                     }
                                                 }
                                             });
-
-
                                 });
                             } else {
                                 new AlertDialog.Builder(CameraDetailActivity.this)
@@ -523,10 +535,7 @@ public class CameraDetailActivity extends AppCompatActivity {
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        /// simpan produk ke keranjang
-
+        /// masukkan produk kedalam keranjang
         if (options.equals("cart")) {
             String uid = String.valueOf(System.currentTimeMillis());
 
@@ -543,24 +552,22 @@ public class CameraDetailActivity extends AppCompatActivity {
                 addToCart.put("dateStart", first);
                 addToCart.put("dateFinish", first);
                 addToCart.put("totalPrice", model.getPrice());
-                addToCart.put("durationEnd", durationEndInMillis);
             } else if (hour == 12) {
                 addToCart.put("duration", hour + " Jam");
                 addToCart.put("price", model.getPrice2());
                 addToCart.put("dateStart", first);
                 addToCart.put("dateFinish", first);
                 addToCart.put("totalPrice", model.getPrice2());
-                addToCart.put("durationEnd", durationEndInMillis);
             } else {
                 addToCart.put("duration", difference + " Hari");
                 addToCart.put("price", model.getPrice3());
                 addToCart.put("dateStart", first);
                 addToCart.put("dateFinish", second);
-                addToCart.put("durationEnd", 0);
                 addToCart.put("totalPrice", Long.parseLong(model.getPrice3()) * difference);
             }
+            addToCart.put("durationEnd", durationEndInMillis);
             addToCart.put("category", "Kamera");
-            addToCart.put("customerUid", user.getUid());
+            addToCart.put("customerUid", userUid);
             addToCart.put("customerName", getCustomerName);
             addToCart.put("pickHour", pickHour);
 
@@ -598,7 +605,6 @@ public class CameraDetailActivity extends AppCompatActivity {
             cartModel.setDp(model.getDp());
             if(hour == 6 || hour == 12) {
                 cartModel.setDuration(hour + " Jam");
-                cartModel.setDurationEnd(durationEndInMillis);
                 if(hour == 6) {
                     cartModel.setPrice(model.getPrice());
                     cartModel.setTotalPrice(model.getPrice());
@@ -609,11 +615,11 @@ public class CameraDetailActivity extends AppCompatActivity {
                 cartModel.setDateFinish(first);
             } else {
                 cartModel.setDuration(difference + " Hari");
-                cartModel.setDurationEnd(0);
                 cartModel.setPrice(model.getPrice3());
                 cartModel.setTotalPrice(model.getPrice3());
                 cartModel.setDateFinish(second);
             }
+            cartModel.setDurationEnd(durationEndInMillis);
             cartModel.setDateStart(first);
             cartModel.setMerk(model.getMerk());
             cartModel.setName(model.getName());
@@ -658,6 +664,23 @@ public class CameraDetailActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+            /// untuk keperluan set notifikasi
+            Map<String, Object> notification = new HashMap<>();
+            notification.put("cartId", trId);
+            notification.put("dateStart", first);
+            if(hour == 6 || hour == 12) {
+                notification.put("dateFinish", first);
+            } else {
+                notification.put("dateFinish", second);
+            }
+            notification.put("name", model.getName());
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("notification")
+                    .document(trId)
+                    .set(notification);
+
         }
     }
 

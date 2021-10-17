@@ -91,6 +91,19 @@ public class CartActivity extends AppCompatActivity {
         for(int i=0; i<cartModelArrayList.size(); i++) {
             listName.add(cartModelArrayList.get(i).getName());
             totalPrice += Integer.parseInt(cartModelArrayList.get(i).getTotalPrice());
+
+            /// untuk keperluan set notifikasi
+            Map<String, Object> notification = new HashMap<>();
+            notification.put("cartId", cartModelArrayList.get(i).getCartId());
+            notification.put("dateStart", cartModelArrayList.get(i).getDateStart());
+            notification.put("dateFinish", cartModelArrayList.get(i).getDateFinish());
+            notification.put("name", cartModelArrayList.get(i).getName());
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("notification")
+                    .document(cartModelArrayList.get(i).getCartId())
+                    .set(notification);
+
         }
 
 
