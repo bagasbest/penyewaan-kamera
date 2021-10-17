@@ -281,6 +281,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .setPositiveButton("YA", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
                     verifyTransaction();
+                    deleteNotification();
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
@@ -388,7 +389,13 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
     }
 
     private void deleteNotification() {
-
+        for(int i=0; i<model.getData().size(); i++) {
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("notification")
+                    .document(model.getData().get(i).getCartId())
+                    .delete();
+        }
     }
 
     private void deleteTransaction() {

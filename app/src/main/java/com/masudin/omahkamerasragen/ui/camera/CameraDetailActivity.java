@@ -488,7 +488,18 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                             }
                                                         } else {
                                                             mProgressDialog.dismiss();
-                                                            confirmSewaCamera(selection, hour, durationEndInMillis, pickHour);
+                                                            if(pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
+                                                                confirmSewaCamera(selection, hour, durationEndInMillis, pickHour);
+                                                            } else {
+                                                                new AlertDialog.Builder(CameraDetailActivity.this)
+                                                                        .setTitle("Gagal")
+                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: pukul " + getPickHour)
+                                                                        .setIcon(R.drawable.ic_baseline_warning_24)
+                                                                        .setPositiveButton("OKE", (dialogInterface, i) -> {
+                                                                            dialogInterface.dismiss();
+                                                                        })
+                                                                        .show();
+                                                            }
                                                         }
                                                     } else {
                                                         mProgressDialog.dismiss();

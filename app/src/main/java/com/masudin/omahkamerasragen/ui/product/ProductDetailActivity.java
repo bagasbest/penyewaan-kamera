@@ -305,7 +305,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                                 mProgressDialog.dismiss();
                                                                 new AlertDialog.Builder(ProductDetailActivity.this)
                                                                         .setTitle("Gagal")
-                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: " + getPickHour)
+                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: pukul " + getPickHour)
                                                                         .setIcon(R.drawable.ic_baseline_warning_24)
                                                                         .setPositiveButton("OKE", (dialogInterface, i) -> {
                                                                             dialogInterface.dismiss();
@@ -319,7 +319,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             } else {
                                                                 new AlertDialog.Builder(ProductDetailActivity.this)
                                                                         .setTitle("Gagal")
-                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: " + getPickHour)
+                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: pukul " + getPickHour)
                                                                         .setIcon(R.drawable.ic_baseline_warning_24)
                                                                         .setPositiveButton("OKE", (dialogInterface, i) -> {
                                                                             dialogInterface.dismiss();
@@ -485,7 +485,18 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             }
                                                         } else {
                                                             mProgressDialog.dismiss();
-                                                            confirmSewaPeralatanCamera(selection, hour, durationEndInMillis, pickHour);
+                                                            if(pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
+                                                                confirmSewaPeralatanCamera(selection, hour, durationEndInMillis, pickHour);
+                                                            } else {
+                                                                new AlertDialog.Builder(ProductDetailActivity.this)
+                                                                        .setTitle("Gagal")
+                                                                        .setMessage("Maaf, jam pengambilan produk harus sama pada produk yang ada pada keranjang anda!\n\nJam pengambilan: " + getPickHour)
+                                                                        .setIcon(R.drawable.ic_baseline_warning_24)
+                                                                        .setPositiveButton("OKE", (dialogInterface, i) -> {
+                                                                            dialogInterface.dismiss();
+                                                                        })
+                                                                        .show();
+                                                            }
                                                         }
                                                     } else {
                                                         mProgressDialog.dismiss();
