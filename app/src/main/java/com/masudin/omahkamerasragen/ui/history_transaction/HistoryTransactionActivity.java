@@ -18,18 +18,20 @@ import com.masudin.omahkamerasragen.databinding.ActivityHistoryTransactionBindin
 
 public class HistoryTransactionActivity extends AppCompatActivity {
 
+    /// inisiasi variabel, diperlukan supaya aplikasi tidak error saat dijalankan
     private ActivityHistoryTransactionBinding binding;
     private HistoryTransactionAdapter adapter;
     private FirebaseUser user;
     private String role;
     private String status = "Belum Bayar";
-
     @Override
     protected void onResume() {
         super.onResume();
        checkRole();
     }
 
+    /// cek role apakah yang login saat ini user atau admin
+    /// jika admin, maka dapat melihat semua transaksi
     private void checkRole() {
         FirebaseFirestore
                 .getInstance()
@@ -57,9 +59,10 @@ public class HistoryTransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHistoryTransactionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        /// get uid dari user yang sedang login
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // filter belum bayar atau sudah bayar
+        // filter belum bayar atau sudah bayar, atau selesai
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.status, android.R.layout.simple_list_item_1);
         // Specify the layout to use when the list of choices appears
@@ -73,7 +76,7 @@ public class HistoryTransactionActivity extends AppCompatActivity {
         });
 
 
-
+        /// kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,14 +85,17 @@ public class HistoryTransactionActivity extends AppCompatActivity {
         });
     }
 
+
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA history transaksi
     private void initRecyclerView() {
         binding.rvTransaction.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HistoryTransactionAdapter();
         binding.rvTransaction.setAdapter(adapter);
     }
 
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA history tranasaksi DARI FIREBASE
     private void initViewModel(String role, String status) {
-        // tampilkan daftar artikel di halaman artikel terkait pertanian
+        // tampilkan daftar history tranasksi berdasarkan role nya, admin atau user biasa
         HistoryTransactionViewModel viewModel = new ViewModelProvider(this).get(HistoryTransactionViewModel.class);
 
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -109,6 +115,8 @@ public class HistoryTransactionActivity extends AppCompatActivity {
         });
     }
 
+
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

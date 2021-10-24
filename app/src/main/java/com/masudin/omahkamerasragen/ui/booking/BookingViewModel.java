@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 public class BookingViewModel extends ViewModel {
 
+    /// KELAS VIEW MODEL BERFUNGSI UNTUK MENGAMBIL DATA DARI FIRESTORE KEMUDIAN MENERUSKANNYA KEPADA ACTIVITY YANG DI TUJU
+    /// CONTOH KELAS BOOKING VIEW MODEL MENGAMBIL DATA DARI COLLECTION "booking", KEMUDIAN SETELAH DI AMBIL, DATA DIMASUKKAN KEDALAM MODEL, SETELAH ITU DITERUSKAN KEPADA ACTIVITY BOOKING, SEHINGGA ACTIVITY DAPAT MENAMPILKAN DATA BOOKING
+
     private final MutableLiveData<ArrayList<BookingModel>> listBooking = new MutableLiveData<>();
     final ArrayList<BookingModel> bookingModelArrayList = new ArrayList<>();
 

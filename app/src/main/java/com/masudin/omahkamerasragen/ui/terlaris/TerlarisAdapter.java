@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 public class TerlarisAdapter extends RecyclerView.Adapter<TerlarisAdapter.ViewHolder> {
 
+    /// INISIASI ARRAY LIST SEBAGAI PENAMPUNG LIST DATA terlaris
     private final ArrayList<CameraModel> listCamera = new ArrayList<>();
     public void setData(ArrayList<CameraModel> items) {
         listCamera.clear();
@@ -31,6 +32,8 @@ public class TerlarisAdapter extends RecyclerView.Adapter<TerlarisAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+
+    /// CASTING LAYOUT KE item_terlaris SUPAYA LIST DENDA DAPAT DI TAMPILKAN BERBENTUK LIST
     @NonNull
     @NotNull
     @Override
@@ -49,8 +52,9 @@ public class TerlarisAdapter extends RecyclerView.Adapter<TerlarisAdapter.ViewHo
         return listCamera.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
 
+    //// FUNGSI UNTUK MEMASUKKAN DATA DARI ARRAY LIST DIATAS KEDALAM ATRIBUT, SEHINGGA TERLIHAT nama, DLL PADA LIST
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private ConstraintLayout cv;
         private ImageView dp;
         private TextView name, facility, price;

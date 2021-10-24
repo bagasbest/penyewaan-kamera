@@ -41,11 +41,11 @@ import java.util.ArrayList;
 
 public class HomepageActivity extends AppCompatActivity {
 
+    /// inisisasi variabel supaya tidak error aplikasinya
     private ActivityHomepageBinding binding;
     private FirebaseUser user;
     private String role = "";
     private TerlarisAdapter adapter;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -61,8 +61,11 @@ public class HomepageActivity extends AppCompatActivity {
         binding = ActivityHomepageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        /// get user uid, untuk mengenali siapa yang login saat ini
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+
+        /// klik menu icon / ikon menu
         binding.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,10 +76,10 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
-        //getRole
+        //getRole, untuk menentukan admin atau user biasa, jika admin, maka dapat melihat daftar user
         getRole();
 
-        // Halaman profil
+        // klik ikon profil
         binding.account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,9 +95,10 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
-        // show onboarding image
+        // tampilkan onboarding image
         showOnboardingImage();
 
+        /// klik lokasi pembayaran
         binding.imageView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +107,7 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
-
+        /// klik terlaris
         binding.textView17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +117,8 @@ public class HomepageActivity extends AppCompatActivity {
 
     }
 
+
+    //getRole, untuk menentukan admin atau user biasa, jika admin, maka dapat melihat daftar user
     private void getRole() {
         FirebaseFirestore
                 .getInstance()
@@ -130,6 +136,7 @@ public class HomepageActivity extends AppCompatActivity {
                 });
     }
 
+    /// fungsi untuk menampilkan drawer atau menu yang disamping pada halaman utama
     @SuppressLint("NonConstantResourceId")
     private void populateDrawerItem() {
         // Klik navigasi pada drawer
@@ -168,6 +175,8 @@ public class HomepageActivity extends AppCompatActivity {
         });
     }
 
+
+    /// onboarding merupakan gambar gambar yang otomatis slide pada halaman utama
     private void showOnboardingImage() {
         final ArrayList<SlideModel> imageList = new ArrayList<>();// Create image list
 
@@ -180,6 +189,7 @@ public class HomepageActivity extends AppCompatActivity {
 
     }
 
+    /// fungsi konfirmasi logout
     private void showExitDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi Logout")
@@ -203,6 +213,7 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
 
+    /// memunculkan Foto profil, nama, dan email pada navigasi menu
     private void populateHeader() {
         FirebaseFirestore
                 .getInstance()
@@ -231,13 +242,14 @@ public class HomepageActivity extends AppCompatActivity {
                 });
     }
 
-
+    /// menampilkan data terlaris
     private void initRecylerView() {
         binding.rvTerlaris.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         adapter = new TerlarisAdapter();
         binding.rvTerlaris.setAdapter(adapter);
     }
 
+    /// mengambil data terlaris dari firebase
     private void initViewModel() {
         // tampilkan daftar artikel di halaman artikel terkait pertanian
         CameraViewModel viewModel = new ViewModelProvider(this).get(CameraViewModel.class);
@@ -256,6 +268,7 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
 
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

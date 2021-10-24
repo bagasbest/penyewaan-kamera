@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHolder> {
 
+    /// INISIASI ARRAY LIST SEBAGAI PENAMPUNG LIST DATA BOOKING
     private final ArrayList<BookingModel> listBooking = new ArrayList<>();
     public void setData(ArrayList<BookingModel> items) {
         listBooking.clear();
@@ -22,6 +23,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    /// CASTING LAYOUT KE item_booking SUPAYA LIST BOOKING DAPAT DI TAMPILKAN BERBENTUK URUTAN
     @NonNull
     @NotNull
     @Override
@@ -40,6 +42,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         return listBooking.size();
     }
 
+    //// FUNGSI UNTUK MEMASUKKAN DATA DARI ARRAY LIST DIATAS KEDALAM ATRIBUT, SEHINGGA TERLIHAT KODE TRANSAKSI DLL PADA LIST
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tId, dateStart, dateFinish, name;
 

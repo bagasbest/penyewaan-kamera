@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.masudin.omahkamerasragen.ui.product.ProductModel;
 
 import java.util.ArrayList;
 
 public class CameraViewModel extends ViewModel {
+
+    /// KELAS VIEW MODEL BERFUNGSI UNTUK MENGAMBIL DATA DARI FIRESTORE KEMUDIAN MENERUSKANNYA KEPADA ACTIVITY YANG DI TUJU
+    /// CONTOH KELAS KAMERA VIEW MODEL MENGAMBIL DATA DARI COLLECTION "camera", KEMUDIAN SETELAH DI AMBIL, DATA DIMASUKKAN KEDALAM MODEL, SETELAH ITU DITERUSKAN KEPADA ACTIVITY KAMERA, SEHINGGA ACTIVITY DAPAT MENAMPILKAN DATA KAMERA
 
     private final MutableLiveData<ArrayList<CameraModel>> listCamera = new MutableLiveData<>();
     final ArrayList<CameraModel> cameraModelArrayList = new ArrayList<>();
@@ -26,6 +28,7 @@ public class CameraViewModel extends ViewModel {
             FirebaseFirestore
                     .getInstance()
                     .collection("camera")
+                    .orderBy("name", Query.Direction.ASCENDING)
                     .get()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
@@ -43,7 +46,7 @@ public class CameraViewModel extends ViewModel {
                                 model.setPrice3("" + document.get("price3"));
                                 model.setUid("" + document.get("uid"));
                                 model.setStatus("" + document.get("status"));
-
+                                model.setTotalSewa((long) document.get("totalSewa"));
 
                                 cameraModelArrayList.add(model);
                             }
@@ -83,7 +86,7 @@ public class CameraViewModel extends ViewModel {
                                 model.setPrice3("" + document.get("price3"));
                                 model.setUid("" + document.get("uid"));
                                 model.setStatus("" + document.get("status"));
-
+                                model.setTotalSewa((long) document.get("totalSewa"));
 
                                 cameraModelArrayList.add(model);
                             }

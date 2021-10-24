@@ -24,6 +24,7 @@ import java.util.Currency;
 
 public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTransactionAdapter.ViewHolder> {
 
+    /// INISIASI ARRAY LIST SEBAGAI PENAMPUNG LIST DATA HISTORY TRANSAKSI
     private final ArrayList<HistoryTransactionModel> historyTransactionModelArrayList = new ArrayList<>();
     public void setData(ArrayList<HistoryTransactionModel> items) {
         historyTransactionModelArrayList.clear();
@@ -31,6 +32,7 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
         notifyDataSetChanged();
     }
 
+    /// CASTING LAYOUT KE item_transaction SUPAYA LIST DENDA DAPAT DI TAMPILKAN BERBENTUK LIST
     @NonNull
     @NotNull
     @Override
@@ -49,6 +51,8 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
         return historyTransactionModelArrayList.size();
     }
 
+
+    //// FUNGSI UNTUK MEMASUKKAN DATA DARI ARRAY LIST DIATAS KEDALAM ATRIBUT, SEHINGGA TERLIHAT riwayat penyewaan, waktu penyewaan, waktu pengembalian DLL PADA LIST
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout cv;
@@ -69,6 +73,7 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
 
         @SuppressLint("SetTextI18n")
         public void bind(HistoryTransactionModel model) {
+            /// number format digunakan untuk money currency, misal IDR. 100.000
             NumberFormat formatter = new DecimalFormat("#,###");
 
             transactionId.setText(model.getTransactionId());
@@ -76,13 +81,17 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
             status.setText(model.getStatus());
             finalPrice.setText("IDR " + formatter.format(Double.parseDouble(model.getFinalPrice())));
 
+
+            /// jika belum bayar maka background color nya berwarna merah
             if(model.getStatus().equals("Belum Bayar")) {
                 view.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg));
             } else {
+                /// jika sudah bayar / selesai, maka background color nya berwarna hijau
                 view.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg2));
             }
 
 
+            /// ketika klik salah satu item tranasaksi, maka ke halaman detail tranasaksi
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

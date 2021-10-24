@@ -7,23 +7,28 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
 public class UserViewModel extends ViewModel {
+
+    /// KELAS VIEW MODEL BERFUNGSI UNTUK MENGAMBIL DATA DARI FIRESTORE KEMUDIAN MENERUSKANNYA KEPADA ACTIVITY YANG DI TUJU
+    /// CONTOH KELAS User VIEW MODEL MENGAMBIL DATA DARI COLLECTION "users", KEMUDIAN SETELAH DI AMBIL, DATA DIMASUKKAN KEDALAM MODEL, SETELAH ITU DITERUSKAN KEPADA UserActivity, SEHINGGA ACTIVITY DAPAT MENAMPILKAN DATA user
+
     private final MutableLiveData<ArrayList<UserModel>> listUser = new MutableLiveData<>();
     final ArrayList<UserModel> userModelArrayList = new ArrayList<>();
 
     private static final String TAG = UserViewModel.class.getSimpleName();
 
-    public void setListUser(String uid) {
+    public void setListUser() {
         userModelArrayList.clear();
 
         try {
             FirebaseFirestore
                     .getInstance()
                     .collection("users")
-                    .whereNotEqualTo("uid", uid)
+                    .orderBy("name")
                     .get()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {

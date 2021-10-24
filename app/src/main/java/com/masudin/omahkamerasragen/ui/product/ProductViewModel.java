@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 public class ProductViewModel extends ViewModel {
 
+    /// KELAS VIEW MODEL BERFUNGSI UNTUK MENGAMBIL DATA DARI FIRESTORE KEMUDIAN MENERUSKANNYA KEPADA ACTIVITY YANG DI TUJU
+    /// CONTOH KELAS PRODUCT VIEW MODEL MENGAMBIL DATA DARI COLLECTION "peralatan", KEMUDIAN SETELAH DI AMBIL, DATA DIMASUKKAN KEDALAM MODEL, SETELAH ITU DITERUSKAN KEPADA ACTIVITY Product, SEHINGGA ACTIVITY DAPAT MENAMPILKAN DATA AKSESORIS
+
     private final MutableLiveData<ArrayList<ProductModel>> listProduct = new MutableLiveData<>();
     final ArrayList<ProductModel> productModelArrayList = new ArrayList<>();
 
@@ -26,6 +29,7 @@ public class ProductViewModel extends ViewModel {
             FirebaseFirestore
                     .getInstance()
                     .collection("peralatan")
+                    .orderBy("name", Query.Direction.ASCENDING)
                     .get()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
@@ -41,6 +45,7 @@ public class ProductViewModel extends ViewModel {
                                 model.setPrice3("" + document.get("price3"));
                                 model.setUid("" + document.get("uid"));
                                 model.setStatus("" + document.get("status"));
+                                model.setTotalSewa((long) document.get("totalSewa"));
 
 
                                 productModelArrayList.add(model);
@@ -79,6 +84,7 @@ public class ProductViewModel extends ViewModel {
                                 model.setPrice3("" + document.get("price3"));
                                 model.setUid("" + document.get("uid"));
                                 model.setStatus("" + document.get("status"));
+                                model.setTotalSewa((long) document.get("totalSewa"));
 
 
                                 productModelArrayList.add(model);

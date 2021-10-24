@@ -32,6 +32,7 @@ import java.util.Map;
 
 public class CameraAddActivity extends AppCompatActivity {
 
+    /// inisiasi variabel, supaya tidak error ketika dijalankan aplikasinya
     private ActivityCameraAddBinding binding;
     private String dp;
     private static final int REQUEST_FROM_GALLERY = 1001;
@@ -63,9 +64,11 @@ public class CameraAddActivity extends AppCompatActivity {
             }
         });
 
+        /// kembali KE HALAMAN SEBELUMNYA
         binding.backButton.setOnClickListener(view -> onBackPressed());
     }
 
+    /// ini fungsi yang bekerja ketika tombol upload di klik, sistem akan melakukan storing data inputan ke database
     private void uploadCamera() {
 
         String name = binding.nameEt.getText().toString().trim();
@@ -76,6 +79,7 @@ public class CameraAddActivity extends AppCompatActivity {
         String price2 = binding.price2.getText().toString().trim();
         String price3 = binding.price3.getText().toString().trim();
 
+        /// ini merpakan validasi kolom inputan, semua kolom wajib diisi
         if(name.isEmpty()) {
             Toast.makeText(CameraAddActivity.this, "Nama Kamera tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
@@ -125,7 +129,6 @@ public class CameraAddActivity extends AppCompatActivity {
         product.put("status", "ready");
         product.put("dp", dp);
         product.put("totalSewa", 0);
-
         FirebaseFirestore
                 .getInstance()
                 .collection("camera")
@@ -147,6 +150,7 @@ public class CameraAddActivity extends AppCompatActivity {
 
     }
 
+    /// tampilkan dialog box ketika gagal mengupload
     private void showFailureDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Gagal Mengunggah Kamera")
@@ -159,6 +163,7 @@ public class CameraAddActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// tampilkan dialog box ketika sukses mengupload
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Berhasil Mengunggah Kamera")
@@ -171,7 +176,7 @@ public class CameraAddActivity extends AppCompatActivity {
                 .show();
     }
 
-
+    /// fungsi untuk memvalidasi kode berdasarkan inisiasi variabel di atas tadi
     @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -183,6 +188,8 @@ public class CameraAddActivity extends AppCompatActivity {
         }
     }
 
+
+    /// fungsi untuk mengupload foto kedalam cloud storage
     private void uploadArticleDp(Uri data) {
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
         ProgressDialog mProgressDialog = new ProgressDialog(this);
@@ -216,7 +223,7 @@ public class CameraAddActivity extends AppCompatActivity {
                 });
     }
 
-
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

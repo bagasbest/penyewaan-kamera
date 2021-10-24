@@ -10,6 +10,7 @@ import com.masudin.omahkamerasragen.R;
 import java.util.Calendar;
 
 public class Background {
+    /// background profil
     public static void setBackgroundImage(FragmentActivity activity, ImageView background) {
         Calendar calendar = Calendar.getInstance();
         int timeOfDay = calendar.get(Calendar.HOUR_OF_DAY);

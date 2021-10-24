@@ -28,7 +28,7 @@ public class BookingActivity extends AppCompatActivity {
         initRecylerView();
         initViewModel(category);
 
-        // filter kategori
+        // filter kategori berdasarkan kategori barang AKSESORIS / KAMERA
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.kategori, android.R.layout.simple_list_item_1);
         // Specify the layout to use when the list of choices appears
@@ -41,7 +41,7 @@ public class BookingActivity extends AppCompatActivity {
             initViewModel(category);
         });
 
-
+        // KEMBALI
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,16 +51,18 @@ public class BookingActivity extends AppCompatActivity {
 
     }
 
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA BOOKING
     private void initRecylerView() {
         binding.rvBooking.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookingAdapter();
         binding.rvBooking.setAdapter(adapter);
     }
 
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA BOOKING DARI FIREBASE
     private void initViewModel(String category) {
-        // tampilkan daftar artikel di halaman artikel terkait pertanian
         BookingViewModel viewModel = new ViewModelProvider(this).get(BookingViewModel.class);
 
+        /// AMBIL DATA BERDASARKAN STATUS YANG DIPILIH USER, KAMERA / AKSESORIS
         binding.progressBar.setVisibility(View.VISIBLE);
         if(category.equals("Kamera")) {
             viewModel.setListBookingCamera();
@@ -78,6 +80,7 @@ public class BookingActivity extends AppCompatActivity {
         });
     }
 
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

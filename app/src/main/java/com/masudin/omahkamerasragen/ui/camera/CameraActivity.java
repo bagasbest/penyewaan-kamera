@@ -20,10 +20,12 @@ import com.masudin.omahkamerasragen.ui.product.ProductViewModel;
 public class CameraActivity extends AppCompatActivity {
 
 
+    /// inisiasi variabel supaya tidak error ketika dijalankan
     private ActivityCameraBinding  binding;
     private FirebaseUser user;
     private CameraAdapter adapter;
 
+    /// ON RESUME Activity sudah terlihat dan pengguna sudah dapat berinteraksi. Di sini adalah tempat terbaik untuk menjalankan animasi, membuka akses seperti camera, mengupdate UI, dll.
     @Override
     protected void onResume() {
         super.onResume();
@@ -59,12 +61,16 @@ public class CameraActivity extends AppCompatActivity {
         });
     }
 
+
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA KAMERA
     private void initRecylerView() {
         binding.rvCamera.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CameraAdapter();
         binding.rvCamera.setAdapter(adapter);
     }
 
+
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA KAMERA DARI FIREBASE
     private void initViewModel() {
         CameraViewModel viewModel = new ViewModelProvider(this).get(CameraViewModel.class);
 
@@ -82,6 +88,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
+    // cek role, hanya admin yang bisa CRUD produk kamera
     private void checkRole() {
         FirebaseFirestore
                 .getInstance()
@@ -98,6 +105,8 @@ public class CameraActivity extends AppCompatActivity {
                 });
     }
 
+
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

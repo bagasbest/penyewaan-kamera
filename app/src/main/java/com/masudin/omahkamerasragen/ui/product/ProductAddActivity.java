@@ -29,6 +29,8 @@ import java.util.Map;
 
 public class ProductAddActivity extends AppCompatActivity {
 
+
+    /// inisiasi variabel, supaya tidak error ketika dijalankan aplikasinya
     private ActivityProductAddBinding binding;
     private String dp;
     private static final int REQUEST_FROM_GALLERY = 1001;
@@ -59,11 +61,13 @@ public class ProductAddActivity extends AppCompatActivity {
             }
         });
 
+        /// KEMBALI KE HALAMAN SEBELUMNYA
         binding.backButton.setOnClickListener(view -> onBackPressed());
     }
 
-    private void uploadCameraUtilities() {
 
+    /// ini fungsi yang bekerja ketika tombol upload di klik, sistem akan melakukan storing data inputan ke database
+    private void uploadCameraUtilities() {
         String name = binding.nameEt.getText().toString().trim();
         String merk = binding.merkEt.getText().toString().trim();
         String desc = binding.description.getText().toString();
@@ -71,6 +75,8 @@ public class ProductAddActivity extends AppCompatActivity {
         String price2 = binding.price2.getText().toString().trim();
         String price3 = binding.price3.getText().toString().trim();
 
+
+        /// ini merpakan validasi kolom inputan, semua kolom wajib diisi
         if(name.isEmpty()) {
             Toast.makeText(ProductAddActivity.this, "Nama Produk tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
@@ -103,7 +109,7 @@ public class ProductAddActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         String uid = String.valueOf(System.currentTimeMillis());
 
-        // SIMPAN DATA PERALATAN KAMERA KE DATABASE
+        // SIMPAN DATA aksesoris KE DATABASE
         Map<String, Object> product = new HashMap<>();
         product.put("name", name);
         product.put("description", desc);
@@ -115,10 +121,6 @@ public class ProductAddActivity extends AppCompatActivity {
         product.put("dp", dp);
         product.put("status", "ready");
         product.put("totalSewa", 0);
-
-
-
-
         FirebaseFirestore
                 .getInstance()
                 .collection("peralatan")
@@ -140,6 +142,8 @@ public class ProductAddActivity extends AppCompatActivity {
 
     }
 
+
+    /// tampilkan dialog box ketika gagal mengupload
     private void showFailureDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Gagal Mengunggah Aksesoris")
@@ -152,6 +156,8 @@ public class ProductAddActivity extends AppCompatActivity {
                 .show();
     }
 
+
+    /// tampilkan dialog box ketika sukses mengupload
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Berhasil Mengunggah Aksesoris")
@@ -165,6 +171,7 @@ public class ProductAddActivity extends AppCompatActivity {
     }
 
 
+    /// fungsi untuk memvalidasi kode berdasarkan inisiasi variabel di atas tadi
     @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -176,10 +183,10 @@ public class ProductAddActivity extends AppCompatActivity {
         }
     }
 
+    /// fungsi untuk mengupload foto kedalam cloud storage
     private void uploadArticleDp(Uri data) {
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
         ProgressDialog mProgressDialog = new ProgressDialog(this);
-
         mProgressDialog.setMessage("Mohon tunggu hingga proses selesai...");
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();

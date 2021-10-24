@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 public class ProductModel implements Parcelable {
 
+    /// KELAS MODEL BERFUNGSI UNTUK TEMPAT MENAMPUNG FIELD DATA DARI FIREBASE, KEMUDIAN FIELD - FIELD DI BAWAH INI DAPAT DI PANGGIL PADA ACTIVITY YANG DIINGINKAN
+
+
     private String name;
     private String merk;
     private String description;
@@ -14,8 +17,10 @@ public class ProductModel implements Parcelable {
     private String price3;
     private String uid;
     private String status;
+    private long totalSewa;
 
     public ProductModel(){}
+
     protected ProductModel(Parcel in) {
         name = in.readString();
         merk = in.readString();
@@ -26,6 +31,7 @@ public class ProductModel implements Parcelable {
         price3 = in.readString();
         uid = in.readString();
         status = in.readString();
+        totalSewa = in.readLong();
     }
 
     @Override
@@ -39,6 +45,7 @@ public class ProductModel implements Parcelable {
         dest.writeString(price3);
         dest.writeString(uid);
         dest.writeString(status);
+        dest.writeLong(totalSewa);
     }
 
     @Override
@@ -128,5 +135,13 @@ public class ProductModel implements Parcelable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getTotalSewa() {
+        return totalSewa;
+    }
+
+    public void setTotalSewa(long totalSewa) {
+        this.totalSewa = totalSewa;
     }
 }

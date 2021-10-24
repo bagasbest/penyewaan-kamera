@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 public class CartViewModel extends ViewModel {
 
+
+    /// KELAS VIEW MODEL BERFUNGSI UNTUK MENGAMBIL DATA DARI FIRESTORE KEMUDIAN MENERUSKANNYA KEPADA ACTIVITY YANG DI TUJU
+    /// CONTOH KELAS CART / KERANJANG, VIEW MODEL MENGAMBIL DATA DARI COLLECTION "cart", KEMUDIAN SETELAH DI AMBIL, DATA DIMASUKKAN KEDALAM MODEL, SETELAH ITU DITERUSKAN KEPADA CartActivity, SEHINGGA ACTIVITY DAPAT MENAMPILKAN DATA Keranjang
     private final MutableLiveData<ArrayList<CartModel>> listCart = new MutableLiveData<>();
     final ArrayList<CartModel> cartModelArrayList = new ArrayList<>();
 

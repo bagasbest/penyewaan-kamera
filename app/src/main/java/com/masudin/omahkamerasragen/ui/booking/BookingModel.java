@@ -2,6 +2,8 @@ package com.masudin.omahkamerasragen.ui.booking;
 
 public class BookingModel {
 
+    /// KELAS MODEL BERFUNGSI UNTUK TEMPAT MENAMPUNG FIELD DATA DARI FIREBASE, KEMUDIAN FIELD - FIELD DI BAWAH INI DAPAT DI PANGGIL PADA ACTIVITY YANG DIINGINKAN
+
     private String transactionId;
     private String dateStart;
     private String dateFinish;

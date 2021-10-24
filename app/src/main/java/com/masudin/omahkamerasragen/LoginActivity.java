@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoginActivity extends AppCompatActivity {
 
+    /// inisisasi variabel supaya tidak error aplikasinya
     private ActivityLoginBinding binding;
 
     @Override
@@ -28,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        /// untuk memunculkan logo di login activity
         Glide.with(this)
                 .load(R.drawable.logo)
                 .into(binding.imageView7);
@@ -52,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /// fungsi untuk auto login, cek apakah user pernah login sebelumnya
     private void checkUserLoginOrNotBefore() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, HomepageActivity.class));
@@ -59,10 +62,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /// ketika klik register
     private void register() {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 
+    /// ketika klik login, validasi inputan email & password
     private void login() {
         String email = binding.emailEt.getText().toString().trim();
         String password = binding.passwordEt.getText().toString().trim();
@@ -96,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /// jika gagal login, munculkan alert dialog gagal
     private void showFailureDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Gagal login")
@@ -107,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -17,11 +17,11 @@ import com.masudin.omahkamerasragen.ui.product.ProductViewModel;
 
 public class TerlarisActivity extends AppCompatActivity {
 
+    /// inisiasi variabel, diperlukan supaya aplikasi tidak error saat dijalankan
     private ActivityTerlarisBinding binding;
     private CameraAdapter cameraAdapter;
     private ProductAdapter productAdapter;
     private String category = "";
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -40,6 +40,7 @@ public class TerlarisActivity extends AppCompatActivity {
         binding = ActivityTerlarisBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        /// untuk memfilter kategori kamera, atau aksesoris
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.kategori, android.R.layout.simple_list_item_1);
         // Specify the layout to use when the list of choices appears
@@ -59,16 +60,20 @@ public class TerlarisActivity extends AppCompatActivity {
 
         });
 
+        /// kembali
         binding.backButton.setOnClickListener(view -> onBackPressed());
 
     }
 
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA terlaris
     private void initRecyclerViewCamera() {
         binding.rvTerlaris.setLayoutManager(new LinearLayoutManager(this));
         cameraAdapter = new CameraAdapter();
         binding.rvTerlaris.setAdapter(cameraAdapter);
     }
 
+
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA terlaris DARI FIREBASE
     private void initViewModelCamera() {
         CameraViewModel viewModel = new ViewModelProvider(this).get(CameraViewModel.class);
 
@@ -108,6 +113,8 @@ public class TerlarisActivity extends AppCompatActivity {
         });
     }
 
+
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

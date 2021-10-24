@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,9 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.masudin.omahkamerasragen.HomepageActivity;
-import com.masudin.omahkamerasragen.LoginActivity;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityCartBinding;
+import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionActivity;
+
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +27,7 @@ import java.util.Map;
 
 public class CartActivity extends AppCompatActivity {
 
+    /// inisiasi variabel, diperlukan supaya aplikasi tidak error saat dijalankan
     private ActivityCartBinding binding;
     private FirebaseUser user;
     private CartAdapter adapter;
@@ -57,7 +58,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
-        // checkout semua produk
+        // checkout semua produk yang ada di cart / keranjang
         binding.button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +67,8 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
+
+    /// dialog box, konfirmasi apakah ingin mengcheckout semua barang di keranjang ?
     private void showConfirmDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi Melakukan Checkout")
@@ -85,6 +88,8 @@ public class CartActivity extends AppCompatActivity {
                 .show();
     }
 
+
+    //// setelah di konfirmasi, maka lakukan checkout barang 1 per 1, jika lebih dari satu, oleh karena itu ada perulangan di bawah, untuk melakukan checkout jika barang lebih dari 1
     private void checkoutAllProduct(String code) {
         ArrayList<String> listName = new ArrayList<>();
 
@@ -92,7 +97,7 @@ public class CartActivity extends AppCompatActivity {
             listName.add(cartModelArrayList.get(i).getName());
             totalPrice += Integer.parseInt(cartModelArrayList.get(i).getTotalPrice());
 
-            /// untuk keperluan set notifikasi
+            /// untuk keperluan set notifikasi, jadi barang yang waktu penyewaan nya sama, nanti di transaksi akan muncul dialog, bahwa waktu penyewaan sama, maka user harus segera membayar
             Map<String, Object> notification = new HashMap<>();
             notification.put("cartId", cartModelArrayList.get(i).getCartId());
             notification.put("dateStart", cartModelArrayList.get(i).getDateStart());
@@ -107,8 +112,9 @@ public class CartActivity extends AppCompatActivity {
         }
 
 
+        //// dari tiap tiap barang yang ada di dalam keranjang, di buatkan collection baru yaitu transaction
+        //// collection transaction menampung data transaksi, pada barang yang di checkout dari keranjang
         String transactionId = String.valueOf(System.currentTimeMillis());
-
         Map<String, Object> transaction = new HashMap<>();
         transaction.put("transactionId", code+transactionId);
         transaction.put("customerId", cartModelArrayList.get(0).getCustomerUid());
@@ -118,7 +124,6 @@ public class CartActivity extends AppCompatActivity {
         transaction.put("finalPrice", String.valueOf(totalPrice));
         transaction.put("data", cartModelArrayList);
         transaction.put("name", listName);
-
         FirebaseFirestore
                 .getInstance()
                 .collection("transaction")
@@ -137,6 +142,8 @@ public class CartActivity extends AppCompatActivity {
 
     }
 
+
+    //// memunculkan dialog jika gagal checkout
     private void showFailureDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Gagal Melakukan Checkout")
@@ -148,6 +155,8 @@ public class CartActivity extends AppCompatActivity {
                 .show();
     }
 
+
+    //// memunculkan dialog jika berhasil checkout
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Berhasil Melakukan Checkout")
@@ -160,6 +169,8 @@ public class CartActivity extends AppCompatActivity {
                 .show();
     }
 
+
+    /// fungsi untuk menghapus keranjang, setelah berhasil checkout, supaya keranjang bersih, setelah itu navigasi ke halaman transaksi
     private void deleteCart() {
         for(int i=0; i<cartModelArrayList.size(); i++) {
             FirebaseFirestore
@@ -170,16 +181,20 @@ public class CartActivity extends AppCompatActivity {
         }
         initRecyclerView();
         initViewModel();
+        startActivity(new Intent(CartActivity.this, HistoryTransactionActivity.class));
     }
 
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA keranjang
     private void initRecyclerView() {
         binding.rvCart.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CartAdapter("cart");
         binding.rvCart.setAdapter(adapter);
     }
 
+
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA Keranjang DARI FIREBASE
     private void initViewModel() {
-        // tampilkan daftar artikel di halaman artikel terkait pertanian
+        // tampilkan daftar barang yang ada di keranjang
         CartViewModel viewModel = new ViewModelProvider(this).get(CartViewModel.class);
         cartModelArrayList = new ArrayList<>();
 
@@ -198,6 +213,8 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
+
+    /// ketika klik kembali, maka akan menghapus data sebelumnya
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK)
@@ -211,6 +228,8 @@ public class CartActivity extends AppCompatActivity {
         return false;
     }
 
+
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

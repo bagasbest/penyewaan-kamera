@@ -17,10 +17,12 @@ import com.masudin.omahkamerasragen.databinding.ActivityProductBinding;
 
 public class ProductActivity extends AppCompatActivity {
 
+    /// inisiasi variabel supaya tidak error ketika dijalankan
     private ActivityProductBinding binding;
     private FirebaseUser user;
     private ProductAdapter adapter;
 
+    /// ON RESUME Activity sudah terlihat dan pengguna sudah dapat berinteraksi. Di sini adalah tempat terbaik untuk menjalankan animasi, membuka akses seperti aksesoris, mengupdate UI, dll.
     @Override
     protected void onResume() {
         super.onResume();
@@ -58,12 +60,16 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
+
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA AKSESORIS
     private void initRecylerView() {
         binding.rvProduct.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ProductAdapter();
         binding.rvProduct.setAdapter(adapter);
     }
 
+
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA AKSESORIS DARI FIREBASE
     private void initViewModel() {
         ProductViewModel viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
 
@@ -80,6 +86,7 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
+    // cek role, hanya admin yang bisa CRUD produk AKSESORIS
     private void checkRole() {
         FirebaseFirestore
                 .getInstance()
@@ -96,6 +103,9 @@ public class ProductActivity extends AppCompatActivity {
                 });
     }
 
+
+
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

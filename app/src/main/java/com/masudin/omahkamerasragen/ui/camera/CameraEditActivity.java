@@ -27,6 +27,8 @@ import java.util.Map;
 
 public class CameraEditActivity extends AppCompatActivity {
 
+
+    /// inisiasi variabel supaya tidak terjadi error pada aplikasi
     public static final String EXTRA_EDIT = "edit";
     private ActivityCameraEditBinding binding;
     private String dp;
@@ -39,6 +41,8 @@ public class CameraEditActivity extends AppCompatActivity {
         binding = ActivityCameraEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+        ///data dari kelas model terkait data kamera di panggil di activity ini, kemudian data tersebut di tampilkan pada halaman ini
         model = getIntent().getParcelableExtra(EXTRA_EDIT);
 
         Glide.with(this)
@@ -75,7 +79,7 @@ public class CameraEditActivity extends AppCompatActivity {
         });
 
 
-        // KLIK UNGGAH ARTIKEL
+        // KLIK UNGGAH data kamera
         binding.uploadArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +88,7 @@ public class CameraEditActivity extends AppCompatActivity {
         });
     }
 
+    /// fungsi yang berjalan ketika pengguna menekan klik pada unggah kamera
     private void updateCamera() {
 
         String name = binding.nameEt.getText().toString().trim();
@@ -92,7 +97,9 @@ public class CameraEditActivity extends AppCompatActivity {
         String price = binding.price.getText().toString().trim();
         String price2 = binding.price2.getText().toString().trim();
         String price3 = binding.price3.getText().toString().trim();
+        String facility = binding.facility.getText().toString().trim();
 
+        /// validasi kolom inputan
         if(name.isEmpty()) {
             Toast.makeText(CameraEditActivity.this, "Nama Kamera tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
@@ -116,6 +123,9 @@ public class CameraEditActivity extends AppCompatActivity {
         else if(price3.isEmpty()) {
             Toast.makeText(CameraEditActivity.this, "Harga Kamera (24 Jam) tidak boleh kosong", Toast.LENGTH_SHORT).show();
             return;
+        } else if (facility.isEmpty()) {
+            Toast.makeText(CameraEditActivity.this, "Fasilitas tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -128,11 +138,10 @@ public class CameraEditActivity extends AppCompatActivity {
         product.put("price", price);
         product.put("price2", price2);
         product.put("price3", price3);
+        product.put("facility", facility);
         if(dp != null) {
             product.put("dp", dp);
         }
-
-
         FirebaseFirestore
                 .getInstance()
                 .collection("camera")
@@ -154,6 +163,8 @@ public class CameraEditActivity extends AppCompatActivity {
 
     }
 
+
+    /// tampilkan dialog box jika gagal
     private void showFailureDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Gagal Mengunggah Peralatan Kamera")
@@ -166,6 +177,7 @@ public class CameraEditActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// tampilkan dialog box jika sukses
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Berhasil Mengunggah Peralatan Kamera")
@@ -180,6 +192,7 @@ public class CameraEditActivity extends AppCompatActivity {
     }
 
 
+    /// fungsi untuk memvalidasi kode berdasarkan inisiasi variabel di atas tadi
     @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -191,6 +204,7 @@ public class CameraEditActivity extends AppCompatActivity {
         }
     }
 
+    /// fungsi untuk mengupload foto kedalam cloud storage
     private void uploadArticleDp(Uri data) {
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
         ProgressDialog mProgressDialog = new ProgressDialog(this);
@@ -224,6 +238,8 @@ public class CameraEditActivity extends AppCompatActivity {
                 });
     }
 
+
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

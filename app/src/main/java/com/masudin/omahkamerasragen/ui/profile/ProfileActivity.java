@@ -25,6 +25,7 @@ import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    /// inisiasi variabel, diperlukan supaya aplikasi tidak error saat dijalankan
     private ActivityProfileBinding binding;
     private FirebaseUser user;
 
@@ -52,10 +53,12 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
+        /// tampilkan profil user
         populateUI();
     }
 
+
+    /// pilih foto
     private void updateUserDp() {
         binding.updateUserDp.setOnClickListener(view -> {
             ImagePicker
@@ -67,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-
+    /// update profil konfirmasi
     private void updateProfile() {
         binding.updateProfileBtn.setOnClickListener(view -> {
             new AlertDialog.Builder(this)
@@ -84,6 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    /// simpan update ke dalam database
     private void saveProfileChangesToDatabase() {
         String name = binding.nameEt.getText().toString().trim();
         String phone = binding.phoneEt.getText().toString().trim();
@@ -197,7 +201,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -26,6 +26,7 @@ import java.util.Currency;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
+    /// INISIASI ARRAY LIST SEBAGAI PENAMPUNG LIST DATA AKSESORIS
     private final ArrayList<ProductModel> listProduct = new ArrayList<>();
     public void setData(ArrayList<ProductModel> items) {
         listProduct.clear();
@@ -33,6 +34,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+
+    /// CASTING LAYOUT KE item_peralatan SUPAYA LIST KAMERA DAPAT DI TAMPILKAN BERBENTUK URUTAN
     @NonNull
     @NotNull
     @Override
@@ -51,6 +54,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return listProduct.size();
     }
 
+
+
+    //// FUNGSI UNTUK MEMASUKKAN DATA DARI ARRAY LIST DIATAS KEDALAM ATRIBUT, SEHINGGA TERLIHAT NAMA AKSESORIS, HARGA, DLL PADA LIST
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ConstraintLayout cv;
@@ -80,6 +86,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     .into(dp);
             status.setText(productModel.getStatus());
 
+            /// JIKA STATUS READY
             if(productModel.getStatus().equals("ready")) {
                 bg.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg2));
 
@@ -92,6 +99,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     }
                 });
             } else {
+                /// JIKA TIDAK READY
                 bg.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg));
             }
         }

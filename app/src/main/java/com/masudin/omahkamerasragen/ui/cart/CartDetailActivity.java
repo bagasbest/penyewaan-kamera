@@ -27,6 +27,7 @@ import java.util.TimeZone;
 
 public class CartDetailActivity extends AppCompatActivity {
 
+    /// inisiasi variable supaya aplikasi tidak error ketika dijalankan
     public static final String EXTRA_CART = "cart";
     private ActivityCartDetailBinding  binding;
     private CartModel model;
@@ -38,6 +39,8 @@ public class CartDetailActivity extends AppCompatActivity {
         binding = ActivityCartDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        /// model berfungsi untuk menampung data berdasarkan field-field contohnya nama, image, harga, dll,
+        /// kemudian data dari model di ambil, dan di presentasikan di halaman detail keranjang
         model = getIntent().getParcelableExtra(EXTRA_CART);
         NumberFormat formatter = new DecimalFormat("#,###");
 
@@ -45,6 +48,7 @@ public class CartDetailActivity extends AppCompatActivity {
                 .load(model.getDp())
                 .into(binding.dp);
 
+        /// kemudian data dari model di ambil, dan di presentasikan di halaman detail keranjang
         binding.name.setText(model.getName());
         binding.merk.setText("Merk: " + model.getMerk());
         binding.dateStart.setText(model.getDateStart());
@@ -53,6 +57,7 @@ public class CartDetailActivity extends AppCompatActivity {
         binding.duration.setText("Durasi sewa: " + model.getDuration());
         binding.totalPrice.setText("Total Biaya: IDR " + formatter.format(Double.parseDouble(model.getTotalPrice())));
 
+        /// kemudian data dari model di ambil, dan di presentasikan di halaman detail keranjang
         if(model.getDuration().equals("6 Jam")) {
             long durationEndInMillis = model.getDurationEnd() - (1000*60*60*6);
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -80,7 +85,7 @@ public class CartDetailActivity extends AppCompatActivity {
             }
         });
 
-        // cancel button
+        // cancel button pada keranjang detail
         binding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +94,7 @@ public class CartDetailActivity extends AppCompatActivity {
         });
     }
 
+    /// konfirmasi cancel barang di keranjang
     private void showConfirmationBeforeDelete() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi menghapus cart")
@@ -104,6 +110,7 @@ public class CartDetailActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// ketika konfirmasi di tekan "YAKIN", maka, item keranjang tersebut akan di hapus dari keranjang
     private void deleteCart() {
         FirebaseFirestore
                 .getInstance()
@@ -124,6 +131,8 @@ public class CartDetailActivity extends AppCompatActivity {
                 });
     }
 
+
+    /// kembali ke halaman Cart Activity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK)
@@ -135,6 +144,7 @@ public class CartDetailActivity extends AppCompatActivity {
         return false;
     }
 
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

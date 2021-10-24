@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    /// inisisasi variabel supaya tidak error aplikasinya
     private ActivityRegisterBinding binding;
 
     @Override
@@ -34,10 +35,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        /// kembali ke halaman login
         binding.login.setOnClickListener(view -> onBackPressed());
 
     }
 
+    /// fungsi untuk validasi inputan kolom - kolom registrasi
     private void registrateUser() {
         String name = binding.nameEt.getText().toString().trim();
         String username = binding.usernameEt.getText().toString().trim();
@@ -127,6 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /// munculkan dialog ketika gagal registrasi
     private void showFailureDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Gagal melakukan registrasi")
@@ -139,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// munculkan dialog ketika sukses registrasi
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Berhasil melakukan registrasi")
@@ -151,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .show();
     }
 
-
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

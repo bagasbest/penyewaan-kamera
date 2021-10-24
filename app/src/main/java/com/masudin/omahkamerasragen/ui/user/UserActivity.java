@@ -4,15 +4,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Bundle;
 import android.view.View;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.masudin.omahkamerasragen.databinding.ActivityUserBinding;
 
 public class UserActivity extends AppCompatActivity {
 
+    /// inisiasi variabel, diperlukan supaya aplikasi tidak error saat dijalankan
     private ActivityUserBinding binding;
     private UserAdapter adapter;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -26,6 +24,7 @@ public class UserActivity extends AppCompatActivity {
         binding = ActivityUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        /// kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,20 +33,20 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
-
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA user
     private void initRecyclerView() {
         binding.rvUser.setLayoutManager(new LinearLayoutManager(this));
         adapter = new UserAdapter();
         binding.rvUser.setAdapter(adapter);
     }
 
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA user DARI FIREBASE
     private void initViewModel() {
-        // tampilkan daftar artikel di halaman artikel terkait pertanian
+        // tampilkan daftar user
         UserViewModel viewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         binding.progressBar.setVisibility(View.VISIBLE);
-        viewModel.setListUser(uid);
+        viewModel.setListUser();
         viewModel.getUser().observe(this, users -> {
             if (users.size() > 0) {
                 binding.noData.setVisibility(View.GONE);
@@ -59,6 +58,7 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

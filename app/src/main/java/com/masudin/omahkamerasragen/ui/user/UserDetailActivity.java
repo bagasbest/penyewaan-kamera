@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class UserDetailActivity extends AppCompatActivity {
 
+    /// inisiasi variable supaya aplikasi tidak error ketika dijalankan
     public static final String EXTRA_USER = "user";
     private ActivityUserDetailBinding binding;
     private UserModel model;
@@ -39,10 +40,29 @@ public class UserDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        /// model berfungsi untuk menampung data berdasarkan field-field contohnya nama, image dll,
+        /// kemudian data dari model di ambil, dan di presentasikan di halaman detail user
         model = getIntent().getParcelableExtra(EXTRA_USER);
-        Glide.with(UserDetailActivity.this)
-                .load(model.getDp())
-                .into(binding.roundedImageView);
+
+        /// jika admin, maka bisa hampus user
+        if(!model.getEmail().equals(user.getEmail())) {
+            binding.delete.setVisibility(View.VISIBLE);
+        }
+
+
+        /// jika tidak ada foto, tampilkan
+        if(!model.getDp().isEmpty()) {
+            Glide.with(UserDetailActivity.this)
+                    .load(model.getDp())
+                    .into(binding.roundedImageView);
+        } else {
+            Glide.with(UserDetailActivity.this)
+                    .load(R.drawable.ic_baseline_face_24)
+                    .into(binding.roundedImageView);
+        }
+
+
+        /// tampilkan informasi user
         binding.addressEt.setText(model.getAddress());
         binding.emailEt.setText(model.getEmail());
         binding.nameEt.setText(model.getName());
@@ -69,6 +89,7 @@ public class UserDetailActivity extends AppCompatActivity {
         binding.usernameEt.setEnabled(false);
 
 
+        /// kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +97,7 @@ public class UserDetailActivity extends AppCompatActivity {
             }
         });
 
+        /// hapus user
         binding.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +106,8 @@ public class UserDetailActivity extends AppCompatActivity {
         });
     }
 
+
+    /// konfirmasi hapus user
     private void showConfirmDeleteUser() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi Menghapus Pengguna")
@@ -99,6 +123,8 @@ public class UserDetailActivity extends AppCompatActivity {
                 .show();
     }
 
+
+    /// fungsi delete user
     private void deleteUser() {
 
         ProgressDialog mProgressDialog = new ProgressDialog(this);
@@ -189,6 +215,8 @@ public class UserDetailActivity extends AppCompatActivity {
                 });
     }
 
+
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

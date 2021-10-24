@@ -15,6 +15,7 @@ import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionVie
 
 public class DendaActivity extends AppCompatActivity {
 
+    /// inisiasi variabel, diperlukan supaya aplikasi tidak error saat dijalankan
     private ActivityDendaBinding binding;
     private DendaAdapter adapter;
     private FirebaseUser user;
@@ -24,10 +25,15 @@ public class DendaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityDendaBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        /// ambil data pengguna yang sedang login saat ini
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        /// cek role pengguna, apakah admin/user, jika admin, maka akan dapat melihat semua daftar denda seluruh pengguna
+        /// jika user, maka hanya dapat melihat denda akun sendiri
         checkRole();
 
+
+        /// kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -36,6 +42,8 @@ public class DendaActivity extends AppCompatActivity {
         });
     }
 
+    /// cek role pengguna, apakah admin/user, jika admin, maka akan dapat melihat semua daftar denda seluruh pengguna
+    /// jika user, maka hanya dapat melihat denda akun sendiri
     private void checkRole() {
         FirebaseFirestore
                 .getInstance()
@@ -56,14 +64,16 @@ public class DendaActivity extends AppCompatActivity {
                 });
     }
 
+    /// FUNGSI UNTUK MENAMPILKAN LIST DATA denda
     private void initRecyclerView() {
         binding.rvDenda.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DendaAdapter();
         binding.rvDenda.setAdapter(adapter);
     }
 
+    /// FUNGSI UNTUK MENDAPATKAN LIST DATA denda DARI FIREBASE
     private void initViewModel(String role) {
-        // tampilkan daftar artikel di halaman artikel terkait pertanian
+        // tampilkan daftar denda
         HistoryTransactionViewModel viewModel = new ViewModelProvider(this).get(HistoryTransactionViewModel.class);
 
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -84,6 +94,7 @@ public class DendaActivity extends AppCompatActivity {
         });
     }
 
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

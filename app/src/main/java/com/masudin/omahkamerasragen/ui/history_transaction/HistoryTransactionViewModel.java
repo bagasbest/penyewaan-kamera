@@ -14,6 +14,9 @@ import java.util.List;
 
 public class HistoryTransactionViewModel extends ViewModel {
 
+    /// KELAS VIEW MODEL BERFUNGSI UNTUK MENGAMBIL DATA DARI FIRESTORE KEMUDIAN MENERUSKANNYA KEPADA ACTIVITY YANG DI TUJU
+    /// CONTOH KELAS History Transaksi VIEW MODEL MENGAMBIL DATA DARI COLLECTION "tansaction", KEMUDIAN SETELAH DI AMBIL, DATA DIMASUKKAN KEDALAM MODEL, SETELAH ITU DITERUSKAN KEPADA HistoryTransactionActivity, SEHINGGA ACTIVITY DAPAT MENAMPILKAN DATA transaksi
+
     private final MutableLiveData<ArrayList<HistoryTransactionModel>> listTransaction = new MutableLiveData<>();
     final ArrayList<HistoryTransactionModel> transactionModelArrayList = new ArrayList<>();
 

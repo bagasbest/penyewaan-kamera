@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Currency;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
-
+    /// INISIASI ARRAY LIST SEBAGAI PENAMPUNG LIST DATA KERANJANG
     private final ArrayList<CartModel> listCart = new ArrayList<>();
 
     String option;
@@ -35,7 +35,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-
+    /// CASTING LAYOUT KE item_cart SUPAYA LIST KERANJANG DAPAT DI TAMPILKAN BERBENTUK LIST
     @NonNull
     @NotNull
     @Override
@@ -54,6 +54,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         return listCart.size();
     }
 
+    //// FUNGSI UNTUK MEMASUKKAN DATA DARI ARRAY LIST DIATAS KEDALAM ATRIBUT, SEHINGGA TERLIHAT Foto barang, nama, harga, DLL PADA LIST
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout cv;

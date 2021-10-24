@@ -24,6 +24,7 @@ import java.util.Currency;
 
 public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder> {
 
+    /// INISIASI ARRAY LIST SEBAGAI PENAMPUNG LIST DATA KAMERA
     private final ArrayList<CameraModel> listCamera = new ArrayList<>();
     public void setData(ArrayList<CameraModel> items) {
         listCamera.clear();
@@ -31,7 +32,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-
+    /// CASTING LAYOUT KE item_booking SUPAYA LIST KAMERA DAPAT DI TAMPILKAN BERBENTUK URUTAN
     @NonNull
     @NotNull
     @Override
@@ -51,6 +52,8 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
     }
 
 
+
+    //// FUNGSI UNTUK MEMASUKKAN DATA DARI ARRAY LIST DIATAS KEDALAM ATRIBUT, SEHINGGA TERLIHAT NAMA KAMERA, HARGA, DLL PADA LIST
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ConstraintLayout cv;
@@ -83,9 +86,11 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.ViewHolder
             status.setText(model.getStatus());
 
 
+            /// JIKA STATUS READY
             if(model.getStatus().equals("ready")) {
                 bg.setBackground(ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_bg2));
 
+                /// KLIK DETAIL CAMERA
                 cv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

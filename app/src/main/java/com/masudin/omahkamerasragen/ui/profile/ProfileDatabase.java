@@ -12,6 +12,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class ProfileDatabase {
+
+    /// simpan foto profil kedalam cloud storage
+
     public static void uploadImageToDatabase(Uri data, FragmentActivity activity, String uid) {
 
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();

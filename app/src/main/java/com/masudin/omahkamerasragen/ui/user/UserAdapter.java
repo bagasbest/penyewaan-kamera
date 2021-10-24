@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
+    /// INISIASI ARRAY LIST SEBAGAI PENAMPUNG LIST DATA user
     private final ArrayList<UserModel> listUser = new ArrayList<>();
     public void setData(ArrayList<UserModel> items) {
         listUser.clear();
@@ -25,6 +26,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
+    /// CASTING LAYOUT KE item_user SUPAYA LIST DENDA DAPAT DI TAMPILKAN BERBENTUK LIST
     @NonNull
     @NotNull
     @Override
@@ -43,6 +46,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return listUser.size();
     }
 
+
+    //// FUNGSI UNTUK MEMASUKKAN DATA DARI ARRAY LIST DIATAS KEDALAM ATRIBUT, SEHINGGA TERLIHAT nama, DLL PADA LIST
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout cv;
@@ -56,6 +61,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public void bind(UserModel model) {
             name.setText(model.getName());
+
+            /// klik item user, menuju detail user
             cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

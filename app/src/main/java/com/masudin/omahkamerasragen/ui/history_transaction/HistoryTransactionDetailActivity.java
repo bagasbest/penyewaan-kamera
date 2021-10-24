@@ -44,6 +44,7 @@ import java.util.TimeZone;
 
 public class HistoryTransactionDetailActivity extends AppCompatActivity {
 
+    /// inisiasi variable supaya aplikasi tidak error ketika dijalankan
     public static final String EXTRA_TRANSACTION = "transaction";
     private ActivityHistoryTransactionDetailBinding binding;
     private HistoryTransactionModel model;
@@ -58,18 +59,21 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        /// model berfungsi untuk menampung data berdasarkan field-field contohnya nama, image, harga, dll,
+        /// kemudian data dari model di ambil, dan di presentasikan di halaman detail transaksi
         model = getIntent().getParcelableExtra(EXTRA_TRANSACTION);
         NumberFormat formatter = new DecimalFormat("#,###");
 
 
-        String duration = model.getData().get(0).getDuration();
-
+        /// kemudian data dari model di ambil, dan di presentasikan di halaman detail transaksi
         binding.transactionId.setText("Koda Transaksi: " + model.getTransactionId());
         binding.name.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.dateStart.setText("Waktu Penyewaan: " + model.getData().get(0).getDateStart());
         binding.pickHour.setText("Jam Ambil: Pukul " + model.getData().get(0).getPickHour());
 
-        /// waktu pengembalian
+        /// waktu pengembalian produk yang disewa
+        /// konversi mil detik menjadi waktu pengembalian yang mudah dibaca
+        /// contoh: 12302301293 -> 19:30
         long durationEndInMillis = model.getData().get(0).getDurationEnd();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date(durationEndInMillis);
@@ -77,37 +81,17 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         String returnFormat = dateFormat.format(date);
         binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
 
-
+        /// set biaya sewa produk
         binding.finalPrice.setText("Biaya Sewa: IDR " + formatter.format(Double.parseDouble(model.getFinalPrice())));
-//        if(duration.equals("6 Jam")) {
-//            long durationEndInMillis = model.getData().get(0).getDurationEnd();
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-//            Date date = new Date(durationEndInMillis);
-//            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-//            String returnFormat = dateFormat.format(date);
-//            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
-//        } else if(duration.equals("12 Jam")) {
-//            long durationEndInMillis = model.getData().get(0).getDurationEnd();
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-//            Date date = new Date(durationEndInMillis);
-//            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-//            String returnFormat = dateFormat.format(date);
-//            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
-//        }
-//        else {
-//            long durationEndInMillis = model.getData().get(0).getDurationEnd();
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-//            Date date = new Date(durationEndInMillis);
-//            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-//            String returnFormat = dateFormat.format(date);
-//            binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul " + returnFormat);
-//            ///binding.dateFinish.setText("Waktu Pengembalian: " + model.getData().get(0).getDateFinish() + ", maksimal Pukul 23:59");
-//        }
 
+        /// tampilkan data barang yang di sewa, secara list atau terurut vertikal
         initRecyclerView();
 
+        /// cek role, admin atau user, jika admin, dapat meng acc pembayaran atau menghapus transaksi
         checkRole();
 
+
+        /// kembali ke halaman sebelumnya
         binding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +99,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
             }
         });
 
-        // show info
+        // tampilkan informasi keterangan penyewaan produk
         binding.info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +116,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
             }
         });
 
-        //verifikasi transaksi
+        // verifikasi / acc transaksi (khusus admin)
         binding.verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,7 +129,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         });
 
 
-        // hapus transaksi
+        // hapus transaksi (khusus admin)
         binding.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,11 +138,14 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         });
 
 
-        /// beri validasi jika terdapat barang & waktu yang sama, namun status = Belum Bayar
-        showDialogNotification();
+        /// beri validasi (munculkan dialog box) jika terdapat barang & waktu yang sama, namun status = Belum Bayar
+        if(model.getStatus().equals("Belum Bayar")) {
+            showDialogNotification();
+        }
 
     }
 
+    /// fungsi untuk memberi validasi (munculkan dialog box) jika terdapat barang & waktu yang sama, namun status = Belum Bayar
     private void showDialogNotification() {
         for (int i = 0; i < model.getName().size(); i++) {
             int finalI = i;
@@ -208,7 +195,8 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
             if (counterNotification > 0) {
-                /// tampilkan dialog notifikasi
+                /// tampilkan dialog validasi
+                /// memberi validasi (munculkan dialog box) jika terdapat barang & waktu yang sama, namun status = Belum Bayar
                 new AlertDialog.Builder(HistoryTransactionDetailActivity.this)
                         .setTitle("Harap Lakukan Pembayaran")
                         .setMessage("Harap segera melakukan pembayaran terhadap transaksi ini, karena barang pada transaksi ini juga terdapat di transaksi lain.\n\nHanya pelanggan yang pertama kali membayar, yang berhak menyewa Kamera/Aksesoris pada transaksi ini, setelah itu transaksi lain akan dibatalkan oleh admin")
@@ -218,14 +206,17 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                         })
                         .show();
             }
+            /// delay 1 detik
         }, 1000);
     }
 
+    /// jika penyewaan status nya selesai, maka poin total sewa kamera / peralatan yang disewa saat ini bertambah 1
     private void setTotalSewa() {
         for (int i = 0; i < model.getData().size(); i++) {
             String category = model.getData().get(i).getCategory();
             String productId = model.getData().get(i).getProductId();
 
+            /// jika penyewaan status nya selesai, maka poin total sewa kamera / peralatan yang disewa saat ini bertambah 1
             if (category.equals("Kamera")) {
                 FirebaseFirestore
                         .getInstance()
@@ -246,6 +237,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                             }
                         });
             } else {
+                /// jika penyewaan status nya selesai, maka poin total sewa kamera / peralatan yang disewa saat ini bertambah 1
                 FirebaseFirestore
                         .getInstance()
                         .collection("peralatan")
@@ -272,6 +264,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
 
     }
 
+    /// konfirmasi acc transaksi, ketika user sudah membayar
     private void showConfirmVerifyDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi ACC Transaksi")
@@ -289,6 +282,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// konfirmasi menyelesaikan transaksi, jika user sudah mengembalikan produk
     private void showConfirmFinishDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi Selesaikan Transaksi")
@@ -305,6 +299,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// fungsi untuk menyelesaikan tranasksi ke database
     private void finishTransaction() {
         FirebaseFirestore
                 .getInstance()
@@ -325,18 +320,8 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void deleteBooking() {
-        for (int i = 0; i < model.getData().size(); i++) {
-            FirebaseFirestore
-                    .getInstance()
-                    .collection("booking")
-                    .document(model.getData().get(i).getCartId())
-                    .delete();
-        }
-    }
-
+    /// fungsi untuk membuat daftar booking, jika user sudah membayar transaksi
     private void verifyTransaction() {
-
         FirebaseFirestore
                 .getInstance()
                 .collection("transaction")
@@ -371,6 +356,29 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 });
     }
 
+    /// setelah menyelesaikan transaksi, hapus daftar booking, dehingga pengguna baru dapat menyewa tanpa terhalang daftar booking
+    private void deleteBooking() {
+        for (int i = 0; i < model.getData().size(); i++) {
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("booking")
+                    .document(model.getData().get(i).getCartId())
+                    .delete();
+        }
+    }
+
+    /// hapus validasi pada produk, jika status transaksi == Selesai
+    private void deleteNotification() {
+        for(int i=0; i<model.getData().size(); i++) {
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("notification")
+                    .document(model.getData().get(i).getCartId())
+                    .delete();
+        }
+    }
+
+    /// tampilkan konfirmasi menghapus transaksi, Apakah anda yakin ingin menghapus transaksi ini?
     private void showConfirmDeleteDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Konfirmasi Menghapus Transaksi")
@@ -388,16 +396,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void deleteNotification() {
-        for(int i=0; i<model.getData().size(); i++) {
-            FirebaseFirestore
-                    .getInstance()
-                    .collection("notification")
-                    .document(model.getData().get(i).getCartId())
-                    .delete();
-        }
-    }
-
+    /// fungsi untuk menghapus transaksi, setelah sebelumnya menekan YA pada konfirmasi sebelumnya
     private void deleteTransaction() {
         FirebaseFirestore
                 .getInstance()
@@ -417,6 +416,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 });
     }
 
+    /// cek role, jika admin, akan ada muncul tombol acc & delete transaksi
     private void checkRole() {
         FirebaseFirestore
                 .getInstance()
@@ -438,6 +438,10 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 });
     }
 
+
+
+    /// memunculkan dialog box validasi
+    /// jika terdapat penyewaan produk dalam waktu yang sama namun statusnya belum bayar
     private void showAlertDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Info Pembayaran")
@@ -450,6 +454,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
                 .show();
     }
 
+    /// tampilkan data tranasksi, secara list atau terurut vertikal
     private void initRecyclerView() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         CartAdapter adapter = new CartAdapter("transaction");
@@ -457,6 +462,7 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
         adapter.setData((ArrayList<CartModel>) model.data);
     }
 
+    /// HAPUSKAN ACTIVITY KETIKA SUDAH TIDAK DIGUNAKAN, AGAR MENGURANGI RISIKO MEMORY LEAKS
     @Override
     protected void onDestroy() {
         super.onDestroy();

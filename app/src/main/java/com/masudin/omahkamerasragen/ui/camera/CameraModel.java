@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 public class CameraModel implements Parcelable {
 
+    /// KELAS MODEL BERFUNGSI UNTUK TEMPAT MENAMPUNG FIELD DATA DARI FIREBASE, KEMUDIAN FIELD - FIELD DI BAWAH INI DAPAT DI PANGGIL PADA ACTIVITY YANG DIINGINKAN
+
     private String name;
     private String description;
     private String facility;
@@ -15,6 +17,7 @@ public class CameraModel implements Parcelable {
     private String uid;
     private String dp;
     private String status;
+    private long totalSewa;
 
    public CameraModel() {}
 
@@ -29,6 +32,7 @@ public class CameraModel implements Parcelable {
         uid = in.readString();
         dp = in.readString();
         status = in.readString();
+        totalSewa = in.readLong();
     }
 
     @Override
@@ -43,6 +47,7 @@ public class CameraModel implements Parcelable {
         dest.writeString(uid);
         dest.writeString(dp);
         dest.writeString(status);
+        dest.writeLong(totalSewa);
     }
 
     @Override
@@ -140,5 +145,13 @@ public class CameraModel implements Parcelable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getTotalSewa() {
+        return totalSewa;
+    }
+
+    public void setTotalSewa(long totalSewa) {
+        this.totalSewa = totalSewa;
     }
 }
