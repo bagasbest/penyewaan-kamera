@@ -66,7 +66,11 @@ public class HistoryTransactionDetailActivity extends AppCompatActivity {
 
 
         /// kemudian data dari model di ambil, dan di presentasikan di halaman detail transaksi
-        binding.transactionId.setText("Koda Transaksi: " + model.getTransactionId());
+        if(model.getData().get(0).getCategory().equals("Kamera")) {
+            binding.transactionId.setText("Koda Transaksi: CA-" + model.getTransactionId());
+        } else {
+            binding.transactionId.setText("Koda Transaksi: AK-" + model.getTransactionId());
+        }
         binding.name.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.dateStart.setText("Waktu Penyewaan: " + model.getData().get(0).getDateStart());
         binding.pickHour.setText("Jam Ambil: Pukul " + model.getData().get(0).getPickHour());

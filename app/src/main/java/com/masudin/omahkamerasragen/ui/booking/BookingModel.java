@@ -1,5 +1,9 @@
 package com.masudin.omahkamerasragen.ui.booking;
 
+import com.masudin.omahkamerasragen.ui.cart.CartModel;
+
+import java.util.List;
+
 public class BookingModel {
 
     /// KELAS MODEL BERFUNGSI UNTUK TEMPAT MENAMPUNG FIELD DATA DARI FIREBASE, KEMUDIAN FIELD - FIELD DI BAWAH INI DAPAT DI PANGGIL PADA ACTIVITY YANG DIINGINKAN
@@ -8,6 +12,7 @@ public class BookingModel {
     private String dateStart;
     private String dateFinish;
     private String productName;
+    private String category;
 
    public BookingModel(){}
 
@@ -41,5 +46,13 @@ public class BookingModel {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

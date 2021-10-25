@@ -39,6 +39,7 @@ public class BookingViewModel extends ViewModel {
                                 model.setDateStart("" + document.get("dateStart"));
                                 model.setDateFinish("" + document.get("dateFinish"));
                                 model.setProductName("" + document.get("productName"));
+                                model.setCategory("" + document.get("category"));
 
                                 bookingModelArrayList.add(model);
                             }
@@ -70,6 +71,7 @@ public class BookingViewModel extends ViewModel {
                                 model.setDateStart("" + document.get("dateStart"));
                                 model.setDateFinish("" + document.get("dateFinish"));
                                 model.setProductName("" + document.get("productName"));
+                                model.setCategory("" + document.get("category"));
 
                                 bookingModelArrayList.add(model);
                             }

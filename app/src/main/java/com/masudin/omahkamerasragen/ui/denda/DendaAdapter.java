@@ -80,7 +80,12 @@ public class DendaAdapter extends RecyclerView.Adapter<DendaAdapter.ViewHolder> 
             NumberFormat formatter = new DecimalFormat("#,###");
 
 
-            transactionId.setText(historyTransactionModel.getTransactionId());
+            if(historyTransactionModel.getData().get(0).getCategory().equals("Kamera")) {
+                transactionId.setText("CA-"+historyTransactionModel.getTransactionId());
+            } else {
+                transactionId.setText("AK-"+historyTransactionModel.getTransactionId());
+            }
+
             dateFinish.setText(historyTransactionModel.getDateFinish());
             /// jika belum melewati batas pengembalian, maka waktu keterlambatan masih "0 Hari, 0 Jam".
             dateBackProduct.setText("0 Hari, 0 Jam");

@@ -263,25 +263,39 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:textAllCaps="false"
+            android:layout_marginTop="10dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sewaBerdasarkanJam"
             tools:layout_editor_absoluteX="16dp" />
 
 
-        <Button
+        <View
             android:id="@+id/sewaSekarang"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Sewa Sekarang"
+            android:elevation="4dp"
             android:textAllCaps="false"
+            android:background="@drawable/btn_now"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/bookingBtn" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sewa Sekarang"
+            android:elevation="5dp"
+            android:id="@+id/textSewaSekarang"
+            android:textColor="@color/background"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/sewaBerdasarkanJam"
+            app:layout_constraintEnd_toEndOf="@+id/sewaBerdasarkanJam"
+            app:layout_constraintStart_toStartOf="@+id/sewaBerdasarkanJam"
+            app:layout_constraintTop_toTopOf="@+id/sewaBerdasarkanJam" />
 
         <Button
             android:id="@+id/masukkanKeranjang"
@@ -291,6 +305,7 @@
             android:layout_marginBottom="30dp"
             android:text="Masukkan kedalam keranjang"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:textAllCaps="false"
             android:textStyle="bold"

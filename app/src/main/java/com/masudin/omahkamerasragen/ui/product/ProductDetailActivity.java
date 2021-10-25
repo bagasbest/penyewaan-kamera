@@ -175,6 +175,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 binding.sewaSekarang.setVisibility(View.GONE);
+                binding.textSewaSekarang.setVisibility(View.GONE);
                 binding.masukkanKeranjang.setVisibility(View.GONE);
                 options = "now";
             }
@@ -186,6 +187,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 binding.sewaSekarang.setVisibility(View.GONE);
+                binding.textSewaSekarang.setVisibility(View.GONE);
                 binding.masukkanKeranjang.setVisibility(View.GONE);
                 options = "cart";
             }
@@ -700,7 +702,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                         public void onComplete(@NonNull @NotNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 mProgressDialog.dismiss();
-                                showSuccessDialog("Berhasil Memasukkan Produk Kedalam Keranjang", "Anda dapat melihat produk pada navigasi cart atau keranjang");
+                                showSuccessDialog("Berhasil Memasukkan Produk Kedalam Keranjang", "barang akan ditambahkan pada keranjang");
                             } else {
                                 mProgressDialog.dismiss();
                                 showFailureDialog("Gagal Memasukkan Produk Kedalam Keranjang", "Terdapat kesalahan ketika memasukkan produk kedalam keranjang, silahkan periksa koneksi internet anda, dan coba lagi nanti");
@@ -761,13 +763,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
             transaction.put("dateStart", first);
             transaction.put("status", "Belum Bayar");
-            transaction.put("transactionId", "AK-" + trId);
+            transaction.put("transactionId", trId);
             transaction.put("name", name);
             transaction.put("data", cart);
             FirebaseFirestore
                     .getInstance()
                     .collection("transaction")
-                    .document("AK-" + trId)
+                    .document(trId)
                     .set(transaction)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -813,6 +815,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .setPositiveButton("OKE", (dialogInterface, i) -> {
                     binding.sewaSekarang.setVisibility(View.VISIBLE);
                     binding.masukkanKeranjang.setVisibility(View.VISIBLE);
+                    binding.textSewaSekarang.setVisibility(View.VISIBLE);
                     dialogInterface.dismiss();
                     onBackPressed();
                 })
@@ -828,6 +831,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .setPositiveButton("OKE", (dialogInterface, i) -> {
                     binding.sewaSekarang.setVisibility(View.VISIBLE);
                     binding.masukkanKeranjang.setVisibility(View.VISIBLE);
+                    binding.textSewaSekarang.setVisibility(View.VISIBLE);
                     dialogInterface.dismiss();
                     if (options.equals("cart")) {
                         startActivity(new Intent(ProductDetailActivity.this, CartActivity.class));

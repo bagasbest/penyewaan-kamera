@@ -88,7 +88,10 @@ public class HistoryTransactionActivity extends AppCompatActivity {
 
     /// FUNGSI UNTUK MENAMPILKAN LIST DATA history transaksi
     private void initRecyclerView() {
-        binding.rvTransaction.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        binding.rvTransaction.setLayoutManager(layoutManager);
         adapter = new HistoryTransactionAdapter();
         binding.rvTransaction.setAdapter(adapter);
     }

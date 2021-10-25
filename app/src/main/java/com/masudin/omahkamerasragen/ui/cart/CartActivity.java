@@ -76,11 +76,7 @@ public class CartActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_baseline_warning_24)
                 .setPositiveButton("YAKIN", (dialogInterface, i) -> {
                     dialogInterface.dismiss();
-                    if(cartModelArrayList.get(0).getCategory().equals("Kamera")) {
-                        checkoutAllProduct("CA-");
-                    } else {
-                        checkoutAllProduct("AK-");
-                    }
+                    checkoutAllProduct();
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
@@ -90,7 +86,7 @@ public class CartActivity extends AppCompatActivity {
 
 
     //// setelah di konfirmasi, maka lakukan checkout barang 1 per 1, jika lebih dari satu, oleh karena itu ada perulangan di bawah, untuk melakukan checkout jika barang lebih dari 1
-    private void checkoutAllProduct(String code) {
+    private void checkoutAllProduct() {
         ArrayList<String> listName = new ArrayList<>();
 
         for(int i=0; i<cartModelArrayList.size(); i++) {
@@ -116,7 +112,7 @@ public class CartActivity extends AppCompatActivity {
         //// collection transaction menampung data transaksi, pada barang yang di checkout dari keranjang
         String transactionId = String.valueOf(System.currentTimeMillis());
         Map<String, Object> transaction = new HashMap<>();
-        transaction.put("transactionId", code+transactionId);
+        transaction.put("transactionId", transactionId);
         transaction.put("customerId", cartModelArrayList.get(0).getCustomerUid());
         transaction.put("dateStart", cartModelArrayList.get(0).getDateStart());
         transaction.put("dateFinish", cartModelArrayList.get(0).getDateFinish());
@@ -127,7 +123,7 @@ public class CartActivity extends AppCompatActivity {
         FirebaseFirestore
                 .getInstance()
                 .collection("transaction")
-                .document(code+transactionId)
+                .document(transactionId)
                 .set(transaction)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

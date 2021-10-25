@@ -281,18 +281,31 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/bookingBtn" />
 
-        <Button
+        <View
             android:id="@+id/sewaSekarang"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Sewa Sekarang"
+            android:elevation="5dp"
+            android:background="@drawable/btn_now"
             android:textAllCaps="false"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/bookingBtn" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            android:textStyle="bold"
+            android:id="@+id/textSewaSekarang"
+            android:text="Sewa Sekarang"
+            android:textColor="@color/background"
+            app:layout_constraintBottom_toBottomOf="@+id/sewaBerdasarkanJam"
+            app:layout_constraintEnd_toEndOf="@+id/sewaBerdasarkanJam"
+            app:layout_constraintStart_toStartOf="@+id/sewaBerdasarkanJam"
+            app:layout_constraintTop_toTopOf="@+id/sewaBerdasarkanJam" />
 
         <Button
             android:id="@+id/sewaBerdasarkanHari"
@@ -302,6 +315,7 @@
             android:text="Sewa Berdasarkan Hari"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginTop="10dp"
             android:textAllCaps="false"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -318,6 +332,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:textAllCaps="false"
+            android:layout_marginTop="10dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sewaBerdasarkanJam" />

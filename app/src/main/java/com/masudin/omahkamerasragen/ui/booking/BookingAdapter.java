@@ -1,5 +1,6 @@
 package com.masudin.omahkamerasragen.ui.booking;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,13 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             name = itemView.findViewById(R.id.productName);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bind(BookingModel model) {
-            tId.setText(model.getTransactionId());
+            if (model.getCategory().equals("Kamera")) {
+                tId.setText("CA-" + model.getTransactionId());
+            } else {
+                tId.setText("AK-" + model.getTransactionId());
+            }
             dateStart.setText(model.getDateStart());
             dateFinish.setText(model.getDateFinish());
             name.setText(model.getProductName());

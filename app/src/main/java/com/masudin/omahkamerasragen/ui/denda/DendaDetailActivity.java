@@ -43,7 +43,11 @@ public class DendaDetailActivity extends AppCompatActivity {
         NumberFormat formatter = new DecimalFormat("#,###");
 
         /// kemudian data dari model di ambil, dan di presentasikan di halaman detail denda
-        binding.transactionId.setText("Kode Transaksi: " + model.getTransactionId());
+        if(model.getData().get(0).getCategory().equals("Kamera")) {
+            binding.transactionId.setText("Kode Transaksi: CA-" + model.getTransactionId());
+        } else {
+            binding.transactionId.setText("Kode Transaksi: AK-" + model.getTransactionId());
+        }
         binding.borrower.setText("Nama Penyewa: " + model.getData().get(0).getCustomerName());
         binding.finalPrice.setText("Biaya Denda: IDR " + formatter.format(Double.parseDouble(String.valueOf(getIntent().getLongExtra(DENDA,0)))));
         binding.startDate.setText("Tanggal Peminjaman: " + model.getDateStart() + ", pukul " + model.getData().get(0).getPickHour());

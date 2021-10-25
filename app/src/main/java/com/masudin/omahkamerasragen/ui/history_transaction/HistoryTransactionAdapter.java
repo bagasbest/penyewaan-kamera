@@ -76,7 +76,11 @@ public class HistoryTransactionAdapter extends RecyclerView.Adapter<HistoryTrans
             /// number format digunakan untuk money currency, misal IDR. 100.000
             NumberFormat formatter = new DecimalFormat("#,###");
 
-            transactionId.setText(model.getTransactionId());
+            if(model.getData().get(0).getCategory().equals("Kamera")) {
+                transactionId.setText("CA-"+model.getTransactionId());
+            } else {
+                transactionId.setText("AK-"+model.getTransactionId());
+            }
             dateStart.setText(model.getDateStart());
             status.setText(model.getStatus());
             finalPrice.setText("IDR " + formatter.format(Double.parseDouble(model.getFinalPrice())));
