@@ -177,6 +177,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 binding.sewaSekarang.setVisibility(View.GONE);
                 binding.textSewaSekarang.setVisibility(View.GONE);
                 binding.masukkanKeranjang.setVisibility(View.GONE);
+                binding.imageView5.setVisibility(View.GONE);
+                binding.imageView6.setVisibility(View.GONE);
                 options = "now";
             }
         });
@@ -189,6 +191,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 binding.sewaSekarang.setVisibility(View.GONE);
                 binding.textSewaSekarang.setVisibility(View.GONE);
                 binding.masukkanKeranjang.setVisibility(View.GONE);
+                binding.imageView5.setVisibility(View.GONE);
+                binding.imageView6.setVisibility(View.GONE);
                 options = "cart";
             }
         });
@@ -816,6 +820,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                     binding.sewaSekarang.setVisibility(View.VISIBLE);
                     binding.masukkanKeranjang.setVisibility(View.VISIBLE);
                     binding.textSewaSekarang.setVisibility(View.VISIBLE);
+                    binding.imageView5.setVisibility(View.VISIBLE);
+                    binding.imageView6.setVisibility(View.VISIBLE);
                     dialogInterface.dismiss();
                     onBackPressed();
                 })
@@ -832,6 +838,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                     binding.sewaSekarang.setVisibility(View.VISIBLE);
                     binding.masukkanKeranjang.setVisibility(View.VISIBLE);
                     binding.textSewaSekarang.setVisibility(View.VISIBLE);
+                    binding.imageView5.setVisibility(View.VISIBLE);
+                    binding.imageView6.setVisibility(View.VISIBLE);
                     dialogInterface.dismiss();
                     if (options.equals("cart")) {
                         startActivity(new Intent(ProductDetailActivity.this, CartActivity.class));

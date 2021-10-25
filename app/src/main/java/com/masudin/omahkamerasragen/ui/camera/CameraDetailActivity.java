@@ -180,6 +180,8 @@ public class CameraDetailActivity extends AppCompatActivity {
                 binding.sewaSekarang.setVisibility(View.GONE);
                 binding.textSewaSekarang.setVisibility(View.GONE);
                 binding.masukkanKeranjang.setVisibility(View.GONE);
+                binding.imageView5.setVisibility(View.GONE);
+                binding.imageView6.setVisibility(View.GONE);
                 options = "now";
             }
         });
@@ -191,6 +193,8 @@ public class CameraDetailActivity extends AppCompatActivity {
                 binding.sewaSekarang.setVisibility(View.GONE);
                 binding.textSewaSekarang.setVisibility(View.GONE);
                 binding.masukkanKeranjang.setVisibility(View.GONE);
+                binding.imageView5.setVisibility(View.GONE);
+                binding.imageView6.setVisibility(View.GONE);
                 options = "cart";
             }
         });
@@ -829,6 +833,8 @@ public class CameraDetailActivity extends AppCompatActivity {
                     binding.masukkanKeranjang.setVisibility(View.VISIBLE);
                     binding.sewaSekarang.setVisibility(View.VISIBLE);
                     binding.textSewaSekarang.setVisibility(View.VISIBLE);
+                    binding.imageView5.setVisibility(View.VISIBLE);
+                    binding.imageView6.setVisibility(View.VISIBLE);
                     dialogInterface.dismiss();
                     onBackPressed();
                 })
@@ -846,6 +852,8 @@ public class CameraDetailActivity extends AppCompatActivity {
                     binding.masukkanKeranjang.setVisibility(View.VISIBLE);
                     binding.sewaSekarang.setVisibility(View.VISIBLE);
                     binding.textSewaSekarang.setVisibility(View.VISIBLE);
+                    binding.imageView5.setVisibility(View.VISIBLE);
+                    binding.imageView6.setVisibility(View.VISIBLE);
                     if (options.equals("cart")) {
                         startActivity(new Intent(CameraDetailActivity.this, CartActivity.class));
                     } else {
