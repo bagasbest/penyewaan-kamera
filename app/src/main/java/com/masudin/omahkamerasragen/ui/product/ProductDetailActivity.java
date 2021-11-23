@@ -31,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.masudin.omahkamerasragen.R;
 import com.masudin.omahkamerasragen.databinding.ActivityProductDetailBinding;
 import com.masudin.omahkamerasragen.ui.booking.BookingActivity;
+import com.masudin.omahkamerasragen.ui.camera.CameraDetailActivity;
 import com.masudin.omahkamerasragen.ui.cart.CartActivity;
 import com.masudin.omahkamerasragen.ui.cart.CartModel;
 import com.masudin.omahkamerasragen.ui.history_transaction.HistoryTransactionActivity;
@@ -65,6 +66,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private String dateFinish = "";
     private String getPickHour = "";
     private String getCustomerName = "";
+    private String duration = "";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -240,6 +242,24 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 dateStart = "" + document.getDocuments().get(0).get("dateStart");
                                 dateFinish = "" + document.getDocuments().get(0).get("dateFinish");
                                 getPickHour = "" + document.getDocuments().get(0).get("pickHour");
+                                duration = "" + document.getDocuments().get(0).get("duration");
+
+
+                                /// saya disini mau mendapatkan durasi dari barang yang ada di keranjang, dengan tujuan barang yang ada di keranjang memiliki durasi yang sama: contoh 12 jam semua atau 1 hari semua.
+                                /// logikanya: jika durasi penyewaan barang di keranjang tidak sesuai, maka pengguna saat ini tidak bisa menambah barang baru ke keranjang
+                                long diff = Long.parseLong(prendiRange.second.toString()) - Long.parseLong(prendiRange.first.toString());
+                                long diffDays = diff / (24 * 60 * 60 * 1000);
+                                if(!duration.equals(diffDays + " Hari") && options.equals("cart")) {
+                                    new AlertDialog.Builder(ProductDetailActivity.this)
+                                            .setTitle("Durasi Harus Sesuai")
+                                            .setMessage("Maaf, Durasi penyewaan Peralatan Kamera ini harus sama dengan produk yang ada di dalam keranjang anda. Durasi yang ada di keranjang anda adalah " + duration)
+                                            .setIcon(R.drawable.ic_baseline_warning_24)
+                                            .setPositiveButton("OKE", (dialogInterface, i) -> {
+                                                dialogInterface.dismiss();
+                                            })
+                                            .show();
+                                    return;
+                                }
                             }
 
                             /// cek apakah waktu peminjaman & pengembalian sudah sama dengan produk yang ada di keranjang, jika ada
@@ -292,10 +312,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             Date getTimeNow = df.parse(timeNow);
                                                             Date getDateNow = sdf.parse(dateNow);
                                                             Date nowFirst = sdf.parse(formatFirst);
-                                                            Log.e("tag", "" + getDateNow.getTime() + " " + nowFirst.getTime());
-                                                            Log.e("tag", ""+ getTimeNow.getTime() + " " + durationEndInMillis);
-
-                                                            Log.e("TAF", "" + df.format(getTimeNow.getTime()) + " " + df.format(durationEndInMillis - (1000*60*60*7)));
 
                                                             if((getDateNow.getTime() == nowFirst.getTime()) && getTimeNow.getTime() > (durationEndInMillis - (1000*60*60*7))){
                                                                 mProgressDialog.dismiss();
@@ -345,6 +361,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                                         } else {
                                                                             for (int i = 0; i < listName.size(); i++) {
                                                                                 if (model.getName().equals(listName.get(i))) {
+                                                                                    counter = 0;
                                                                                     mProgressDialog.dismiss();
                                                                                     Toast.makeText(ProductDetailActivity.this, "Tanggal Sudah Di Booking", Toast.LENGTH_SHORT).show();
                                                                                     return;
@@ -466,6 +483,21 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 dateStart = "" + document.getDocuments().get(0).get("dateStart");
                                 dateFinish = "" + document.getDocuments().get(0).get("dateFinish");
                                 getPickHour = "" + document.getDocuments().get(0).get("pickHour");
+                                duration = "" + document.getDocuments().get(0).get("duration");
+
+                                /// saya disini mau mendapatkan durasi dari barang yang ada di keranjang, dengan tujuan barang yang ada di keranjang memiliki durasi yang sama: contoh 12 jam semua atau 1 hari semua.
+                                /// logikanya: jika durasi penyewaan barang di keranjang tidak sesuai, maka pengguna saat ini tidak bisa menambah barang baru ke keranjang
+                                if(!duration.equals(hour + " Jam") && options.equals("cart")) {
+                                    new AlertDialog.Builder(ProductDetailActivity.this)
+                                            .setTitle("Durasi Harus Sesuai")
+                                            .setMessage("Maaf, Durasi penyewaan Peralatan Kamera ini harus sama dengan produk yang ada di dalam keranjang anda. Durasi yang ada di keranjang anda adalah " + duration)
+                                            .setIcon(R.drawable.ic_baseline_warning_24)
+                                            .setPositiveButton("OKE", (dialogInterface, i) -> {
+                                                dialogInterface.dismiss();
+                                            })
+                                            .show();
+                                    return;
+                                }
                             }
 
 
@@ -515,11 +547,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             Date tanggalPengambilan = sdf.parse(getDateNow);
                                                             long jamPengambilan = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(timePicker.getHour()) + TimeUnit.MINUTES.toSeconds(timePicker.getMinute()));
 
-                                                            Log.e("tag", "" + tanggalSekarang.getTime() + " " + tanggalPengambilan.getTime());
-                                                            Log.e("tag", ""+ jamSekarang.getTime() + " " + jamPengambilan);
-
-                                                            Log.e("TAF", "" + df.format(jamSekarang.getTime()) + " " + df.format((jamPengambilan - (1000*60*60*7)) ));
-
                                                             if((tanggalSekarang.getTime() == tanggalPengambilan.getTime()) && jamSekarang.getTime() > (jamPengambilan - (1000*60*60*7))){
                                                                 mProgressDialog.dismiss();
                                                                 new AlertDialog.Builder(ProductDetailActivity.this)
@@ -566,6 +593,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                                         } else {
                                                                             for (int i = 0; i < listName.size(); i++) {
                                                                                 if (model.getName().equals(listName.get(i))) {
+                                                                                    counter = 0;
                                                                                     mProgressDialog.dismiss();
                                                                                     Toast.makeText(ProductDetailActivity.this, "Tanggal Sudah Di Booking", Toast.LENGTH_SHORT).show();
                                                                                     return;
