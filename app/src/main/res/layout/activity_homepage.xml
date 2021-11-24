@@ -97,17 +97,17 @@
 
 
             <TextView
+                android:id="@+id/about"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Lokasi Omah Kamera Sragen"
                 android:textColor="@color/black"
-                android:layout_marginTop="16dp"
                 android:textSize="18sp"
-                android:id="@+id/about"
                 android:textStyle="bold"
+                android:layout_marginTop="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintTop_toBottomOf="@+id/rvTerlaris" />
 
             <TextView
                 android:id="@+id/textView15"
@@ -115,21 +115,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="30sp"
                 android:layout_marginEnd="16dp"
                 android:text="Jl. Cemara, Mageru, Plumbungan, Kec. Karangmalang, Kabupaten Sragen, Jawa Tengah 57214"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/about" />
 
 
             <ImageView
-                android:contentDescription="@string/image"
                 android:id="@+id/imageView3"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginEnd="16dp"
+                android:contentDescription="@string/image"
                 android:src="@drawable/ic_baseline_location_on_24"
+                app:layout_constraintBottom_toBottomOf="@+id/textView15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView15"
                 app:tint="@color/background" />
@@ -140,37 +143,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:text="Barang Unggulan"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+                android:layout_marginTop="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 
             <TextView
                 android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:padding="5dp"
+                android:layout_marginTop="20sp"
                 android:text="Lihat Semua >>>"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="12sp"
-                android:padding="5dp"
-                android:layout_marginEnd="16dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTerlaris"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="30dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView16"
                 tools:listitem="@layout/item_terlaris" />
 
