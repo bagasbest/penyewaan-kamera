@@ -252,7 +252,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                 /// logikanya: jika durasi penyewaan barang di keranjang tidak sesuai, maka pengguna saat ini tidak bisa menambah barang baru ke keranjang
                                 long diff = Long.parseLong(prendiRange.second.toString()) - Long.parseLong(prendiRange.first.toString());
                                 long diffDays = diff / (24 * 60 * 60 * 1000);
-                                if(!duration.equals(diffDays + " Hari") && options.equals("cart")) {
+                                if (!duration.equals(diffDays + " Hari") && options.equals("cart")) {
                                     new AlertDialog.Builder(CameraDetailActivity.this)
                                             .setTitle("Durasi Harus Sesuai")
                                             .setMessage("Maaf, Durasi penyewaan Kamera ini harus sama dengan produk yang ada di dalam keranjang anda. Durasi yang ada di keranjang anda adalah " + duration)
@@ -492,7 +492,7 @@ public class CameraDetailActivity extends AppCompatActivity {
 
                                 /// saya disini mau mendapatkan durasi dari barang yang ada di keranjang, dengan tujuan barang yang ada di keranjang memiliki durasi yang sama: contoh 12 jam semua atau 1 hari semua.
                                 /// logikanya: jika durasi penyewaan barang di keranjang tidak sesuai, maka pengguna saat ini tidak bisa menambah barang baru ke keranjang
-                                if(!duration.equals(hour + " Jam") && options.equals("cart")) {
+                                if (!duration.equals(hour + " Jam") && options.equals("cart")) {
                                     new AlertDialog.Builder(CameraDetailActivity.this)
                                             .setTitle("Durasi Harus Sesuai")
                                             .setMessage("Maaf, Durasi penyewaan Kamera ini harus sama dengan produk yang ada di dalam keranjang anda. Durasi yang ada di keranjang anda adalah " + duration)
@@ -506,13 +506,23 @@ public class CameraDetailActivity extends AppCompatActivity {
 
                             }
 
-                            /// cek apakah waktu peminjaman & pengembalian sudah sama dengan produk yang ada di keranjang, jika ada
-                            /// jika waktu peminjaman, pengembalian, sesuai maka bisa lanjut memilih waktu pengambilan barang
-                            if (getDateNow.equals(dateStart) && getDateNow.equals(dateFinish) || document.size() == 0 || options.equals("now")) {
-                                // show time picker
-                                MaterialTimePicker timePicker = new MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build();
-                                timePicker.show(getSupportFragmentManager(), timePicker.toString());
-                                timePicker.addOnPositiveButtonClickListener(time -> {
+
+                            // show time picker
+                            MaterialTimePicker timePicker = new MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build();
+                            timePicker.show(getSupportFragmentManager(), timePicker.toString());
+                            timePicker.addOnPositiveButtonClickListener(time -> {
+
+                                /// waktu penyewaan berakhir pada pukul, contoh: 13:30
+                                long durationStartInMillis = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(timePicker.getHour()) + TimeUnit.MINUTES.toSeconds(timePicker.getMinute()));
+                                long durationEndInMillis = durationStartInMillis + (1000L * 60 * 60 * hour);
+                                long dateEnd = (Long.parseLong(selection.toString()) - (1000L * 60 * 60 * 7)) + durationEndInMillis;
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                                String dateEndInString = sdf.format(new Date(dateEnd));
+
+                                /// cek apakah waktu peminjaman & pengembalian sudah sama dengan produk yang ada di keranjang, jika ada
+                                /// jika waktu peminjaman, pengembalian, sesuai maka bisa lanjut memilih waktu pengambilan barang
+                                if (getDateNow.equals(dateStart) && dateEndInString.equals(dateFinish) || document.size() == 0 || options.equals("now")) {
 
                                     /// tampilkan progress dialog
                                     ProgressDialog mProgressDialog = new ProgressDialog(CameraDetailActivity.this);
@@ -535,15 +545,13 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                         /// cek apakah data transaksi ada atau tidak
                                                         QuerySnapshot size = task.getResult();
 
+
                                                         /// konversi waktu pengambilan barang, contoh waktu konversi: 13:30
                                                         if (timePicker.getMinute() < 10) {
                                                             pickHour = timePicker.getHour() + ":0" + timePicker.getMinute();
                                                         } else {
                                                             pickHour = timePicker.getHour() + ":" + timePicker.getMinute();
                                                         }
-
-                                                        /// waktu penyewaan berakhir pada pukul, contoh: 13:30
-                                                        long durationEndInMillis = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(timePicker.getHour()) + TimeUnit.MINUTES.toSeconds(timePicker.getMinute())) + (1000 * 60 * 60 * hour);
 
                                                         /// ambil jam saat ini, digunakan untuk memverifikasi penyewaan hari ini,
                                                         /// misal jam penyewaan, 09:00 namun sekarang jam 10:00, maka tidak bisa menyewa
@@ -598,7 +606,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                                             if (counter == size.size()) {
                                                                                 counter = 0;
                                                                                 mProgressDialog.dismiss();
-                                                                                confirmSewaCamera(selection, hour, durationEndInMillis, pickHour);
+                                                                                confirmSewaCamera(selection, dateEndInString, hour, durationEndInMillis, pickHour);
                                                                             }
                                                                         } else {
                                                                             for (int i = 0; i < listName.size(); i++) {
@@ -613,7 +621,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                                             if (counter == size.size()) {
                                                                                 counter = 0;
                                                                                 mProgressDialog.dismiss();
-                                                                                confirmSewaCamera(selection, hour, durationEndInMillis, pickHour);
+                                                                                confirmSewaCamera(selection, dateEndInString, hour, durationEndInMillis, pickHour);
                                                                             }
                                                                         }
 
@@ -640,7 +648,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                             mProgressDialog.dismiss();
                                                             /// jika transaksi kosong, maka cek keranjang, apakah waktu peminjaman sesuai atau tidak
                                                             if (pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
-                                                                confirmSewaCamera(selection, hour, durationEndInMillis, pickHour);
+                                                                confirmSewaCamera(selection, dateEndInString, hour, durationEndInMillis, pickHour);
                                                             } else {
                                                                 new AlertDialog.Builder(CameraDetailActivity.this)
                                                                         .setTitle("Gagal")
@@ -658,25 +666,28 @@ public class CameraDetailActivity extends AppCompatActivity {
                                                     }
                                                 }
                                             });
-                                });
-                            } else {
-                                /// waktu penyewaan tidak sesuai
-                                new AlertDialog.Builder(CameraDetailActivity.this)
-                                        .setTitle("Gagal")
-                                        .setMessage("Maaf, waktu peminjaman dan waktu pengembalian barang harus sama dengan waktu pada produk yang ada pada keranjang anda!\n\nWaktu peminjaman: " + dateStart + "\nWaktu pengembalian: " + dateFinish)
-                                        .setIcon(R.drawable.ic_baseline_warning_24)
-                                        .setPositiveButton("OKE", (dialogInterface, i) -> {
-                                            dialogInterface.dismiss();
-                                        })
-                                        .show();
-                            }
+
+                                } else {
+                                    /// waktu penyewaan tidak sesuai
+                                    new AlertDialog.Builder(CameraDetailActivity.this)
+                                            .setTitle("Gagal")
+                                            .setMessage("Maaf, waktu peminjaman dan waktu pengembalian barang harus sama dengan waktu pada produk yang ada pada keranjang anda!\n\nWaktu peminjaman: " + dateStart + "\nWaktu pengembalian: " + dateFinish)
+                                            .setIcon(R.drawable.ic_baseline_warning_24)
+                                            .setPositiveButton("OKE", (dialogInterface, i) -> {
+                                                dialogInterface.dismiss();
+                                            })
+                                            .show();
+                                }
+
+                            });
+
                         }
                     });
         });
     }
 
     /// fungsi untuk menampilkan dialog box, apakah ingin menyewa kamera ini ?
-    private void confirmSewaCamera(Object selection, int hour, long durationEndInMillis, String pickHour) {
+    private void confirmSewaCamera(Object selection, String dateEnd, int hour, long durationEndInMillis, String pickHour) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String format = sdf.format(new Date(Long.parseLong(selection.toString())));
         new AlertDialog.Builder(this)
@@ -684,7 +695,7 @@ public class CameraDetailActivity extends AppCompatActivity {
                 .setMessage("Apakah anda yakin ingin menyewa Kamera ini ?")
                 .setIcon(R.drawable.ic_baseline_warning_24)
                 .setPositiveButton("OKE", (dialogInterface, i) -> {
-                    saveProductToCart(format, "", hour, 0, durationEndInMillis, pickHour);
+                    saveProductToCart(format, dateEnd, hour, 0, durationEndInMillis, pickHour);
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
@@ -714,22 +725,18 @@ public class CameraDetailActivity extends AppCompatActivity {
             if (hour == 6) {
                 addToCart.put("duration", hour + " Jam");
                 addToCart.put("price", model.getPrice());
-                addToCart.put("dateStart", first);
-                addToCart.put("dateFinish", first);
                 addToCart.put("totalPrice", model.getPrice());
             } else if (hour == 12) {
                 addToCart.put("duration", hour + " Jam");
                 addToCart.put("price", model.getPrice2());
-                addToCart.put("dateStart", first);
-                addToCart.put("dateFinish", first);
                 addToCart.put("totalPrice", model.getPrice2());
             } else {
                 addToCart.put("duration", difference + " Hari");
                 addToCart.put("price", model.getPrice3());
-                addToCart.put("dateStart", first);
-                addToCart.put("dateFinish", second);
                 addToCart.put("totalPrice", Long.parseLong(model.getPrice3()) * difference);
             }
+            addToCart.put("dateStart", first);
+            addToCart.put("dateFinish", second);
             addToCart.put("durationEnd", durationEndInMillis);
             addToCart.put("category", "Kamera");
             addToCart.put("customerUid", userUid);
@@ -780,14 +787,13 @@ public class CameraDetailActivity extends AppCompatActivity {
                     cartModel.setPrice(model.getPrice2());
                     cartModel.setTotalPrice(model.getPrice2());
                 }
-                cartModel.setDateFinish(first);
             } else {
                 cartModel.setDuration(difference + " Hari");
                 cartModel.setPrice(model.getPrice3());
                 cartModel.setTotalPrice(model.getPrice3());
-                cartModel.setDateFinish(second);
             }
             cartModel.setDurationEnd(durationEndInMillis);
+            cartModel.setDateFinish(second);
             cartModel.setDateStart(first);
             cartModel.setMerk(model.getMerk());
             cartModel.setName(model.getName());
@@ -801,14 +807,12 @@ public class CameraDetailActivity extends AppCompatActivity {
             transaction.put("customerId", userUid);
             if (hour == 6) {
                 transaction.put("finalPrice", model.getPrice());
-                transaction.put("dateFinish", first);
             } else if (hour == 12) {
                 transaction.put("finalPrice", model.getPrice2());
-                transaction.put("dateFinish", first);
             } else {
                 transaction.put("finalPrice", model.getPrice3());
-                transaction.put("dateFinish", second);
             }
+            transaction.put("dateFinish", second);
             transaction.put("dateStart", first);
             transaction.put("status", "Belum Bayar");
             transaction.put("transactionId", trId);
@@ -841,11 +845,7 @@ public class CameraDetailActivity extends AppCompatActivity {
             /// oleh karena itu dibutuhkan penyimpanan dan pengecekan waktu penyewaan, dan waktu pengembalian
             notification.put("cartId", trId);
             notification.put("dateStart", first);
-            if (hour == 6 || hour == 12) {
-                notification.put("dateFinish", first);
-            } else {
-                notification.put("dateFinish", second);
-            }
+            notification.put("dateFinish", second);
             notification.put("name", model.getName());
             FirebaseFirestore
                     .getInstance()

@@ -249,7 +249,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 /// logikanya: jika durasi penyewaan barang di keranjang tidak sesuai, maka pengguna saat ini tidak bisa menambah barang baru ke keranjang
                                 long diff = Long.parseLong(prendiRange.second.toString()) - Long.parseLong(prendiRange.first.toString());
                                 long diffDays = diff / (24 * 60 * 60 * 1000);
-                                if(!duration.equals(diffDays + " Hari") && options.equals("cart")) {
+                                if (!duration.equals(diffDays + " Hari") && options.equals("cart")) {
                                     new AlertDialog.Builder(ProductDetailActivity.this)
                                             .setTitle("Durasi Harus Sesuai")
                                             .setMessage("Maaf, Durasi penyewaan Peralatan Kamera ini harus sama dengan produk yang ada di dalam keranjang anda. Durasi yang ada di keranjang anda adalah " + duration)
@@ -313,7 +313,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             Date getDateNow = sdf.parse(dateNow);
                                                             Date nowFirst = sdf.parse(formatFirst);
 
-                                                            if((getDateNow.getTime() == nowFirst.getTime()) && getTimeNow.getTime() > (durationEndInMillis - (1000*60*60*7))){
+                                                            if ((getDateNow.getTime() == nowFirst.getTime()) && getTimeNow.getTime() > (durationEndInMillis - (1000 * 60 * 60 * 7))) {
                                                                 mProgressDialog.dismiss();
                                                                 new AlertDialog.Builder(ProductDetailActivity.this)
                                                                         .setTitle("Gagal")
@@ -396,7 +396,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                         } else {
                                                             mProgressDialog.dismiss();
                                                             /// jika belum ada transaksi sama sekali, maka cek apakah waktu penyewaan ini sudah sesuai dengan barang pertama di keranjang atau belum
-                                                            if(pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
+                                                            if (pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
                                                                 confirmSewaPeralatanCameraPerDay(datePicker, pickHour, durationEndInMillis);
                                                             } else {
                                                                 new AlertDialog.Builder(ProductDetailActivity.this)
@@ -462,7 +462,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         datePicker.show(getSupportFragmentManager(), datePicker.toString());
         datePicker.addOnPositiveButtonClickListener(selection -> {
 
-
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             String getDateNow = sdf.format(new Date(Long.parseLong(selection.toString())));
 
@@ -487,7 +486,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                                 /// saya disini mau mendapatkan durasi dari barang yang ada di keranjang, dengan tujuan barang yang ada di keranjang memiliki durasi yang sama: contoh 12 jam semua atau 1 hari semua.
                                 /// logikanya: jika durasi penyewaan barang di keranjang tidak sesuai, maka pengguna saat ini tidak bisa menambah barang baru ke keranjang
-                                if(!duration.equals(hour + " Jam") && options.equals("cart")) {
+                                if (!duration.equals(hour + " Jam") && options.equals("cart")) {
                                     new AlertDialog.Builder(ProductDetailActivity.this)
                                             .setTitle("Durasi Harus Sesuai")
                                             .setMessage("Maaf, Durasi penyewaan Peralatan Kamera ini harus sama dengan produk yang ada di dalam keranjang anda. Durasi yang ada di keranjang anda adalah " + duration)
@@ -501,14 +500,24 @@ public class ProductDetailActivity extends AppCompatActivity {
                             }
 
 
-                            /// cek apakah waktu peminjaman & pengembalian sudah sama dengan produk yang ada di keranjang, jika ada
-                            /// jika waktu peminjaman, pengembalian, sesuai maka bisa lanjut memilih waktu pengambilan barang
-                            if (getDateNow.equals(dateStart) && getDateNow.equals(dateFinish) || document.size() == 0 || options.equals("now")) {
+                            /// pilih waktu ambil barang
+                            MaterialTimePicker timePicker = new MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build();
+                            timePicker.show(getSupportFragmentManager(), timePicker.toString());
+                            timePicker.addOnPositiveButtonClickListener(time -> {
 
-                                /// pilih waktu ambil barang
-                                MaterialTimePicker timePicker = new MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H).build();
-                                timePicker.show(getSupportFragmentManager(), timePicker.toString());
-                                timePicker.addOnPositiveButtonClickListener(time -> {
+                                /// waktu penyewaan berakhir pada pukul, contoh: 13:30
+                                long durationStartInMillis = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(timePicker.getHour()) + TimeUnit.MINUTES.toSeconds(timePicker.getMinute()));
+                                long durationEndInMillis = durationStartInMillis + (1000L * 60 * 60 * hour);
+                                long dateEnd = (Long.parseLong(selection.toString()) - (1000L * 60 * 60 * 7)) + durationEndInMillis;
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                                String dateEndInString = sdf.format(new Date(dateEnd));
+
+
+                                /// cek apakah waktu peminjaman & pengembalian sudah sama dengan produk yang ada di keranjang, jika ada
+                                /// jika waktu peminjaman, pengembalian, sesuai maka bisa lanjut memilih waktu pengambilan barang
+                                if (getDateNow.equals(dateStart) && dateEndInString.equals(dateFinish) || document.size() == 0 || options.equals("now")) {
+
 
                                     /// loading bar
                                     ProgressDialog mProgressDialog = new ProgressDialog(ProductDetailActivity.this);
@@ -533,8 +542,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             pickHour = timePicker.getHour() + ":" + timePicker.getMinute();
                                                         }
 
-                                                        long durationEndInMillis = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(timePicker.getHour()) + TimeUnit.MINUTES.toSeconds(timePicker.getMinute())) + (1000 * 60 * 60 * hour);
-
 
                                                         /// ambil jam saat ini, digunakan untuk memverifikasi penyewaan hari ini,
                                                         /// misal jam penyewaan, 09:00 namun sekarang jam 10:00, maka tidak bisa menyewa
@@ -547,7 +554,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             Date tanggalPengambilan = sdf.parse(getDateNow);
                                                             long jamPengambilan = TimeUnit.SECONDS.toMillis(TimeUnit.HOURS.toSeconds(timePicker.getHour()) + TimeUnit.MINUTES.toSeconds(timePicker.getMinute()));
 
-                                                            if((tanggalSekarang.getTime() == tanggalPengambilan.getTime()) && jamSekarang.getTime() > (jamPengambilan - (1000*60*60*7))){
+                                                            if ((tanggalSekarang.getTime() == tanggalPengambilan.getTime()) && jamSekarang.getTime() > (jamPengambilan - (1000 * 60 * 60 * 7))) {
                                                                 mProgressDialog.dismiss();
                                                                 new AlertDialog.Builder(ProductDetailActivity.this)
                                                                         .setTitle("Gagal")
@@ -588,7 +595,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                                             if (counter == size.size()) {
                                                                                 counter = 0;
                                                                                 mProgressDialog.dismiss();
-                                                                                confirmSewaPeralatanCamera(selection, hour, durationEndInMillis, pickHour);
+                                                                                confirmSewaPeralatanCamera(selection, dateEndInString , hour, durationEndInMillis, pickHour);
                                                                             }
                                                                         } else {
                                                                             for (int i = 0; i < listName.size(); i++) {
@@ -603,7 +610,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                                             if (counter == size.size()) {
                                                                                 counter = 0;
                                                                                 mProgressDialog.dismiss();
-                                                                                confirmSewaPeralatanCamera(selection, hour, durationEndInMillis, pickHour);
+                                                                                confirmSewaPeralatanCamera(selection, dateEndInString, hour, durationEndInMillis, pickHour);
                                                                             }
                                                                         }
 
@@ -626,8 +633,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                             }
                                                         } else {
                                                             mProgressDialog.dismiss();
-                                                            if(pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
-                                                                confirmSewaPeralatanCamera(selection, hour, durationEndInMillis, pickHour);
+                                                            if (pickHour.equals(getPickHour) || document.size() == 0 || options.equals("now")) {
+                                                                confirmSewaPeralatanCamera(selection, dateEndInString, hour, durationEndInMillis, pickHour);
                                                             } else {
                                                                 new AlertDialog.Builder(ProductDetailActivity.this)
                                                                         .setTitle("Gagal")
@@ -645,18 +652,21 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                     }
                                                 }
                                             });
-                                });
 
-                            } else {
-                                new AlertDialog.Builder(ProductDetailActivity.this)
-                                        .setTitle("Gagal")
-                                        .setMessage("Maaf, waktu peminjaman dan waktu pengembalian barang harus sama dengan waktu pada produk yang ada pada keranjang anda!\n\nWaktu peminjaman: " + dateStart + "\nWaktu pengembalian: " + dateFinish)
-                                        .setIcon(R.drawable.ic_baseline_warning_24)
-                                        .setPositiveButton("OKE", (dialogInterface, i) -> {
-                                            dialogInterface.dismiss();
-                                        })
-                                        .show();
-                            }
+
+                                } else {
+                                    new AlertDialog.Builder(ProductDetailActivity.this)
+                                            .setTitle("Gagal")
+                                            .setMessage("Maaf, waktu peminjaman dan waktu pengembalian barang harus sama dengan waktu pada produk yang ada pada keranjang anda!\n\nWaktu peminjaman: " + dateStart + "\nWaktu pengembalian: " + dateFinish)
+                                            .setIcon(R.drawable.ic_baseline_warning_24)
+                                            .setPositiveButton("OKE", (dialogInterface, i) -> {
+                                                dialogInterface.dismiss();
+                                            })
+                                            .show();
+                                }
+
+                            });
+
                         }
                     });
         });
@@ -664,7 +674,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     /// fungsi untuk menampilkan dialog box, apakah ingin menyewa kamera ini ?
-    private void confirmSewaPeralatanCamera(Object selection, int hour, long durationEndInMillis, String pickHour) {
+    private void confirmSewaPeralatanCamera(Object selection, String dateFinish, int hour, long durationEndInMillis, String pickHour) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String format = sdf.format(new Date(Long.parseLong(selection.toString())));
         new AlertDialog.Builder(this)
@@ -672,7 +682,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .setMessage("Apakah anda yakin ingin menyewa  peralatan kamera ini ?")
                 .setIcon(R.drawable.ic_baseline_warning_24)
                 .setPositiveButton("OKE", (dialogInterface, i) -> {
-                    saveProductToCart(format, "", hour, 0, durationEndInMillis, pickHour);
+                    saveProductToCart(format, dateFinish, hour, 0, durationEndInMillis, pickHour);
                 })
                 .setNegativeButton("TIDAK", (dialog, i) -> {
                     dialog.dismiss();
@@ -703,22 +713,18 @@ public class ProductDetailActivity extends AppCompatActivity {
             if (hour == 6) {
                 addToCart.put("duration", hour + " Jam");
                 addToCart.put("price", model.getPrice());
-                addToCart.put("dateStart", first);
-                addToCart.put("dateFinish", first);
                 addToCart.put("totalPrice", model.getPrice());
             } else if (hour == 12) {
                 addToCart.put("duration", hour + " Jam");
                 addToCart.put("price", model.getPrice2());
-                addToCart.put("dateStart", first);
-                addToCart.put("dateFinish", first);
                 addToCart.put("totalPrice", model.getPrice2());
             } else {
                 addToCart.put("duration", difference + " Hari");
                 addToCart.put("price", model.getPrice3());
-                addToCart.put("dateStart", first);
-                addToCart.put("dateFinish", second);
                 addToCart.put("totalPrice", Long.parseLong(model.getPrice3()) * difference);
             }
+            addToCart.put("dateStart", first);
+            addToCart.put("dateFinish", second);
             addToCart.put("durationEnd", durationEndInMillis);
             addToCart.put("category", "Aksesoris");
             addToCart.put("customerUid", userUid);
@@ -764,15 +770,14 @@ public class ProductDetailActivity extends AppCompatActivity {
                     cartModel.setPrice(model.getPrice2());
                     cartModel.setTotalPrice(model.getPrice2());
                 }
-                cartModel.setDateFinish(first);
             } else {
                 cartModel.setDuration(difference + " Hari");
                 cartModel.setPrice(model.getPrice3());
                 cartModel.setTotalPrice(model.getPrice3());
-                cartModel.setDateFinish(second);
             }
             cartModel.setDurationEnd(durationEndInMillis);
             cartModel.setDateStart(first);
+            cartModel.setDateFinish(second);
             cartModel.setMerk(model.getMerk());
             cartModel.setName(model.getName());
             cartModel.setPickHour(pickHour);
@@ -785,15 +790,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             transaction.put("customerId", userUid);
             if (hour == 6) {
                 transaction.put("finalPrice", model.getPrice());
-                transaction.put("dateFinish", first);
             } else if (hour == 12) {
                 transaction.put("finalPrice", model.getPrice2());
-                transaction.put("dateFinish", first);
             } else {
                 transaction.put("finalPrice", model.getPrice3());
-                transaction.put("dateFinish", second);
             }
             transaction.put("dateStart", first);
+            transaction.put("dateFinish", second);
             transaction.put("status", "Belum Bayar");
             transaction.put("transactionId", trId);
             transaction.put("name", name);
@@ -821,11 +824,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             Map<String, Object> notification = new HashMap<>();
             notification.put("cartId", trId);
             notification.put("dateStart", first);
-            if(hour == 6 || hour == 12) {
-                notification.put("dateFinish", first);
-            } else {
-                notification.put("dateFinish", second);
-            }
+            notification.put("dateFinish", second);
             notification.put("name", model.getName());
             FirebaseFirestore
                     .getInstance()
